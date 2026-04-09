@@ -1,0 +1,10 @@
+PyQt6
+Pillow
+imagehash
+opencv-python
+numpy
+pillow-heif
+send2trash
+piexif
+torch
+torchvision
