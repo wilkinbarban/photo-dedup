@@ -1,92 +1,122 @@
 # PhotoDedup
 
+*(Scroll down for Portuguese and Spanish versions / Role para baixo para Português e Espanhol / Desplácese hacia abajo para Portugués y Español)*
+
+🇺🇸 **English** | [🇧🇷 Português](#-português) | [🇪🇸 Español](#-español)
+
 PhotoDedup is an intelligent duplicate photo finder and automated media organizer. Built with Python and PyQt6, it not only detects exact and similar duplicate images but also integrates deeply with Google Takeout JSON files to restore lost EXIF metadata and organize your photo and video library automatically.
 
 ## 🚀 Features
 
-*   **Intelligent Duplicate Detection**:
-    *   Find exact duplicates based on file size and content.
-    *   Find visually similar images using perceptual hashing (`imagehash`).
-    *   Advanced AI-powered similarity checks using `MobileNetV2` for extreme accuracy.
-*   **Google Takeout Integration**:
-    *   Automatically associates `*.json` or `*.supplemen.json` files with your photos and videos.
-    *   Restores essential metadata: `photoTakenTime` (DateTimeOriginal), `geoData` (GPS coordinates), and descriptions directly into the image's EXIF data.
-*   **Real-Time Log Viewer**:
-    *   Monitor the analysis progress, background tasks, and errors in real-time directly from the application's UI with a dedicated log console.
-*   **Final Summary & Dynamic Controls**:
-    *   After analysis, a detailed summary panel displays the total images and videos processed, duplicates found, and whether JSON files were generated.
-    *   Dynamic context-aware buttons guide you smoothly (e.g., "Continue" if duplicates are found, or "Back" if none exist).
-*   **Automatic Media Organizer**:
-    *   If Google Takeout JSON files are detected, PhotoDedup will automatically rename your files to a standard format (`YYYY-MM-DD_HH-MM-SS.ext`).
-    *   Moves organized photos and videos into structured directories: `/YYYY/MM/`.
-    *   Safely moves processed JSON files to a dedicated `/Json/` folder to clean up the workspace.
-*   **Safe Deletion**:
-    *   Duplicates are moved to the system's Recycle Bin/Trash, preventing accidental permanent loss.
-*   **Multilingual Interface**:
-    *   Available in English, Spanish (Español), and Brazilian Portuguese (Português - Brasil). The language is selected at application startup.
-*   **High Performance**:
-    *   Utilizes multiple CPU cores via `ProcessPoolExecutor` to analyze thousands of images rapidly.
-    *   Includes built-in caching (`cache.json` and `embeddings.pkl`) to speed up subsequent scans.
+*   **Intelligent Duplicate Detection**: Find exact duplicates based on file size/content or visually similar images using perceptual hashing and advanced AI-powered similarity checks (`MobileNetV2`).
+*   **Google Takeout Integration**: Automatically associates `*.json` or `*.supplemen.json` files with your media. Restores `photoTakenTime`, `geoData` (GPS), and descriptions directly into the EXIF data.
+*   **Automatic Media Organizer**: Renames files to a standard format (`YYYY-MM-DD_HH-MM-SS.ext`) and moves them into structured directories: `/YYYY/MM/`. Safely moves processed JSON files to a dedicated `/Json/` folder.
+*   **Real-Time Log Viewer**: Monitor progress, background tasks, and errors directly from the UI.
+*   **Multilingual Interface**: The application natively supports English, Spanish, and Brazilian Portuguese.
+*   **Safe Deletion**: Duplicates are moved to the system's Recycle Bin/Trash, preventing accidental permanent loss.
+*   **High Performance**: Utilizes multiple CPU cores and built-in caching (`cache.json` and `embeddings.pkl`) to speed up subsequent scans.
 
 ## 📦 Installation
 
-### Requirements
-
-*   Python 3.8 or higher.
-
-### Steps
-
-1.  Clone this repository:
-    ```bash
-    git clone https://github.com/wilkinbarban/photo-dedup
-    cd photo-dedup
-    ```
-
+1.  Clone this repository: `git clone https://github.com/wilkinbarban/photo-dedup`
 2.  Install dependencies:
-    *   **On Windows**: You can simply run `install_dependencies.bat`.
-    *   **Manual installation**:
-        ```bash
-        pip install -r requirements.txt
-        ```
-    *   *Dependencies include:* `PyQt6`, `Pillow`, `imagehash`, `opencv-python`, `numpy`, `pillow-heif`, `send2trash`, `piexif`, `torch`, `torchvision`.
+    *   **Windows**: Run `install_dependencies.bat`.
+    *   **Manual**: `pip install -r requirements.txt`
 
 ## 💻 Usage
 
-1.  Run the application:
-    ```bash
-    python photo_dedup.py
-    ```
+1.  Run `python photo_dedup.py`
 2.  Select your preferred language at startup.
-3.  Select the root folder containing your images, videos, and (optionally) Google Takeout JSON files.
-4.  Choose your settings:
-    *   **Mode**: Exact or Similar.
-    *   **Threshold**: How strict the similarity match should be.
-    *   **AI Level**: Use Deep Learning models to refine results (Fast, Balanced, Deep).
-5.  Click **"Start"**.
-
-### 🛠 How the System Works
-
-*   **JSON Processing & EXIF**: When analyzing a photo (e.g., `IMG_1234.jpg`), the system searches for a matching JSON file (like `IMG_1234.jpg.json` or `IMG_1234.supplemen.json`). If found, it parses the Google Takeout metadata and embeds it securely back into the image using `piexif`.
-*   **File Organization**: After restoring metadata, files are evaluated for their creation date. They are then renamed and safely moved to an intuitive `/Year/Month/` folder structure. Any processed JSON is archived away so you are left with a perfectly clean media folder.
-*   **Duplicate Detection**: Hashing algorithms (Average Hash, Perceptual Hash, Difference Hash) compute differences. For ambiguous cases, a deep learning model (`MobileNetV2`) extracts feature embeddings to calculate high-dimensional similarity, ensuring incredibly accurate deduplication.
+3.  Select the root folder containing your media and (optionally) Google Takeout JSON files.
+4.  Choose your settings (Mode, Threshold, AI Level) and click **"Start"**.
 
 ## ☕ Support the Project
 
-This project is completely free and open-source. However, if you find it useful and it has saved you time or recovered precious memories, you can voluntarily support its development! 
+In the application's main screen, you'll find a **"Buy me a coffee"** button. Clicking it displays a PayPal QR code for voluntary donations. Your support is greatly appreciated!
 
-In the application's main screen, you'll find a **"Buy me a coffee"** button. Clicking it will display a PayPal QR code that you can scan to make a voluntary donation. Your support is greatly appreciated and helps keep the project alive!
+## 🤝 Contributing & License
 
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome!
-Feel free to check [issues page](https://github.com/wilkinbarban/photo-dedup/issues).
-
-## 📝 License
-
-This project is licensed under the **GNU General Public License v3.0 (GPLv3)**.
-
-You are free to use, modify, and distribute this software, provided that any derivative work is also distributed under the same GPLv3 license. See the [LICENSE](LICENSE) file for more details.
+Contributions are welcome via the [issues page](https://github.com/wilkinbarban/photo-dedup/issues).
+Licensed under the **GNU General Public License v3.0 (GPLv3)**.
 
 ---
 
-*Disclaimer: While this software includes safeguards like moving files to the trash instead of permanently deleting them, always make sure you have a backup of your precious photos before running automated deduplication or organization tools.*
+# 🇧🇷 Português
+
+🇺🇸 [English](#photodedup) | 🇧🇷 **Português** | [🇪🇸 Español](#-español)
+
+PhotoDedup é um localizador inteligente de fotos duplicadas e organizador de mídia automatizado. Construído com Python e PyQt6, ele não apenas detecta imagens duplicadas exatas e semelhantes, mas também se integra profundamente com arquivos JSON do Google Takeout para restaurar metadados EXIF perdidos e organizar sua biblioteca automaticamente.
+
+## 🚀 Funcionalidades
+
+*   **Detecção Inteligente de Duplicatas**: Encontre duplicatas exatas ou imagens visualmente semelhantes usando hash perceptivo e análises avançadas com Inteligência Artificial (`MobileNetV2`).
+*   **Integração com Google Takeout**: Associa automaticamente arquivos JSON às suas mídias, restaurando `photoTakenTime`, `geoData` (GPS) e descrições diretamente nos dados EXIF.
+*   **Organizador de Mídia Automático**: Renomeia arquivos para um formato padrão (`AAAA-MM-DD_HH-MM-SS.ext`) e os move para diretórios estruturados: `/AAAA/MM/`. Arquivos JSON processados são movidos para uma pasta `/Json/`.
+*   **Visualizador de Logs em Tempo Real**: Monitore o progresso, tarefas em segundo plano e erros diretamente da interface.
+*   **Interface Multilíngue**: O aplicativo suporta nativamente Inglês, Espanhol e Português do Brasil.
+*   **Exclusão Segura**: Duplicatas são movidas para a Lixeira do sistema, evitando perdas acidentais.
+*   **Alto Desempenho**: Utiliza múltiplos núcleos de CPU e cache integrado para acelerar verificações subsequentes.
+
+## 📦 Instalação
+
+1.  Clone este repositório: `git clone https://github.com/wilkinbarban/photo-dedup`
+2.  Instale as dependências:
+    *   **Windows**: Execute `install_dependencies.bat`.
+    *   **Manual**: `pip install -r requirements.txt`
+
+## 💻 Como Usar
+
+1.  Execute `python photo_dedup.py`
+2.  Selecione seu idioma preferido na inicialização.
+3.  Selecione a pasta raiz contendo suas mídias e arquivos JSON do Google Takeout.
+4.  Escolha as configurações (Modo, Limite, Nível de IA) e clique em **"Iniciar"**.
+
+## ☕ Apoie o Projeto
+
+Na tela principal do aplicativo, você encontrará um botão **"Buy me a coffee"**. Ao clicar nele, um QR code do PayPal será exibido para doações voluntárias. Seu apoio é muito apreciado!
+
+## 🤝 Contribuição e Licença
+
+Contribuições são bem-vindas na [página de issues](https://github.com/wilkinbarban/photo-dedup/issues).
+Licenciado sob a **GNU General Public License v3.0 (GPLv3)**.
+
+---
+
+# 🇪🇸 Español
+
+🇺🇸 [English](#photodedup) | [🇧🇷 Português](#-português) | 🇪🇸 **Español**
+
+PhotoDedup es un buscador inteligente de fotos duplicadas y organizador automático de medios. Creado con Python y PyQt6, no solo detecta imágenes duplicadas exactas o similares, sino que se integra profundamente con los archivos JSON de Google Takeout para restaurar metadatos EXIF perdidos y organizar tu biblioteca automáticamente.
+
+## 🚀 Características
+
+*   **Detección Inteligente de Duplicados**: Encuentra duplicados exactos o imágenes visualmente similares usando hashing perceptivo y análisis avanzados con Inteligencia Artificial (`MobileNetV2`).
+*   **Integración con Google Takeout**: Asocia automáticamente archivos JSON con tus medios, restaurando `photoTakenTime`, `geoData` (GPS) y descripciones directamente en los datos EXIF.
+*   **Organizador Automático de Medios**: Renombra archivos a un formato estándar (`AAAA-MM-DD_HH-MM-SS.ext`) y los mueve a directorios estructurados: `/AAAA/MM/`. Los JSON procesados se guardan en una carpeta `/Json/`.
+*   **Visor de Logs en Tiempo Real**: Monitorea el progreso, tareas en segundo plano y errores directamente desde la interfaz.
+*   **Interfaz Multilingüe**: La aplicación soporta de forma nativa Inglés, Español y Portugués de Brasil.
+*   **Borrado Seguro**: Los duplicados se mueven a la Papelera de Reciclaje del sistema para evitar pérdidas accidentales permanentes.
+*   **Alto Rendimiento**: Utiliza múltiples núcleos de CPU y almacenamiento en caché (`cache.json` y `embeddings.pkl`) para acelerar los análisis futuros.
+
+## 📦 Instalación
+
+1.  Clona este repositorio: `git clone https://github.com/wilkinbarban/photo-dedup`
+2.  Instala las dependencias:
+    *   **Windows**: Ejecuta `install_dependencies.bat`.
+    *   **Manual**: `pip install -r requirements.txt`
+
+## 💻 Uso
+
+1.  Ejecuta `python photo_dedup.py`
+2.  Selecciona tu idioma preferido al iniciar.
+3.  Selecciona la carpeta raíz que contiene tus medios y los archivos JSON de Google Takeout.
+4.  Elige tu configuración (Modo, Umbral, Nivel de IA) y haz clic en **"Iniciar"**.
+
+## ☕ Apoya el Proyecto
+
+En la pantalla principal de la aplicación, encontrarás un botón **"Buy me a coffee"**. Al hacer clic, se mostrará un código QR de PayPal para donaciones voluntarias. ¡Tu apoyo es muy apreciado!
+
+## 🤝 Contribuciones y Licencia
+
+Las contribuciones son bienvenidas a través de la [página de issues](https://github.com/wilkinbarban/photo-dedup/issues).
+Licenciado bajo la **GNU General Public License v3.0 (GPLv3)**.
