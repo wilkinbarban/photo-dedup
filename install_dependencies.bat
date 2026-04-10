@@ -1,44 +1,44 @@
 @echo off
 setlocal enabledelayedexpansion
-title Instalador de Dependencias - PhotoDedup
+title Dependency Installer - PhotoDedup
 color 0A
 
 echo ===================================================
-echo   Instalando dependencias para PhotoDedup...
+echo   Installing dependencies for PhotoDedup...
 echo ===================================================
 echo.
 
 :CHECK_PYTHON
-REM Comprueba si python está disponible en el PATH
+REM Check if python is available in PATH
 python --version >nul 2>&1
 if %errorlevel% equ 0 goto PY_OK
 
 color 0E
-echo [INFO] No se encontro Python en el sistema.
-echo Intentando instalar Python automaticamente usando winget...
+echo [INFO] Python was not found on this system.
+echo Trying to install Python automatically using winget...
 echo.
 
 winget install --id Python.Python.3.11 -e --source winget --accept-package-agreements --accept-source-agreements
 if %errorlevel% neq 0 (
     color 0C
-echo [ERROR] No se pudo instalar Python automaticamente.
-echo Por favor, instala Python manualmente desde https://python.org y asegurate de agregarlo al PATH.
-echo.
-pause
-exit /b
+    echo [ERROR] Python could not be installed automatically.
+    echo Please install Python manually from https://python.org and make sure it is added to PATH.
+    echo.
+    pause
+    exit /b
 )
 
-echo [INFO] Python se ha instalado (winget reporta exito). Intentando localizar python.exe...
+echo [INFO] Python installed (winget reported success). Trying to locate python.exe...
 echo.
 
-REM Primero intenta usar where (puede fallar si PATH no se actualizo en esta sesión)
+REM First try using where (may fail if PATH was not updated in this session)
 where python >nul 2>&1
 if %errorlevel% equ 0 (
-    echo [INFO] python encontrado via where.
+    echo [INFO] python found via where.
     goto PY_OK
 )
 
-REM Buscar en rutas comunes de instalacion por usuario y sistema
+REM Search in common installation paths (per-user and system)
 set "PY_PATH="
 for %%D in ("%LOCALAPPDATA%\Programs\Python\*" "%ProgramFiles%\Python*" "%ProgramFiles(x86)%\Python*") do (
     for /d %%P in (%%~D) do (
@@ -50,61 +50,70 @@ for %%D in ("%LOCALAPPDATA%\Programs\Python\*" "%ProgramFiles%\Python*" "%Progra
 )
 :FOUND_PY_PATH
 if defined PY_PATH (
-    echo [INFO] python.exe localizado en: "!PY_PATH!\python.exe"
-    echo [INFO] Añadiendo carpeta a PATH para la sesion actual...
+    echo [INFO] python.exe found at: "!PY_PATH!\python.exe"
+    echo [INFO] Adding folder to PATH for the current session...
     set "PATH=!PY_PATH!;!PATH!"
-    REM Verifica ahora
+    REM Verify now
     python --version >nul 2>&1
     if %errorlevel% equ 0 (
-        echo [INFO] Python disponible en la sesion actual.
+        echo [INFO] Python is available in the current session.
         goto PY_OK
     )
 )
 
-REM Si llegamos aqui, no podemos detectar python en la sesion actual.
+REM If we get here, Python cannot be detected in the current session.
 color 0E
 echo.
-echo [INFO] Python parece instalado pero no esta disponible en esta consola.
-echo Para aplicar los cambios en el PATH, cierra esta ventana de terminal, abre uno nuevo y vuelve a ejecutar install_dependencies.bat
-echo Si prefieres, puedes añadir manualmente la ruta del python.exe al PATH de usuario y luego reabrir la consola.
+echo [INFO] Python appears to be installed but is not available in this console.
+echo To apply PATH changes, close this terminal window, open a new one and run install_dependencies.bat again.
+echo If you prefer, add the python.exe path manually to your user PATH and reopen the console.
 echo.
 pause
 exit /b
 
 :PY_OK
 color 0A
-echo [INFO] Python detectado:
+echo [INFO] Python detected:
 python --version
 echo.
 
-echo [INFO] Actualizando pip...
+echo [INFO] Updating pip...
 python -m pip install --upgrade pip
 if %errorlevel% neq 0 (
     color 0C
-echo [ERROR] Fallo al actualizar pip. Revisa la instalacion de Python.
-pause
-exit /b
+    echo [ERROR] Failed to update pip. Check your Python installation.
+    pause
+    exit /b
 )
 
-echo [INFO] Instalando paquetes desde requirements.txt...
+echo [INFO] Installing packages from requirements.txt...
 pip install -r requirements.txt
 if %errorlevel% neq 0 (
     color 0C
-echo.
-echo ===================================================
-echo   [ERROR] Hubo un problema al instalar.
-echo   Revisa los mensajes de arriba para mas detalles.
-echo ===================================================
-echo.
-pause
-exit /b
+    echo.
+    echo ===================================================
+    echo   [ERROR] There was a problem during installation.
+    echo   Check the messages above for more details.
+    echo ===================================================
+    echo.
+    pause
+    exit /b
 )
 
 echo.
 echo ===================================================
-echo   Instalacion completada con exito!
-echo   Ya puedes abrir photo_dedup.py
+echo   Installation completed successfully!
+echo   Launching photo_dedup.py...
 echo ===================================================
+
+start "" python photo_dedup.py
+
+if %errorlevel% neq 0 (
+    color 0C
+    echo [ERROR] The program could not be launched automatically.
+    echo Please run: python photo_dedup.py
+)
+
 echo.
 pause
 endlocal

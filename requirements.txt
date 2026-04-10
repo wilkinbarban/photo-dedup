@@ -1,10 +1,33 @@
+# This file lists the Python dependencies for the project.
+# To install these dependencies, you can use pip:
+# pip install -r requirements.txt
+
+# PyQt6 powers the desktop user interface.
 PyQt6
+
+# Pillow handles image loading, conversion, and basic processing.
 Pillow
+
+# imagehash generates perceptual hashes for duplicate and similarity detection.
 imagehash
+
+# OpenCV provides additional image analysis and computer vision utilities.
 opencv-python
+
+# NumPy supports array operations and numerical processing.
 numpy
+
+# pillow-heif adds HEIF and HEIC image support to Pillow.
 pillow-heif
+
+# send2trash moves files to the recycle bin instead of deleting them permanently.
 send2trash
+
+# piexif reads and writes EXIF metadata in image files.
 piexif
+
+# torch provides the core deep learning runtime used by the project.
 torch
+
+# torchvision adds vision models and image transforms built on top of PyTorch.
 torchvision
