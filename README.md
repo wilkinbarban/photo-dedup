@@ -11,7 +11,7 @@ PhotoDedup is an intelligent duplicate photo finder and automated media organize
 Quick Installation: Run this command in PowerShell to download and install automatically.
 
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
 ```
 
 ## 🚀 Features
@@ -60,7 +60,7 @@ PhotoDedup é um localizador inteligente de fotos duplicadas e organizador de m�
 Instalação Rápida: Execute este comando no PowerShell para baixar e instalar automaticamente.
 
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
 ```
 
 ## 🚀 Funcionalidades
@@ -109,7 +109,7 @@ PhotoDedup es un buscador inteligente de fotos duplicadas y organizador automát
 Puedes instalar todo sin necesidad de Git: abre PowerShell, pega este comando y ejecútalo.
 
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
 ```
 
 ## 🚀 Características
