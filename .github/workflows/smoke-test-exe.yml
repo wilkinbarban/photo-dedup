@@ -1,0 +1,61 @@
+name: Smoke Test Windows EXE
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  smoke-test-exe:
+    runs-on: windows-latest
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build executable
+        shell: pwsh
+        run: |
+          ./scripts/build_windows.ps1 -Version "smoke-test" -Clean
+
+      - name: Smoke test EXE (start and controlled shutdown)
+        shell: pwsh
+        run: |
+          $exePath = Join-Path $PWD "dist\PhotoDedup\PhotoDedup.exe"
+          if (-not (Test-Path $exePath)) {
+            throw "EXE was not generated: $exePath"
+          }
+
+          Write-Host "[INFO] Starting EXE: $exePath"
+          $proc = Start-Process -FilePath $exePath -PassThru
+
+          # Give the app time to initialize and fail fast if startup is broken.
+          Start-Sleep -Seconds 12
+
+          if ($proc.HasExited) {
+            throw "EXE exited unexpectedly during smoke test. Exit code: $($proc.ExitCode)"
+          }
+
+          Write-Host "[INFO] EXE started successfully. Stopping process in a controlled way..."
+          Stop-Process -Id $proc.Id -Force
+          Write-Host "[OK] Smoke test passed."
+
+      - name: Upload smoke-test artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PhotoDedup-smoke-test-windows
+          path: dist/PhotoDedup-smoke-test-windows.zip
+          if-no-files-found: error
