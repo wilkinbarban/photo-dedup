@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-04-10
+
+### Added
+- **One-liner installer (`install.ps1`)**: Allows downloading and running the project setup directly from PowerShell without requiring Git.
+- **Secure installer (`install_secure.ps1`)**: Adds safer setup flow with host checks, connectivity validation, download retry logic, ZIP header validation, SHA-256 calculation, optional hash enforcement, and temp cleanup.
+- **Versioned release support in PowerShell installers**: Both `install.ps1` and `install_secure.ps1` now support custom release ZIP URLs and custom install folder names (`RepoZipUrl`, `InstallFolderName`).
+
+### Changed
+- **Installer UX language**: `install_dependencies.bat` messages were translated to English for consistent onboarding.
+- **Post-install behavior**: `install_dependencies.bat` now launches `photo_dedup.py` automatically after successful dependency installation.
+- **Desktop path handling**: PowerShell installers now resolve the actual Windows Desktop directory (including redirected folders such as OneDrive Desktop).
+
+### Fixed
+- **Python detection flow in batch installer**: Improved Python bootstrap and PATH session handling in `install_dependencies.bat`.
+- **Security prompt compatibility**: README one-liner commands now include `-UseBasicParsing` to avoid legacy web parser prompts.
+- **In-memory execution compatibility**: `install_secure.ps1` now handles execution via `iwr ... | iex` without failing signature checks when no local script path exists.
+
+### Documentation
+- Added multilingual **Quick Install** sections (English, Portuguese, Spanish) to README.
+- Documented secure installation in both quick and standard installation sections.
+- Added practical secure examples with versioned release ZIP and expected SHA-256.
+- Pinned secure installer documentation to a known-good commit to reduce cache-related issues.
+
 ## [1.0.0] - 2026-04-09
 
 ### Added
