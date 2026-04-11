@@ -30,6 +30,14 @@ powershell -ExecutionPolicy Bypass -Command "&([scriptblock]::Create((iwr -UseBa
 
 Note: this example targets the versioned `v1.0.0` release ZIP, so the hash remains stable for that release.
 
+## 🪟 Download Windows EXE
+
+If you prefer not to use the console, download the prebuilt Windows executable from Releases:
+
+https://github.com/wilkinbarban/photo-dedup/releases/latest
+
+Look for the asset named `PhotoDedup-vX.Y.Z-windows.zip`, extract it, and run `PhotoDedup.exe`.
+
 ## 🚀 Features
 
 *   **Intelligent Duplicate Detection**: Find exact duplicates based on file size/content or visually similar images using perceptual hashing and advanced AI-powered similarity checks (`MobileNetV2`).
@@ -97,6 +105,14 @@ powershell -ExecutionPolicy Bypass -Command "&([scriptblock]::Create((iwr -UseBa
 
 Observação: este exemplo usa o ZIP versionado da release `v1.0.0`, então o hash permanece estável para essa release.
 
+## 🪟 Download do EXE para Windows
+
+Se você prefere não usar console, baixe o executável do Windows já compilado em Releases:
+
+https://github.com/wilkinbarban/photo-dedup/releases/latest
+
+Procure o arquivo `PhotoDedup-vX.Y.Z-windows.zip`, extraia e execute `PhotoDedup.exe`.
+
 ## 🚀 Funcionalidades
 
 *   **Detecção Inteligente de Duplicatas**: Encontre duplicatas exatas ou imagens visualmente semelhantes usando hash perceptivo e análises avançadas com Inteligência Artificial (`MobileNetV2`).
@@ -163,6 +179,14 @@ powershell -ExecutionPolicy Bypass -Command "&([scriptblock]::Create((iwr -UseBa
 ```
 
 Nota: este ejemplo usa el ZIP versionado de la release `v1.0.0`, así que el hash se mantiene estable para esa release.
+
+## 🪟 Descargar EXE de Windows
+
+Si prefieres no usar consola, descarga el ejecutable de Windows ya compilado desde Releases:
+
+https://github.com/wilkinbarban/photo-dedup/releases/latest
+
+Busca el archivo `PhotoDedup-vX.Y.Z-windows.zip`, descomprímelo y ejecuta `PhotoDedup.exe`.
 
 ## 🚀 Características
 
