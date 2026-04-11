@@ -123,10 +123,15 @@ try {
     # Use modern TLS for secure HTTPS requests.
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-    $signature = Get-AuthenticodeSignature -FilePath $PSCommandPath
-    if ($signature.Status -ne "Valid") {
-        Write-Warn "This script is not Authenticode-signed or has an invalid signature."
-        Write-Warn "Continue only if you trust the source repository."
+    if (-not [string]::IsNullOrWhiteSpace($PSCommandPath) -and (Test-Path $PSCommandPath)) {
+        $signature = Get-AuthenticodeSignature -FilePath $PSCommandPath
+        if ($signature.Status -ne "Valid") {
+            Write-Warn "This script is not Authenticode-signed or has an invalid signature."
+            Write-Warn "Continue only if you trust the source repository."
+        }
+    }
+    else {
+        Write-Warn "Script signature check skipped (running from in-memory content)."
     }
 
     $repoUri = [Uri]$RepoZipUrl
