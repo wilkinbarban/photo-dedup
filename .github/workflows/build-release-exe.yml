@@ -35,6 +35,8 @@ jobs:
       - name: Upload asset to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/PhotoDedup-${{ github.ref_name }}-windows.zip
+          files: |
+            dist/PhotoDedup-${{ github.ref_name }}-windows.zip
+            install_secure.ps1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
