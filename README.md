@@ -14,6 +14,14 @@ Quick Installation: Run this command in PowerShell to download and install autom
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
 ```
 
+For a safer installation flow, you can use the secure installer:
+
+```powershell
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
+```
+
+`install_secure.ps1` adds extra validation before running the installer. It checks GitHub connectivity, retries failed downloads, validates that the downloaded file is a ZIP archive, calculates its SHA-256 hash, allows optional hash verification, and cleans up temporary files if something fails.
+
 ## 🚀 Features
 
 *   **Intelligent Duplicate Detection**: Find exact duplicates based on file size/content or visually similar images using perceptual hashing and advanced AI-powered similarity checks (`MobileNetV2`).
@@ -29,6 +37,8 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 1.  Clone this repository: `git clone https://github.com/wilkinbarban/photo-dedup`
 2.  Install dependencies:
     *   **Windows**: Run `install_dependencies.bat`.
+    *   **PowerShell (automatic)**: Run `install.ps1` for the standard one-line installer.
+    *   **PowerShell (secure)**: Run `install_secure.ps1` to add connectivity checks, download retries, ZIP validation, and optional SHA-256 verification.
     *   **Manual**: `pip install -r requirements.txt`
 
 ## 💻 Usage
@@ -63,6 +73,14 @@ Instalação Rápida: Execute este comando no PowerShell para baixar e instalar 
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
 ```
 
+Para um fluxo de instalação mais seguro, você pode usar o instalador seguro:
+
+```powershell
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
+```
+
+`install_secure.ps1` adiciona validações extras antes de executar o instalador. Ele verifica a conectividade com o GitHub, repete o download em caso de falha, valida se o arquivo baixado é realmente um ZIP, calcula o hash SHA-256, permite verificação opcional do hash e limpa os arquivos temporários se algo falhar.
+
 ## 🚀 Funcionalidades
 
 *   **Detecção Inteligente de Duplicatas**: Encontre duplicatas exatas ou imagens visualmente semelhantes usando hash perceptivo e análises avançadas com Inteligência Artificial (`MobileNetV2`).
@@ -78,6 +96,8 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 1.  Clone este repositório: `git clone https://github.com/wilkinbarban/photo-dedup`
 2.  Instale as dependências:
     *   **Windows**: Execute `install_dependencies.bat`.
+    *   **PowerShell (automático)**: Execute `install.ps1` para a instalação padrão em uma linha.
+    *   **PowerShell (seguro)**: Execute `install_secure.ps1` para adicionar verificação de conectividade, repetição de download, validação de ZIP e verificação opcional de SHA-256.
     *   **Manual**: `pip install -r requirements.txt`
 
 ## 💻 Como Usar
@@ -112,6 +132,14 @@ Puedes instalar todo sin necesidad de Git: abre PowerShell, pega este comando y 
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
 ```
 
+Si prefieres un flujo de instalación más seguro, puedes usar el instalador seguro:
+
+```powershell
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
+```
+
+`install_secure.ps1` agrega validaciones extra antes de ejecutar el instalador. Comprueba la conectividad con GitHub, reintenta la descarga si falla, valida que el archivo descargado sea realmente un ZIP, calcula su hash SHA-256, permite una verificación opcional del hash y limpia los archivos temporales si algo sale mal.
+
 ## 🚀 Características
 
 *   **Detección Inteligente de Duplicados**: Encuentra duplicados exactos o imágenes visualmente similares usando hashing perceptivo y análisis avanzados con Inteligencia Artificial (`MobileNetV2`).
@@ -127,6 +155,8 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 1.  Clona este repositorio: `git clone https://github.com/wilkinbarban/photo-dedup`
 2.  Instala las dependencias:
     *   **Windows**: Ejecuta `install_dependencies.bat`.
+    *   **PowerShell (automático)**: Ejecuta `install.ps1` para la instalación estándar en una sola línea.
+    *   **PowerShell (seguro)**: Ejecuta `install_secure.ps1` para añadir comprobación de conectividad, reintentos de descarga, validación de ZIP y verificación opcional de SHA-256.
     *   **Manual**: `pip install -r requirements.txt`
 
 ## 💻 Uso
