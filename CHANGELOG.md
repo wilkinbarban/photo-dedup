@@ -19,6 +19,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 - _No changes yet._
 
+## [1.0.3] - 2026-04-11
+
+### Added
+- **Windows EXE smoke test workflow**: Added `.github/workflows/smoke-test-exe.yml` to verify executable startup and controlled shutdown on Windows runners.
+- **Stable secure installer channel**: Release pipeline now publishes `install_secure.ps1` as a release asset in addition to the Windows ZIP.
+
+### Changed
+- **README secure installer commands**: Switched to the stable release channel URL (`releases/latest/download/install_secure.ps1`) in English, Portuguese, and Spanish sections.
+
+### Documentation
+- **Windows EXE download guidance**: Added multilingual “Download Windows EXE” sections with direct link to latest GitHub release assets.
+
 ## [1.0.2] - 2026-04-10
 
 ### Added

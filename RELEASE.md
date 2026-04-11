@@ -1,23 +1,21 @@
-# PhotoDedup v1.0.1
+# PhotoDedup v1.0.3
 
 *(Scroll down for Portuguese and Spanish versions / Role para baixo para Português e Espanhol / Desplácese hacia abajo para Portugués y Español)*
 
 🇺🇸 **English**
 
-## What's new in v1.0.1
-This release improves installation reliability and security, especially for users installing PhotoDedup directly from PowerShell.
+## What's new in v1.0.3
+This release strengthens the Windows distribution pipeline and makes the secure installer available through a stable release channel for non-technical users.
 
 ### Highlights
-- **One-line PowerShell install**: Added `install.ps1` for automatic download and setup without requiring Git.
-- **Secure installer option**: Added `install_secure.ps1` with connectivity checks, retry logic, ZIP validation, SHA-256 calculation, and optional hash enforcement.
-- **Versioned release installs**: PowerShell installers now accept custom release ZIP URLs and custom install folder names.
-- **Improved Windows compatibility**: Installers now resolve the real Desktop path (including redirected OneDrive Desktop).
-- **Dependency installer improvements**: `install_dependencies.bat` now shows English messages, improves Python detection/PATH handling, and launches the app after successful installation.
-- **Documentation overhaul**: README now includes multilingual quick install guides and secure install examples with hash validation.
+- **Stable secure installer channel**: `install_secure.ps1` is now published as a release asset, enabling stable install commands via `releases/latest/download`.
+- **Automated smoke testing for EXE**: Added a Windows smoke-test workflow to validate executable startup and controlled shutdown.
+- **Improved release assets**: Published releases now include both `PhotoDedup-vX.Y.Z-windows.zip` and `install_secure.ps1`.
+- **User-focused documentation updates**: README now includes multilingual direct-download instructions for Windows EXE and updated secure installer commands.
 
 ### Recommended secure install (PowerShell)
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/7d12ee7/install_secure.ps1 | iex"
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://github.com/wilkinbarban/photo-dedup/releases/latest/download/install_secure.ps1 | iex"
 ```
 
 ### Standard install
@@ -30,20 +28,18 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 🇧🇷 **Português (Brasil)**
 
-## O que há de novo na v1.0.1
-Esta versão melhora a confiabilidade e a segurança da instalação, especialmente para usuários que instalam o PhotoDedup diretamente pelo PowerShell.
+## O que há de novo na v1.0.3
+Esta versão fortalece o pipeline de distribuição para Windows e disponibiliza o instalador seguro por um canal estável de release para usuários não técnicos.
 
 ### Destaques
-- **Instalação em uma linha no PowerShell**: Adicionado `install.ps1` para download e configuração automática sem exigir Git.
-- **Opção de instalador seguro**: Adicionado `install_secure.ps1` com verificação de conectividade, tentativas automáticas, validação de ZIP, cálculo de SHA-256 e verificação opcional de hash.
-- **Instalação por releases versionadas**: Instaladores PowerShell agora aceitam URL de ZIP de release e nome de pasta de instalação personalizados.
-- **Compatibilidade melhorada no Windows**: Instaladores agora resolvem o caminho real da Área de Trabalho (incluindo redirecionamento via OneDrive).
-- **Melhorias no instalador de dependências**: `install_dependencies.bat` agora exibe mensagens em inglês, melhora detecção de Python/PATH e inicia o app após instalação bem-sucedida.
-- **Documentação ampliada**: README agora inclui guias multilíngues de instalação rápida e exemplos de instalação segura com validação de hash.
+- **Canal estável para instalador seguro**: `install_secure.ps1` agora é publicado como asset do release, permitindo comandos estáveis com `releases/latest/download`.
+- **Teste automatizado de fumaça do EXE**: Novo workflow em Windows para validar inicialização do executável e encerramento controlado.
+- **Assets de release aprimorados**: Releases publicados agora incluem `PhotoDedup-vX.Y.Z-windows.zip` e `install_secure.ps1`.
+- **Documentação focada no usuário final**: README com instruções multilíngues para download direto do EXE e comandos atualizados do instalador seguro.
 
 ### Instalação segura recomendada (PowerShell)
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/7d12ee7/install_secure.ps1 | iex"
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://github.com/wilkinbarban/photo-dedup/releases/latest/download/install_secure.ps1 | iex"
 ```
 
 ### Instalação padrão
@@ -56,20 +52,18 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 🇪🇸 **Español**
 
-## Novedades en la v1.0.1
-Esta versión mejora la fiabilidad y la seguridad de la instalación, especialmente para usuarios que instalan PhotoDedup directamente desde PowerShell.
+## Novedades en la v1.0.3
+Esta versión fortalece el pipeline de distribución para Windows y habilita un canal estable del instalador seguro para usuarios no técnicos.
 
 ### Cambios destacados
-- **Instalación en una línea con PowerShell**: Se añadió `install.ps1` para descargar y configurar automáticamente sin necesidad de Git.
-- **Instalador seguro opcional**: Se añadió `install_secure.ps1` con comprobación de conectividad, reintentos, validación de ZIP, cálculo de SHA-256 y verificación opcional del hash.
-- **Instalación por releases versionadas**: Los instaladores de PowerShell ahora aceptan URL de ZIP de release y nombre de carpeta de instalación personalizados.
-- **Mejor compatibilidad con Windows**: Los instaladores ahora detectan la ruta real del Escritorio (incluyendo redirección con OneDrive).
-- **Mejoras del instalador de dependencias**: `install_dependencies.bat` ahora muestra mensajes en inglés, mejora la detección de Python/PATH y abre el programa tras una instalación exitosa.
-- **Documentación ampliada**: El README ahora incluye instalación rápida multilingüe y ejemplos de instalación segura con validación de hash.
+- **Canal estable para instalador seguro**: `install_secure.ps1` ahora se publica como asset del release, permitiendo comandos estables con `releases/latest/download`.
+- **Smoke-test automatizado del EXE**: Nuevo workflow en Windows para validar el arranque del ejecutable y su cierre controlado.
+- **Assets de release mejorados**: Los releases publicados ahora incluyen `PhotoDedup-vX.Y.Z-windows.zip` e `install_secure.ps1`.
+- **Documentación orientada al usuario final**: README con instrucciones multilingües para descarga directa del EXE y comandos actualizados del instalador seguro.
 
 ### Instalación segura recomendada (PowerShell)
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/7d12ee7/install_secure.ps1 | iex"
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://github.com/wilkinbarban/photo-dedup/releases/latest/download/install_secure.ps1 | iex"
 ```
 
 ### Instalación estándar
