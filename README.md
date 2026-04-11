@@ -17,7 +17,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 For a safer installation flow, you can use the secure installer:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/7d12ee7/install_secure.ps1 | iex"
 ```
 
 `install_secure.ps1` adds extra validation before running the installer. It checks GitHub connectivity, retries failed downloads, validates that the downloaded file is a ZIP archive, calculates its SHA-256 hash, allows optional hash verification, and cleans up temporary files if something fails.
@@ -25,7 +25,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 To enforce SHA-256 validation, run this exact command:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "&([scriptblock]::Create((iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1).Content)) -RepoZipUrl https://github.com/wilkinbarban/photo-dedup/archive/refs/tags/v1.0.0.zip -InstallFolderName photo-dedup-v1.0.0 -ExpectedZipSha256 eae1b914b7af0e7ea8466eb32fc5f6f34a68af8018fc836be40a270f1a3ab753"
+powershell -ExecutionPolicy Bypass -Command "&([scriptblock]::Create((iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/7d12ee7/install_secure.ps1).Content)) -RepoZipUrl https://github.com/wilkinbarban/photo-dedup/archive/refs/tags/v1.0.0.zip -InstallFolderName photo-dedup-v1.0.0 -ExpectedZipSha256 eae1b914b7af0e7ea8466eb32fc5f6f34a68af8018fc836be40a270f1a3ab753"
 ```
 
 Note: this example targets the versioned `v1.0.0` release ZIP, so the hash remains stable for that release.
@@ -84,7 +84,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 Para um fluxo de instalação mais seguro, você pode usar o instalador seguro:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/7d12ee7/install_secure.ps1 | iex"
 ```
 
 `install_secure.ps1` adiciona validações extras antes de executar o instalador. Ele verifica a conectividade com o GitHub, repete o download em caso de falha, valida se o arquivo baixado é realmente um ZIP, calcula o hash SHA-256, permite verificação opcional do hash e limpa os arquivos temporários se algo falhar.
@@ -92,7 +92,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 Para exigir a validação SHA-256, execute este comando exato:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "&([scriptblock]::Create((iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1).Content)) -RepoZipUrl https://github.com/wilkinbarban/photo-dedup/archive/refs/tags/v1.0.0.zip -InstallFolderName photo-dedup-v1.0.0 -ExpectedZipSha256 eae1b914b7af0e7ea8466eb32fc5f6f34a68af8018fc836be40a270f1a3ab753"
+powershell -ExecutionPolicy Bypass -Command "&([scriptblock]::Create((iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/7d12ee7/install_secure.ps1).Content)) -RepoZipUrl https://github.com/wilkinbarban/photo-dedup/archive/refs/tags/v1.0.0.zip -InstallFolderName photo-dedup-v1.0.0 -ExpectedZipSha256 eae1b914b7af0e7ea8466eb32fc5f6f34a68af8018fc836be40a270f1a3ab753"
 ```
 
 Observação: este exemplo usa o ZIP versionado da release `v1.0.0`, então o hash permanece estável para essa release.
@@ -151,7 +151,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 Si prefieres un flujo de instalación más seguro, puedes usar el instalador seguro:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/7d12ee7/install_secure.ps1 | iex"
 ```
 
 `install_secure.ps1` agrega validaciones extra antes de ejecutar el instalador. Comprueba la conectividad con GitHub, reintenta la descarga si falla, valida que el archivo descargado sea realmente un ZIP, calcula su hash SHA-256, permite una verificación opcional del hash y limpia los archivos temporales si algo sale mal.
@@ -159,7 +159,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 Para forzar la validación SHA-256, ejecuta este comando exacto:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "&([scriptblock]::Create((iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1).Content)) -RepoZipUrl https://github.com/wilkinbarban/photo-dedup/archive/refs/tags/v1.0.0.zip -InstallFolderName photo-dedup-v1.0.0 -ExpectedZipSha256 eae1b914b7af0e7ea8466eb32fc5f6f34a68af8018fc836be40a270f1a3ab753"
+powershell -ExecutionPolicy Bypass -Command "&([scriptblock]::Create((iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/7d12ee7/install_secure.ps1).Content)) -RepoZipUrl https://github.com/wilkinbarban/photo-dedup/archive/refs/tags/v1.0.0.zip -InstallFolderName photo-dedup-v1.0.0 -ExpectedZipSha256 eae1b914b7af0e7ea8466eb32fc5f6f34a68af8018fc836be40a270f1a3ab753"
 ```
 
 Nota: este ejemplo usa el ZIP versionado de la release `v1.0.0`, así que el hash se mantiene estable para esa release.
@@ -198,3 +198,4 @@ En la pantalla principal de la aplicación, encontrarás un botón **"Buy me a c
 
 Las contribuciones son bienvenidas a través de la [página de issues](https://github.com/wilkinbarban/photo-dedup/issues).
 Licenciado bajo la **GNU General Public License v3.0 (GPLv3)**.
+
