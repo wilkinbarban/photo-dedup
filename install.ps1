@@ -1,16 +1,24 @@
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory = $false)]
+    [string]$RepoZipUrl = "https://github.com/wilkinbarban/photo-dedup/archive/refs/heads/main.zip",
+
+    [Parameter(Mandatory = $false)]
+    [string]$InstallFolderName = "photo-dedup-main"
+)
+
 $ErrorActionPreference = "Stop"
 
-$zipUrl = "https://github.com/wilkinbarban/photo-dedup/archive/refs/heads/main.zip"
 $desktopPath = [Environment]::GetFolderPath("DesktopDirectory")
 if ([string]::IsNullOrWhiteSpace($desktopPath)) {
     $desktopPath = Join-Path $env:USERPROFILE "Desktop"
 }
-$tempZipPath = Join-Path $env:TEMP "photo-dedup-main.zip"
+$tempZipPath = Join-Path $env:TEMP "photo-dedup.zip"
 $tempExtractPath = Join-Path $env:TEMP "photo-dedup-main-extract"
-$finalPath = Join-Path $desktopPath "photo-dedup-main"
+$finalPath = Join-Path $desktopPath $InstallFolderName
 
 Write-Host "Downloading PhotoDedup..."
-Invoke-WebRequest -Uri $zipUrl -OutFile $tempZipPath
+Invoke-WebRequest -Uri $RepoZipUrl -OutFile $tempZipPath
 
 Write-Host "Extracting files..."
 if (Test-Path $tempExtractPath) {

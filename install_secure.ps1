@@ -1,6 +1,12 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $false)]
+    [string]$RepoZipUrl = "https://github.com/wilkinbarban/photo-dedup/archive/refs/heads/main.zip",
+
+    [Parameter(Mandatory = $false)]
+    [string]$InstallFolderName = "photo-dedup-main",
+
+    [Parameter(Mandatory = $false)]
     [ValidateRange(1, 10)]
     [int]$MaxRetries = 3,
 
@@ -18,14 +24,13 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-$repoZipUrl = "https://github.com/wilkinbarban/photo-dedup/archive/refs/heads/main.zip"
 $desktopPath = [Environment]::GetFolderPath("DesktopDirectory")
 if ([string]::IsNullOrWhiteSpace($desktopPath)) {
     $desktopPath = Join-Path $env:USERPROFILE "Desktop"
 }
-$desktopTarget = Join-Path $desktopPath "photo-dedup-main"
+$desktopTarget = Join-Path $desktopPath $InstallFolderName
 $tempRoot = Join-Path $env:TEMP ("photo-dedup-install-" + [Guid]::NewGuid().ToString("N"))
-$zipPath = Join-Path $tempRoot "photo-dedup-main.zip"
+$zipPath = Join-Path $tempRoot "photo-dedup.zip"
 $extractPath = Join-Path $tempRoot "extract"
 
 $allowedHosts = @("github.com", "raw.githubusercontent.com", "codeload.github.com")
@@ -124,7 +129,7 @@ try {
         Write-Warn "Continue only if you trust the source repository."
     }
 
-    $repoUri = [Uri]$repoZipUrl
+    $repoUri = [Uri]$RepoZipUrl
     if ($allowedHosts -notcontains $repoUri.Host) {
         throw "Blocked download host: $($repoUri.Host)"
     }
@@ -136,8 +141,8 @@ try {
     New-Item -Path $tempRoot -ItemType Directory -Force | Out-Null
     New-Item -Path $extractPath -ItemType Directory -Force | Out-Null
 
-    Write-Info "Downloading project ZIP from main branch..."
-    Download-WithRetry -Url $repoZipUrl -OutputFile $zipPath -Retries $MaxRetries -DelaySeconds $RetryDelaySeconds
+    Write-Info "Downloading project ZIP from: $RepoZipUrl"
+    Download-WithRetry -Url $RepoZipUrl -OutputFile $zipPath -Retries $MaxRetries -DelaySeconds $RetryDelaySeconds
 
     Write-Info "Validating downloaded file format..."
     Test-ZipSignature -FilePath $zipPath
