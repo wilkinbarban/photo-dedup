@@ -2,7 +2,7 @@
 PhotoDedup - Intelligent Duplicate Photo Finder.
 """
 
-__version__ = "1.0.0"
+__version__ = "1.0.2"
 
 import sys
 import warnings

@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- _No changes yet._
+
+### Changed
+- _No changes yet._
+
+### Fixed
+- _No changes yet._
+
+### Documentation
+- _No changes yet._
+
+## [1.0.2] - 2026-04-10
+
+### Added
+- **Windows build automation**: Added `scripts/build_windows.ps1` to compile and package `PhotoDedup.exe` into a release ZIP artifact.
+- **PyInstaller project spec**: Added `PhotoDedup.spec` for reproducible Windows GUI builds.
+- **Release CI workflow**: Added `.github/workflows/build-release-exe.yml` to build and upload Windows ZIP assets automatically on published releases.
+
+### Documentation
+- Added multilingual **Download Windows EXE** sections in README linking directly to latest GitHub Releases for non-technical users.
+- Updated secure installer guidance to use the known-good pinned installer URL in README.
+
 ## [1.0.1] - 2026-04-10
 
 ### Added
