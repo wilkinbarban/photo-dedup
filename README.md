@@ -6,6 +6,14 @@
 
 PhotoDedup is an intelligent duplicate photo finder and automated media organizer. Built with Python and PyQt6, it not only detects exact and similar duplicate images but also integrates deeply with Google Takeout JSON files to restore lost EXIF metadata and organize your photo and video library automatically.
 
+## ⚡ Quick Install
+
+Quick Installation: Run this command in PowerShell to download and install automatically.
+
+```powershell
+powershell -ExecutionPolicy Bypass -Command "iwr https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
+```
+
 ## 🚀 Features
 
 *   **Intelligent Duplicate Detection**: Find exact duplicates based on file size/content or visually similar images using perceptual hashing and advanced AI-powered similarity checks (`MobileNetV2`).
@@ -47,6 +55,14 @@ Licensed under the **GNU General Public License v3.0 (GPLv3)**.
 
 PhotoDedup é um localizador inteligente de fotos duplicadas e organizador de mídia automatizado. Construído com Python e PyQt6, ele não apenas detecta imagens duplicadas exatas e semelhantes, mas também se integra profundamente com arquivos JSON do Google Takeout para restaurar metadados EXIF perdidos e organizar sua biblioteca automaticamente.
 
+## ⚡ Instalação Rápida
+
+Instalação Rápida: Execute este comando no PowerShell para baixar e instalar automaticamente.
+
+```powershell
+powershell -ExecutionPolicy Bypass -Command "iwr https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
+```
+
 ## 🚀 Funcionalidades
 
 *   **Detecção Inteligente de Duplicatas**: Encontre duplicatas exatas ou imagens visualmente semelhantes usando hash perceptivo e análises avançadas com Inteligência Artificial (`MobileNetV2`).
@@ -87,6 +103,14 @@ Licenciado sob a **GNU General Public License v3.0 (GPLv3)**.
 🇺🇸 [English](#photodedup) | [🇧🇷 Português](#-português) | 🇪🇸 **Español**
 
 PhotoDedup es un buscador inteligente de fotos duplicadas y organizador automático de medios. Creado con Python y PyQt6, no solo detecta imágenes duplicadas exactas o similares, sino que se integra profundamente con los archivos JSON de Google Takeout para restaurar metadatos EXIF perdidos y organizar tu biblioteca automáticamente.
+
+## ⚡ Instalación Rápida
+
+Puedes instalar todo sin necesidad de Git: abre PowerShell, pega este comando y ejecútalo.
+
+```powershell
+powershell -ExecutionPolicy Bypass -Command "iwr https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
+```
 
 ## 🚀 Características
 
