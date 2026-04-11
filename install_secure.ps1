@@ -19,7 +19,11 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $repoZipUrl = "https://github.com/wilkinbarban/photo-dedup/archive/refs/heads/main.zip"
-$desktopTarget = Join-Path $env:USERPROFILE "Desktop\photo-dedup-main"
+$desktopPath = [Environment]::GetFolderPath("DesktopDirectory")
+if ([string]::IsNullOrWhiteSpace($desktopPath)) {
+    $desktopPath = Join-Path $env:USERPROFILE "Desktop"
+}
+$desktopTarget = Join-Path $desktopPath "photo-dedup-main"
 $tempRoot = Join-Path $env:TEMP ("photo-dedup-install-" + [Guid]::NewGuid().ToString("N"))
 $zipPath = Join-Path $tempRoot "photo-dedup-main.zip"
 $extractPath = Join-Path $tempRoot "extract"
@@ -158,9 +162,13 @@ try {
     Write-Info "Extracting project files..."
     Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
 
-    $extractedProjectPath = Join-Path $extractPath "photo-dedup-main"
-    if (-not (Test-Path $extractedProjectPath)) {
-        throw "Expected extracted folder not found: $extractedProjectPath"
+    $extractedProjectFolder = Get-ChildItem -Path $extractPath -Directory | Select-Object -First 1
+    if (-not $extractedProjectFolder) {
+        throw "The extracted project folder could not be found."
+    }
+
+    if (-not (Test-Path $desktopPath)) {
+        New-Item -Path $desktopPath -ItemType Directory -Force | Out-Null
     }
 
     if (Test-Path $desktopTarget) {
@@ -169,7 +177,7 @@ try {
     }
 
     Write-Info "Moving files to desktop..."
-    Move-Item -Path $extractedProjectPath -Destination $desktopTarget -Force
+    Move-Item -Path $extractedProjectFolder.FullName -Destination $desktopTarget -Force
 
     Write-Info "Starting dependency installer..."
     $process = Start-Process "cmd.exe" -ArgumentList "/c install_dependencies.bat" -WorkingDirectory $desktopTarget -PassThru -Wait
