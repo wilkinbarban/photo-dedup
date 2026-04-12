@@ -2,6 +2,7 @@ import os
 from dataclasses import dataclass, field
 from typing import Optional
 
+
 @dataclass
 class PhotoInfo:
     """
@@ -67,6 +68,7 @@ class PhotoInfo:
         """
         return self.size / (1024 * 1024)
 
+
 @dataclass
 class DuplicateGroup:
     """
@@ -83,6 +85,7 @@ class DuplicateGroup:
     best_index: int = 0
     root_folder: str = ""
     match_type: str = "similar (hash)"
+
 
 @dataclass
 class Statistics:

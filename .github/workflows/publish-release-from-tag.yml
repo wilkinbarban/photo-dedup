@@ -28,10 +28,10 @@ jobs:
           APP_VERSION=$(python - <<'PY'
 import re
 from pathlib import Path
-text = Path("photo_dedup.py").read_text(encoding="utf-8")
+text = Path("src/main/photo_dedup.py").read_text(encoding="utf-8")
 match = re.search(r'^__version__\s*=\s*"([^"]+)"', text, re.MULTILINE)
 if not match:
-    raise SystemExit("Could not read __version__ from photo_dedup.py")
+    raise SystemExit("Could not read __version__ from src/main/photo_dedup.py")
 print(match.group(1))
 PY
 )

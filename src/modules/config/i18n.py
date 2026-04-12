@@ -336,7 +336,7 @@ TRANSLATIONS = {
         "msg_found_groups": "Encontrados {n} grupos duplicados",
         "btn_donate": "💙 Doação",
         "title_donate": "Apoie o projeto",
-        "msg_donate": "Se você achar esta ferramenta útil, considere apoiar o desenvolvimento com uma doação voluntária!",
+        "msg_donate": "Se você achar esta ferramenta útil, considere apoiar o desenvolvimento com uma doação voluntaria!",
         "lbl_logs": "Visualizador de Logs",
         "lbl_summary_title": "Resumo Final",
         "lbl_total_images": "Total de imagens analisadas: {n}",
@@ -344,7 +344,7 @@ TRANSLATIONS = {
         "lbl_duplicates_found": "Arquivos duplicados encontrados: {n}",
         "lbl_json_generated": "Arquivo .json gerado: {status}",
         "status_yes": "Sim",
-        "status_no": "Não",
+        "status_no": "Nao",
         "btn_continue": "Continuar",
         "btn_back": "Voltar"
     }
@@ -352,12 +352,13 @@ TRANSLATIONS = {
 
 _current_lang = "es"
 
+
 def set_language(lang_code: str):
     global _current_lang
     _current_lang = lang_code
+
 
 def get_text(key: str, language: str = None) -> str:
     lang = language or _current_lang
     lang_dict = TRANSLATIONS.get(lang, TRANSLATIONS["en"])
     return lang_dict.get(key, TRANSLATIONS["en"].get(key, key))
-

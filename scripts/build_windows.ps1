@@ -21,9 +21,9 @@ try {
     }
 
     if ([string]::IsNullOrWhiteSpace($Version)) {
-        $versionLine = Select-String -Path "photo_dedup.py" -Pattern '^__version__\s*=\s*"([^"]+)"' | Select-Object -First 1
+        $versionLine = Select-String -Path "src/main/photo_dedup.py" -Pattern '^__version__\s*=\s*"([^"]+)"' | Select-Object -First 1
         if (-not $versionLine) {
-            throw "Could not determine version from photo_dedup.py. Pass -Version explicitly."
+            throw "Could not determine version from src/main/photo_dedup.py. Pass -Version explicitly."
         }
 
         $Version = $versionLine.Matches[0].Groups[1].Value

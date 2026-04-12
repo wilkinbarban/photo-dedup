@@ -11,13 +11,16 @@ hiddenimports += ['pillow_heif']
 
 
 a = Analysis(
-    ['photo_dedup.py'],
+    ['src/main/photo_dedup.py'],
     pathex=['.'],
     binaries=[],
     datas=[
-        ('assets', 'assets'),
-        ('core', 'core'),
-        ('ui', 'ui'),
+        ('assets',                    'assets'),
+        ('src/main',                  'src/main'),
+        ('src/interfaces',            'src/interfaces'),
+        ('src/modules/config',        'src/modules/config'),
+        ('src/modules/services',      'src/modules/services'),
+        ('src/modules/utils',         'src/modules/utils'),
     ],
     hiddenimports=hiddenimports,
     hookspath=[],

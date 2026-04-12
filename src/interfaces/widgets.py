@@ -12,10 +12,10 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QPixmap, QImage, QColor, QCursor
 
-from core.models import PhotoInfo, DuplicateGroup, Statistics
-from core.state import log_history
-from core.i18n import get_text
-from ui.theme import *
+from src.modules.services.models import PhotoInfo, DuplicateGroup, Statistics
+from src.modules.config.state import log_history
+from src.modules.config.i18n import get_text
+from src.interfaces.theme import *
 
 def make_thumbnail(path: str, size: int = 220) -> QPixmap:
     """

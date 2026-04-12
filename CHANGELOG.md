@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- **Tag-driven release publishing**: Added `.github/workflows/publish-release-from-tag.yml` to create GitHub releases automatically from pushed tags (`vX.Y.Z`) after validating app/tag version consistency and generating `RELEASE.md` from `CHANGELOG.md`.
+- _No changes yet._
 
 ### Changed
 - _No changes yet._
@@ -18,6 +18,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Documentation
 - _No changes yet._
+
+## [1.0.6] - 2026-04-12
+
+### Added
+- **Canonical src architecture**: Introduced `src/main`, `src/modules`, and `src/interfaces` as the final runtime structure, with `src/main/photo_dedup.py` as the canonical app entrypoint.
+- **Maintenance script namespace**: Moved maintenance utilities to `scripts/maintenance/` (`update_analyzer.py`, `update_texts.py`) to keep the project root clean.
+
+### Changed
+- **Packaging and CI path alignment**: Updated `PhotoDedup.spec`, `scripts/build_windows.ps1`, and `.github/workflows/publish-release-from-tag.yml` to resolve version/build entrypoint from `src/main/photo_dedup.py`.
+- **Installer/runtime commands**: Updated installer and release docs to launch the app via `python src/main/photo_dedup.py`.
+
+### Fixed
+- **Legacy module removal**: Removed compatibility wrappers and deleted deprecated `core/` and `ui/` trees after migration validation.
+
+### Documentation
+- Updated `README.md`, `CONTRIBUTING.md`, `RELEASE.md`, and `RELEASE.template.md` to reflect the final `src/`-based structure and commands.
 
 ## [1.0.5] - 2026-04-12
 

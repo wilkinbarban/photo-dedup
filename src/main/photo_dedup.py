@@ -1,8 +1,9 @@
 """
 PhotoDedup - Intelligent Duplicate Photo Finder.
+Canonical application entry point.
 """
 
-__version__ = "1.0.5"
+__version__ = "1.0.6"
 
 import sys
 import warnings
@@ -10,42 +11,33 @@ import logging
 import os
 
 
-def resolve_asset_path(*parts: str) -> str:
-    """Resolve asset paths for both source execution and PyInstaller bundles."""
-    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
-        base_dir = getattr(sys, "_MEIPASS")
-    else:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(base_dir, *parts)
-
 def show_dependency_error(error_msg: str) -> None:
     """
     Displays a dependency error message and instructions on how to install them.
-    It attempts to show a graphical message box using tkinter, falling back to 
+    It attempts to show a graphical message box using tkinter, falling back to
     console output and pausing the console on Windows.
 
     Args:
         error_msg (str): The specific error message indicating the missing package.
-        
+
     Returns:
         None
     """
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print(" DEPENDENCY ERROR")
-    print("="*60)
+    print("=" * 60)
     print(f" A required package is missing: {error_msg}")
     print("\n Please install dependencies by running the file:")
     print(" -> install_dependencies.bat")
     print("\n Or run manually in the console:")
     print(" -> pip install -r requirements.txt")
-    print("="*60 + "\n")
-    
-    # Attempt to show a native graphical window using tkinter
+    print("=" * 60 + "\n")
+
     try:
         import tkinter as tk
         from tkinter import messagebox
         root = tk.Tk()
-        root.withdraw() # Hide the main window
+        root.withdraw()
         messagebox.showerror(
             "Dependency Error",
             f"A required package is missing:\n{error_msg}\n\n"
@@ -55,28 +47,29 @@ def show_dependency_error(error_msg: str) -> None:
         )
         root.destroy()
     except Exception:
-        # If tkinter fails, pause the console on Windows so the message can be read
-        if sys.platform == 'win32':
+        if sys.platform == "win32":
             os.system("pause")
-    
+
     sys.exit(1)
+
 
 try:
     from PyQt6.QtWidgets import QApplication
     from PyQt6.QtGui import QFont
-    
+
     import torch
     import torchvision
-    
+    from src.modules.utils.paths import resolve_asset_path
+
     try:
         import pillow_heif
         pillow_heif.register_heif_opener()
     except Exception:
         pass
 
-    warnings.filterwarnings('ignore', category=UserWarning, module='PIL')
+    warnings.filterwarnings("ignore", category=UserWarning, module="PIL")
 
-    from ui.main_window import MainWindow
+    from src.interfaces.main_window import MainWindow
 except ImportError as e:
     show_dependency_error(str(e))
 
@@ -86,39 +79,40 @@ def main() -> None:
     Main entry point for the PhotoDedup application.
     Initializes the PyQt6 application, sets the application name and font,
     and displays the main window.
-    
+
     Returns:
         None
     """
     import multiprocessing
     multiprocessing.freeze_support()
-    
-    from core.logger import setup_logger
+
+    from src.modules.utils.logger import setup_logger
     setup_logger()
 
     app = QApplication(sys.argv)
-    
+
     from PyQt6.QtCore import qInstallMessageHandler
+
     def qt_message_handler(mode, context, message):
         if "QFont::setPointSize" in message:
             return
         logging.getLogger().debug(f"Qt: {message}")
-        
+
     qInstallMessageHandler(qt_message_handler)
-    
-    from ui.language_dialog import LanguageDialog
-    from core.i18n import set_language, get_text
-    
+
+    from src.interfaces.language_dialog import LanguageDialog
+    from src.modules.config.i18n import set_language, get_text
+
     dialog = LanguageDialog()
     from PyQt6.QtWidgets import QDialog
     if dialog.exec() == QDialog.DialogCode.Accepted:
         set_language(dialog.selected_language)
     else:
         sys.exit(0)
-        
+
     app.setApplicationName(get_text("app_title"))
     app.setFont(QFont("Segoe UI", 10))
-    
+
     from PyQt6.QtGui import QIcon
     icon_path = resolve_asset_path("assets", "Icon.ico")
     if os.path.exists(icon_path):
@@ -127,6 +121,3 @@ def main() -> None:
     window = MainWindow()
     window.show()
     sys.exit(app.exec())
-
-if __name__ == "__main__":
-    main()

@@ -103,15 +103,15 @@ if %errorlevel% neq 0 (
 echo.
 echo ===================================================
 echo   Installation completed successfully!
-echo   Launching photo_dedup.py...
+echo   Launching src\main\photo_dedup.py...
 echo ===================================================
 
-start "" python photo_dedup.py
+start "" python src\main\photo_dedup.py
 
 if %errorlevel% neq 0 (
     color 0C
     echo [ERROR] The program could not be launched automatically.
-    echo Please run: python photo_dedup.py
+    echo Please run: python src\main\photo_dedup.py
 )
 
 echo.

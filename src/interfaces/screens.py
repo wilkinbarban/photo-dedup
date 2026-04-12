@@ -11,11 +11,11 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal, QTimer, QObject
 
-from core.models import DuplicateGroup, PhotoInfo, Statistics
-from core.state import load_config, save_config
-from core.i18n import get_text
-from ui.theme import *
-from ui.widgets import GroupWidget, StatisticsDialog
+from src.modules.services.models import DuplicateGroup, PhotoInfo, Statistics
+from src.modules.config.state import load_config, save_config
+from src.modules.config.i18n import get_text
+from src.interfaces.theme import *
+from src.interfaces.widgets import GroupWidget, StatisticsDialog
 
 class LogEmitter(QObject):
     log_signal = pyqtSignal(str)

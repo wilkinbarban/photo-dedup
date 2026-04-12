@@ -67,7 +67,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 ### Instalación manual
 1. Clona o descarga este repositorio.
 2. Ejecuta `install_dependencies.bat` o instala manualmente con `pip install -r requirements.txt`.
-3. Ejecuta `python photo_dedup.py`.
+3. Ejecuta `python src/main/photo_dedup.py`.
 
 ---
 
@@ -109,7 +109,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 ### Manual install
 1. Clone or download this repository.
 2. Run `install_dependencies.bat` or install manually with `pip install -r requirements.txt`.
-3. Run `python photo_dedup.py`.
+3. Run `python src/main/photo_dedup.py`.
 
 ---
 
@@ -151,7 +151,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 ### Instalacao manual
 1. Clone ou baixe este repositorio.
 2. Execute `install_dependencies.bat` ou instale manualmente com `pip install -r requirements.txt`.
-3. Execute `python photo_dedup.py`.
+3. Execute `python src/main/photo_dedup.py`.
 
 ---
 
@@ -159,9 +159,10 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 | File / Folder | Description |
 |---|---|
-| `photo_dedup.py` | Main application entry point |
-| `core/` | Core logic: analysis, models, state, i18n, logging |
-| `ui/` | User interface components and screens |
+| `src/main/` | Canonical application entry point and startup flow |
+| `src/modules/` | Core logic: analysis, models, state, i18n, logging, utilities |
+| `src/interfaces/` | User interface components, dialogs, screens, and theme |
+| `scripts/maintenance/` | Migration and text-update maintenance helpers |
 | `assets/` | Icons and visual resources |
 | `install_dependencies.bat` | Windows dependency installer |
 | `install.ps1` | Standard PowerShell installer |

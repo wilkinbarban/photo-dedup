@@ -21,7 +21,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 1. Download the Source Code (`zip` or `tar.gz`) below.
 2. Extract the files and open a terminal in the folder.
 3. Install dependencies: `install_dependencies.bat` (Windows) or `pip install -r requirements.txt`.
-4. Run: `python photo_dedup.py`.
+4. Run: `python src/main/photo_dedup.py`.
 
 ---
 
@@ -42,7 +42,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 1. Baixe o Codigo Fonte (`zip` ou `tar.gz`) abaixo.
 2. Extraia os arquivos e abra um terminal na pasta.
 3. Instale as dependencias: `install_dependencies.bat` (Windows) ou `pip install -r requirements.txt`.
-4. Execute: `python photo_dedup.py`.
+4. Execute: `python src/main/photo_dedup.py`.
 
 ---
 
@@ -63,4 +63,4 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 1. Descarga el Codigo Fuente (`zip` o `tar.gz`) a continuacion.
 2. Extrae los archivos y abre una terminal en la carpeta.
 3. Instala las dependencias: `install_dependencies.bat` (Windows) o `pip install -r requirements.txt`.
-4. Ejecuta: `python photo_dedup.py`.
+4. Ejecuta: `python src/main/photo_dedup.py`.

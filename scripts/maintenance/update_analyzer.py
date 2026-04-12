@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 def update_i18n():
-    with open('core/i18n.py', 'r', encoding='utf-8') as f:
+    with open('src/modules/config/i18n.py', 'r', encoding='utf-8') as f:
         content = f.read()
 
     new_en = """        "lbl_summary_groups": "{tot_groups} duplicate groups  •  {tot_photos} involved photos",
@@ -43,16 +43,16 @@ def update_i18n():
     content = content.replace('        "lbl_summary_groups": "{tot_groups} grupos duplicados  •  {tot_photos} fotos implicadas"\n    },', new_es)
     content = content.replace('        "lbl_summary_groups": "{tot_groups} grupos duplicados  •  {tot_photos} fotos envolvidas"\n    }', new_pt)
 
-    with open('core/i18n.py', 'w', encoding='utf-8') as f:
+    with open('src/modules/config/i18n.py', 'w', encoding='utf-8') as f:
         f.write(content)
 
 def update_analyzer():
-    with open('core/analyzer.py', 'r', encoding='utf-8') as f:
+    with open('src/modules/services/analyzer.py', 'r', encoding='utf-8') as f:
         content = f.read()
 
     # Add import
-    if "from core.i18n import get_text" not in content:
-        content = content.replace("import multiprocessing", "import multiprocessing\nfrom core.i18n import get_text")
+    if "from src.modules.config.i18n import get_text" not in content:
+        content = content.replace("import multiprocessing", "import multiprocessing\nfrom src.modules.config.i18n import get_text")
         
     replacements = [
         ('self.progress.emit(0, "Cargando modelo de IA...")', 'self.progress.emit(0, get_text("msg_load_ai"))'),
@@ -67,7 +67,7 @@ def update_analyzer():
     for old, new in replacements:
         content = content.replace(old, new)
         
-    with open('core/analyzer.py', 'w', encoding='utf-8') as f:
+    with open('src/modules/services/analyzer.py', 'w', encoding='utf-8') as f:
         f.write(content)
 
 update_i18n()

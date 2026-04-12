@@ -1,18 +1,9 @@
 import os
-import sys
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QComboBox, QWidget
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
-from ui.theme import DARK_BG, TEXT_PRI, ACCENT, PANEL_BG, BORDER, CARD_BG
-
-
-def resolve_asset_path(*parts: str) -> str:
-    """Resolve asset paths for both source execution and PyInstaller bundles."""
-    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
-        base_dir = getattr(sys, "_MEIPASS")
-    else:
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    return os.path.join(base_dir, *parts)
+from src.modules.utils.paths import resolve_asset_path
+from src.interfaces.theme import DARK_BG, TEXT_PRI, ACCENT, PANEL_BG, BORDER, CARD_BG
 
 class LanguageDialog(QDialog):
     def __init__(self, parent=None):

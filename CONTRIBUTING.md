@@ -40,7 +40,7 @@ install_dependencies.bat
 Then run:
 
 ```cmd
-python photo_dedup.py
+python src\main\photo_dedup.py
 ```
 
 ### Manual setup
@@ -50,7 +50,7 @@ python -m venv .venv
 .venv\Scripts\activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
-python photo_dedup.py
+python src\main\photo_dedup.py
 ```
 
 ## Local validation before PR
@@ -58,7 +58,7 @@ python photo_dedup.py
 At minimum, run:
 
 ```cmd
-python -m py_compile photo_dedup.py update_analyzer.py update_texts.py core\ai_model.py core\analyzer.py core\i18n.py core\logger.py core\models.py core\state.py core\takeout.py ui\language_dialog.py ui\main_window.py ui\screens.py ui\theme.py ui\widgets.py
+python -m py_compile src\main\photo_dedup.py scripts\maintenance\update_analyzer.py scripts\maintenance\update_texts.py src\interfaces\language_dialog.py src\interfaces\main_window.py src\interfaces\screens.py src\interfaces\theme.py src\interfaces\widgets.py src\modules\config\i18n.py src\modules\config\state.py src\modules\services\ai_model.py src\modules\services\analyzer.py src\modules\services\models.py src\modules\services\takeout.py src\modules\utils\logger.py src\modules\utils\paths.py
 ```
 
 If your change touches packaging/release flow, validate:
@@ -75,7 +75,7 @@ python scripts\generate_release_md.py --version X.Y.Z
 
 ## Release process (one tag push)
 
-After updating `photo_dedup.py` version and `CHANGELOG.md` for `X.Y.Z`, publish with one command:
+After updating `src/main/photo_dedup.py` version and `CHANGELOG.md` for `X.Y.Z`, publish with one command:
 
 ```cmd
 git push origin vX.Y.Z
@@ -91,7 +91,7 @@ Then `.github/workflows/build-release-exe.yml` runs on release publish and uploa
 ## Coding guidelines
 
 - Prefer small, clear commits.
-- Keep architecture modular between core and ui layers.
+- Keep architecture modular between `src/modules` and `src/interfaces`.
 - Avoid unrelated refactors in the same PR.
 - Preserve desktop usability and responsiveness.
 - Update README.md and/or CHANGELOG.md when behavior changes.

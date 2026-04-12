@@ -12,7 +12,7 @@ def process_file(filepath, replacements):
         f.write(content)
 
 screens_replacements = [
-    ('from core.state import load_config, save_config', 'from core.state import load_config, save_config\nfrom core.i18n import get_text'),
+    ('from src.modules.config.state import load_config, save_config', 'from src.modules.config.state import load_config, save_config\nfrom src.modules.config.i18n import get_text'),
     ('title = QLabel("PhotoDedup")', 'title = QLabel(get_text("app_title"))'),
     ('subtitle = QLabel("Intelligently find and manage duplicate photos")', 'subtitle = QLabel(get_text("app_subtitle"))'),
     ('folder_group = QGroupBox("Folder to analyze")', 'folder_group = QGroupBox(get_text("grp_folder"))'),
@@ -58,7 +58,7 @@ screens_replacements = [
 ]
 
 widgets_replacements = [
-    ('from core.state import log_history', 'from core.state import log_history\nfrom core.i18n import get_text'),
+    ('from src.modules.config.state import log_history', 'from src.modules.config.state import log_history\nfrom src.modules.config.i18n import get_text'),
     ('badge = QLabel("  Recommended")', 'badge = QLabel(get_text("badge_rec"))'),
     ('score_lbl = QLabel(f"Quality: {score_pct}/100")', 'score_lbl = QLabel(get_text("lbl_quality").format(pct=score_pct))'),
     ('f"🔍 Sharpness: {self.photo.sharpness:.0f}{location_str}"', 'get_text("lbl_sharpness").format(shp=f"{self.photo.sharpness:.0f}") + location_str'),
@@ -96,12 +96,12 @@ widgets_replacements = [
 ]
 
 main_replacements = [
-    ('from core.state import CACHE_FILE\nfrom ui.theme import *', 'from core.state import CACHE_FILE\nfrom core.i18n import get_text\nfrom ui.theme import *'),
+    ('from src.modules.config.state import CACHE_FILE\nfrom src.interfaces.theme import *', 'from src.modules.config.state import CACHE_FILE\nfrom src.modules.config.i18n import get_text\nfrom src.interfaces.theme import *'),
     ('self.setWindowTitle("PhotoDedup")', 'self.setWindowTitle(get_text("app_title"))'),
     ('QMessageBox.critical(self, "Analysis Error", msg)', 'QMessageBox.critical(self, get_text("title_error"), msg)'),
     ('reply = QMessageBox.question(\n                self,\n                "Clear Cache",\n                "Do you want to clear the analysis cache before exiting?\\n\\nIf you keep it, future analysis of the same photos will be much faster. If you delete it, you\'ll free up disk space.",', 'reply = QMessageBox.question(\n                self,\n                get_text("title_clear_cache"),\n                get_text("msg_clear_cache"),')
 ]
 
-process_file('ui/screens.py', screens_replacements)
-process_file('ui/widgets.py', widgets_replacements)
-process_file('ui/main_window.py', main_replacements)
+process_file('src/interfaces/screens.py', screens_replacements)
+process_file('src/interfaces/widgets.py', widgets_replacements)
+process_file('src/interfaces/main_window.py', main_replacements)

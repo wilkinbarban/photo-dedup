@@ -5,12 +5,12 @@ from pathlib import Path
 from PyQt6.QtWidgets import QMainWindow, QStackedWidget, QMessageBox
 from PyQt6.QtCore import Qt
 
-from core.analyzer import AnalysisWorker
-from core.models import DuplicateGroup, Statistics
-from core.state import CACHE_FILE
-from core.i18n import get_text
-from ui.theme import *
-from ui.screens import WelcomeScreen, ProgressScreen, ResultsScreen
+from src.modules.services.analyzer import AnalysisWorker
+from src.modules.services.models import DuplicateGroup, Statistics
+from src.modules.config.state import CACHE_FILE
+from src.modules.config.i18n import get_text
+from src.interfaces.theme import *
+from src.interfaces.screens import WelcomeScreen, ProgressScreen, ResultsScreen
 
 class MainWindow(QMainWindow):
     """
@@ -67,9 +67,9 @@ class MainWindow(QMainWindow):
         self.results = ResultsScreen()
         self.results.back_requested.connect(self._go_home)
 
-        self.stack.addWidget(self.welcome)       # 0
-        self.stack.addWidget(self.progress_screen)  # 1
-        self.stack.addWidget(self.results)       # 2
+        self.stack.addWidget(self.welcome)           # 0
+        self.stack.addWidget(self.progress_screen)   # 1
+        self.stack.addWidget(self.results)           # 2
 
     def _start_analysis(self, folder: str, threshold: int, duplicate_mode: str = "similar") -> None:
         """
@@ -83,7 +83,7 @@ class MainWindow(QMainWindow):
         self.stack.setCurrentIndex(1)
         self.progress_screen.set_worker(None)
 
-        from core.state import load_config
+        from src.modules.config.state import load_config
         config = load_config()
         use_ai = config.get('use_ai', False)
         ai_level = config.get('ai_level', 'balanced')
