@@ -1,4 +1,4 @@
-# PhotoDedup v1.0.6
+# PhotoDedup v1.0.7
 
 *(Auto-generated from CHANGELOG. Do not edit manually.)*
 
@@ -6,23 +6,15 @@
 
 ## English
 
-### What's new in v1.0.6
+### What's new in v1.0.7
 Release date: 2026-04-12
 
 ### Highlights
-### Added
-- **Canonical src architecture**: Introduced `src/main`, `src/modules`, and `src/interfaces` as the final runtime structure, with `src/main/photo_dedup.py` as the canonical app entrypoint.
-- **Maintenance script namespace**: Moved maintenance utilities to `scripts/maintenance/` (`update_analyzer.py`, `update_texts.py`) to keep the project root clean.
-
 ### Changed
-- **Packaging and CI path alignment**: Updated `PhotoDedup.spec`, `scripts/build_windows.ps1`, and `.github/workflows/publish-release-from-tag.yml` to resolve version/build entrypoint from `src/main/photo_dedup.py`.
-- **Installer/runtime commands**: Updated installer and release docs to launch the app via `python src/main/photo_dedup.py`.
+- **Release reliability**: Updated CI triggers so release build and smoke-test workflows run from tag-based publication flow without GitHub token event-chaining issues.
 
 ### Fixed
-- **Legacy module removal**: Removed compatibility wrappers and deleted deprecated `core/` and `ui/` trees after migration validation.
-
-### Documentation
-- Updated `README.md`, `CONTRIBUTING.md`, `RELEASE.md`, and `RELEASE.template.md` to reflect the final `src/`-based structure and commands.
+- **Runtime import bootstrap**: Added startup path bootstrap in `src/main/photo_dedup.py` to guarantee `src.*` imports resolve correctly when launching the entrypoint directly and in frozen runtime.
 
 ### Recommended secure install (PowerShell)
 ```powershell
@@ -39,23 +31,15 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 ## Portugues (Brasil)
 
-### O que ha de novo na v1.0.6
+### O que ha de novo na v1.0.7
 Data do release: 2026-04-12
 
 ### Destaques
-### Adicionado
-- **Canonical src architecture**: Introduced `src/main`, `src/modules`, and `src/interfaces` as the final runtime structure, with `src/main/photo_dedup.py` as the canonical app entrypoint.
-- **Maintenance script namespace**: Moved maintenance utilities to `scripts/maintenance/` (`update_analyzer.py`, `update_texts.py`) to keep the project root clean.
-
 ### Alterado
-- **Packaging and CI path alignment**: Updated `PhotoDedup.spec`, `scripts/build_windows.ps1`, and `.github/workflows/publish-release-from-tag.yml` to resolve version/build entrypoint from `src/main/photo_dedup.py`.
-- **Installer/runtime commands**: Updated installer and release docs to launch the app via `python src/main/photo_dedup.py`.
+- **Release reliability**: Updated CI triggers so release build and smoke-test workflows run from tag-based publication flow without GitHub token event-chaining issues.
 
 ### Corrigido
-- **Legacy module removal**: Removed compatibility wrappers and deleted deprecated `core/` and `ui/` trees after migration validation.
-
-### Documentacao
-- Updated `README.md`, `CONTRIBUTING.md`, `RELEASE.md`, and `RELEASE.template.md` to reflect the final `src/`-based structure and commands.
+- **Runtime import bootstrap**: Added startup path bootstrap in `src/main/photo_dedup.py` to guarantee `src.*` imports resolve correctly when launching the entrypoint directly and in frozen runtime.
 
 ### Instalacao segura recomendada (PowerShell)
 ```powershell
@@ -72,23 +56,15 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 ## Espanol
 
-### Novedades en la v1.0.6
+### Novedades en la v1.0.7
 Fecha de release: 2026-04-12
 
 ### Cambios destacados
-### Anadido
-- **Canonical src architecture**: Introduced `src/main`, `src/modules`, and `src/interfaces` as the final runtime structure, with `src/main/photo_dedup.py` as the canonical app entrypoint.
-- **Maintenance script namespace**: Moved maintenance utilities to `scripts/maintenance/` (`update_analyzer.py`, `update_texts.py`) to keep the project root clean.
-
 ### Cambiado
-- **Packaging and CI path alignment**: Updated `PhotoDedup.spec`, `scripts/build_windows.ps1`, and `.github/workflows/publish-release-from-tag.yml` to resolve version/build entrypoint from `src/main/photo_dedup.py`.
-- **Installer/runtime commands**: Updated installer and release docs to launch the app via `python src/main/photo_dedup.py`.
+- **Release reliability**: Updated CI triggers so release build and smoke-test workflows run from tag-based publication flow without GitHub token event-chaining issues.
 
 ### Corregido
-- **Legacy module removal**: Removed compatibility wrappers and deleted deprecated `core/` and `ui/` trees after migration validation.
-
-### Documentacion
-- Updated `README.md`, `CONTRIBUTING.md`, `RELEASE.md`, and `RELEASE.template.md` to reflect the final `src/`-based structure and commands.
+- **Runtime import bootstrap**: Added startup path bootstrap in `src/main/photo_dedup.py` to guarantee `src.*` imports resolve correctly when launching the entrypoint directly and in frozen runtime.
 
 ### Instalacion segura recomendada (PowerShell)
 ```powershell

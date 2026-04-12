@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 - _No changes yet._
 
+## [1.0.7] - 2026-04-12
+
+### Fixed
+- **Runtime import bootstrap**: Added startup path bootstrap in `src/main/photo_dedup.py` to guarantee `src.*` imports resolve correctly when launching the entrypoint directly and in frozen runtime.
+
+### Changed
+- **Release reliability**: Updated CI triggers so release build and smoke-test workflows run from tag-based publication flow without GitHub token event-chaining issues.
+
 ## [1.0.6] - 2026-04-12
 
 ### Added
