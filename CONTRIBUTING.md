@@ -67,6 +67,12 @@ If your change touches packaging/release flow, validate:
 ./scripts/build_windows.ps1 -Version local-test -Clean
 ```
 
+Before creating a new release tag, regenerate release notes from template:
+
+```cmd
+python scripts\generate_release_md.py --version X.Y.Z
+```
+
 ## Coding guidelines
 
 - Prefer small, clear commits.

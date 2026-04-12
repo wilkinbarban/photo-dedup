@@ -1,4 +1,4 @@
-# PhotoDedup v1.0.5
+# PhotoDedup v{{VERSION}}
 
 *(Auto-generated from CHANGELOG. Do not edit manually.)*
 
@@ -6,13 +6,11 @@
 
 ## English
 
-### What's new in v1.0.5
-Release date: 2026-04-12
+### What's new in v{{VERSION}}
+Release date: {{DATE}}
 
 ### Highlights
-### Changed
-- **Release asset policy**: `install_secure.ps1` is no longer attached as a GitHub Release asset; release uploads now include only `PhotoDedup.exe` and `PhotoDedup-vX.Y.Z-windows.zip`.
-- **README secure installer source**: Updated secure install commands (ES/EN/PT) to fetch `install_secure.ps1` from the repository source (`raw.githubusercontent.com`) instead of release assets.
+{{HIGHLIGHTS_EN}}
 
 ### Recommended secure install (PowerShell)
 ```powershell
@@ -29,13 +27,11 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 ## Portugues (Brasil)
 
-### O que ha de novo na v1.0.5
-Data do release: 2026-04-12
+### O que ha de novo na v{{VERSION}}
+Data do release: {{DATE}}
 
 ### Destaques
-### Alterado
-- **Release asset policy**: `install_secure.ps1` is no longer attached as a GitHub Release asset; release uploads now include only `PhotoDedup.exe` and `PhotoDedup-vX.Y.Z-windows.zip`.
-- **README secure installer source**: Updated secure install commands (ES/EN/PT) to fetch `install_secure.ps1` from the repository source (`raw.githubusercontent.com`) instead of release assets.
+{{HIGHLIGHTS_PT}}
 
 ### Instalacao segura recomendada (PowerShell)
 ```powershell
@@ -52,13 +48,11 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 ## Espanol
 
-### Novedades en la v1.0.5
-Fecha de release: 2026-04-12
+### Novedades en la v{{VERSION}}
+Fecha de release: {{DATE}}
 
 ### Cambios destacados
-### Cambiado
-- **Release asset policy**: `install_secure.ps1` is no longer attached as a GitHub Release asset; release uploads now include only `PhotoDedup.exe` and `PhotoDedup-vX.Y.Z-windows.zip`.
-- **README secure installer source**: Updated secure install commands (ES/EN/PT) to fetch `install_secure.ps1` from the repository source (`raw.githubusercontent.com`) instead of release assets.
+{{HIGHLIGHTS_ES}}
 
 ### Instalacion segura recomendada (PowerShell)
 ```powershell
