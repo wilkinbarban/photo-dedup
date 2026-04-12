@@ -11,14 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _No changes yet._
 
 ### Changed
-- **Release asset policy**: `install_secure.ps1` is no longer attached as a GitHub Release asset; release uploads now include only `PhotoDedup.exe` and `PhotoDedup-vX.Y.Z-windows.zip`.
-- **README secure installer source**: Updated secure install commands (ES/EN/PT) to fetch `install_secure.ps1` from the repository source (`raw.githubusercontent.com`) instead of release assets.
+- _No changes yet._
 
 ### Fixed
 - _No changes yet._
 
 ### Documentation
 - _No changes yet._
+
+## [1.0.5] - 2026-04-12
+
+### Changed
+- **Release asset policy**: `install_secure.ps1` is no longer attached as a GitHub Release asset; release uploads now include only `PhotoDedup.exe` and `PhotoDedup-vX.Y.Z-windows.zip`.
+- **README secure installer source**: Updated secure install commands (ES/EN/PT) to fetch `install_secure.ps1` from the repository source (`raw.githubusercontent.com`) instead of release assets.
 
 ## [1.0.4] - 2026-04-12
 

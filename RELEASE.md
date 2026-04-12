@@ -1,21 +1,20 @@
-# PhotoDedup v1.0.4
+# PhotoDedup v1.0.5
 
 *(Scroll down for Portuguese and Spanish versions / Role para baixo para Português e Espanhol / Desplácese hacia abajo para Portugués y Español)*
 
 🇺🇸 **English**
 
-## What's new in v1.0.4
-This release focuses on zero-friction distribution for novice users by publishing a standalone single-file executable and aligning CI validation to that packaging mode.
+## What's new in v1.0.5
+This release refines the asset policy for cleaner downloads: novice users now receive only the executable deliverables in release assets.
 
 ### Highlights
-- **Standalone EXE published**: Release assets now include direct `PhotoDedup.exe` download for users who do not want extraction steps.
-- **Single-file packaging mode**: PyInstaller moved to `onefile`, bundling runtime components into one executable.
-- **Smoke test aligned to onefile output**: CI now validates startup of `dist/PhotoDedup.exe`.
-- **User-focused documentation updates**: README now highlights direct standalone EXE download in ES/EN/PT.
+- **Cleaner release assets**: `install_secure.ps1` is no longer uploaded as a release asset.
+- **Executable-focused delivery**: Release assets now include only `PhotoDedup.exe` and `PhotoDedup-vX.Y.Z-windows.zip`.
+- **Secure installer still available**: `install_secure.ps1` can be fetched from repository source when needed.
 
 ### Recommended secure install (PowerShell)
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://github.com/wilkinbarban/photo-dedup/releases/latest/download/install_secure.ps1 | iex"
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
 
 ### Standard install
@@ -28,18 +27,17 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://github
 
 🇧🇷 **Português (Brasil)**
 
-## O que há de novo na v1.0.4
-Esta versao prioriza distribuicao sem atrito para usuarios iniciantes, publicando um executavel unico e alinhando a validacao de CI para esse modo.
+## O que há de novo na v1.0.5
+Esta versao refina a politica de assets para downloads mais limpos: usuarios iniciantes recebem apenas os entregaveis executaveis no release.
 
 ### Destaques
-- **EXE standalone publicado**: Os assets do release agora incluem `PhotoDedup.exe` para download direto sem etapa de extracao.
-- **Empacotamento em arquivo unico**: PyInstaller migrado para `onefile`, com dependencias de runtime empacotadas no executavel.
-- **Smoke test alinhado ao onefile**: CI agora valida inicializacao de `dist/PhotoDedup.exe`.
-- **Documentacao focada no usuario final**: README destaca download direto do EXE standalone em ES/EN/PT.
+- **Assets de release mais limpos**: `install_secure.ps1` nao e mais enviado como asset de release.
+- **Entrega focada no executavel**: os assets do release agora incluem apenas `PhotoDedup.exe` e `PhotoDedup-vX.Y.Z-windows.zip`.
+- **Instalador seguro ainda disponivel**: `install_secure.ps1` pode ser baixado pelo source do repositorio quando necessario.
 
 ### Instalação segura recomendada (PowerShell)
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://github.com/wilkinbarban/photo-dedup/releases/latest/download/install_secure.ps1 | iex"
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
 
 ### Instalação padrão
@@ -52,18 +50,17 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://github
 
 🇪🇸 **Español**
 
-## Novedades en la v1.0.4
-Esta version se centra en distribucion sin friccion para usuarios novatos, publicando un ejecutable unico y alineando la validacion de CI con ese modo.
+## Novedades en la v1.0.5
+Esta version refina la politica de assets para descargas mas limpias: usuarios novatos reciben solo los entregables ejecutables en el release.
 
 ### Cambios destacados
-- **EXE standalone publicado**: Los assets del release ahora incluyen `PhotoDedup.exe` para descarga directa sin pasos de extraccion.
-- **Empaquetado en archivo unico**: PyInstaller migrado a `onefile`, con dependencias de runtime dentro del ejecutable.
-- **Smoke-test alineado con onefile**: CI ahora valida el arranque de `dist/PhotoDedup.exe`.
-- **Documentacion orientada al usuario final**: README destaca la descarga directa del EXE standalone en ES/EN/PT.
+- **Assets de release mas limpios**: `install_secure.ps1` ya no se sube como asset del release.
+- **Entrega enfocada en ejecutables**: los assets del release ahora incluyen solo `PhotoDedup.exe` y `PhotoDedup-vX.Y.Z-windows.zip`.
+- **Instalador seguro todavia disponible**: `install_secure.ps1` se puede descargar desde el source del repositorio cuando sea necesario.
 
 ### Instalación segura recomendada (PowerShell)
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://github.com/wilkinbarban/photo-dedup/releases/latest/download/install_secure.ps1 | iex"
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
 
 ### Instalación estándar
