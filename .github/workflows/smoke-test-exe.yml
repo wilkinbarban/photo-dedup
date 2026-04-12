@@ -2,13 +2,15 @@ name: Smoke Test Windows EXE
 
 on:
   workflow_dispatch:
-  release:
-    types: [published]
+  workflow_run:
+    workflows: ["Build Windows EXE on Release"]
+    types: [completed]
 
 jobs:
   smoke-test-exe:
     runs-on: windows-latest
     timeout-minutes: 40
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout source
