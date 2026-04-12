@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/Icon.png" alt="PhotoDedup Logo" width="120" height="120">
+  <img src="assets/Icon.png" alt="PhotoDedup Logo" width="220" style="max-width: 42vw; border-radius: 20px; box-shadow: 0 10px 28px rgba(0,0,0,0.28);">
   <h1>PhotoDedup</h1>
 
   [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
@@ -59,7 +59,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 **Opción B - Instalación automática segura (canal estable):**
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://github.com/wilkinbarban/photo-dedup/releases/latest/download/install_secure.ps1 | iex"
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
 
 `install_secure.ps1` verifica conectividad, reintenta descargas, valida ZIP, calcula SHA-256 y limpia temporales.
@@ -101,7 +101,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 **Option B - Secure automatic install (stable channel):**
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://github.com/wilkinbarban/photo-dedup/releases/latest/download/install_secure.ps1 | iex"
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
 
 `install_secure.ps1` checks connectivity, retries downloads, validates ZIP format, calculates SHA-256, and cleans temp files.
@@ -143,7 +143,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 **Opcao B - Instalacao automatica segura (canal estavel):**
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://github.com/wilkinbarban/photo-dedup/releases/latest/download/install_secure.ps1 | iex"
+powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
 
 `install_secure.ps1` verifica conectividade, repete downloads, valida ZIP, calcula SHA-256 e limpa arquivos temporarios.
@@ -165,7 +165,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://github
 | `assets/` | Icons and visual resources |
 | `install_dependencies.bat` | Windows dependency installer |
 | `install.ps1` | Standard PowerShell installer |
-| `install_secure.ps1` | Secure installer for stable release channel |
+| `install_secure.ps1` | Secure installer script (repository source) |
 | `scripts/build_windows.ps1` | Builds and packages Windows EXE |
 | `.github/workflows/build-release-exe.yml` | Builds and uploads release assets |
 | `.github/workflows/smoke-test-exe.yml` | Smoke-test for EXE startup/shutdown |

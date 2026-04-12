@@ -38,6 +38,5 @@ jobs:
           files: |
             dist/PhotoDedup.exe
             dist/PhotoDedup-${{ github.ref_name }}-windows.zip
-            install_secure.ps1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
