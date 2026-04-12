@@ -25,16 +25,12 @@ jobs:
         shell: bash
         run: |
           TAG_VERSION="${GITHUB_REF_NAME#v}"
-          APP_VERSION=$(python - <<'PY'
-import re
-from pathlib import Path
-text = Path("src/main/photo_dedup.py").read_text(encoding="utf-8")
-match = re.search(r'^__version__\s*=\s*"([^"]+)"', text, re.MULTILINE)
-if not match:
-    raise SystemExit("Could not read __version__ from src/main/photo_dedup.py")
-print(match.group(1))
-PY
-)
+          APP_VERSION=$(grep -oP '__version__\s*=\s*"\K[^"]+' src/main/photo_dedup.py)
+
+          if [ -z "$APP_VERSION" ]; then
+            echo "Could not read __version__ from src/main/photo_dedup.py"
+            exit 1
+          fi
 
           if [ "$TAG_VERSION" != "$APP_VERSION" ]; then
             echo "Tag version ($TAG_VERSION) does not match app version ($APP_VERSION)."
