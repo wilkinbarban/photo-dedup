@@ -168,4 +168,5 @@ Sin_fecha/
 # Local AI operational memory (do not version)
 memoria.mc
 agents.mc
+Agents.mc
 AGENTS_1.MD
