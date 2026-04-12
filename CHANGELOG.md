@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- _No changes yet._
+- **Tag-driven release publishing**: Added `.github/workflows/publish-release-from-tag.yml` to create GitHub releases automatically from pushed tags (`vX.Y.Z`) after validating app/tag version consistency and generating `RELEASE.md` from `CHANGELOG.md`.
 
 ### Changed
 - _No changes yet._

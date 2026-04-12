@@ -1,0 +1,58 @@
+name: Publish Release From Tag
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  publish-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate tag/version consistency
+        shell: bash
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          APP_VERSION=$(python - <<'PY'
+import re
+from pathlib import Path
+text = Path("photo_dedup.py").read_text(encoding="utf-8")
+match = re.search(r'^__version__\s*=\s*"([^"]+)"', text, re.MULTILINE)
+if not match:
+    raise SystemExit("Could not read __version__ from photo_dedup.py")
+print(match.group(1))
+PY
+)
+
+          if [ "$TAG_VERSION" != "$APP_VERSION" ]; then
+            echo "Tag version ($TAG_VERSION) does not match app version ($APP_VERSION)."
+            exit 1
+          fi
+
+      - name: Generate RELEASE.md from CHANGELOG
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          python scripts/generate_release_md.py --version "$VERSION"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: PhotoDedup ${{ github.ref_name }}
+          body_path: RELEASE.md
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

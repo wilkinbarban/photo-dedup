@@ -73,6 +73,21 @@ Before creating a new release tag, regenerate release notes from template:
 python scripts\generate_release_md.py --version X.Y.Z
 ```
 
+## Release process (one tag push)
+
+After updating `photo_dedup.py` version and `CHANGELOG.md` for `X.Y.Z`, publish with one command:
+
+```cmd
+git push origin vX.Y.Z
+```
+
+This triggers `.github/workflows/publish-release-from-tag.yml`, which:
+- validates tag/version consistency,
+- generates `RELEASE.md` from `CHANGELOG.md`,
+- creates the GitHub Release.
+
+Then `.github/workflows/build-release-exe.yml` runs on release publish and uploads EXE assets automatically.
+
 ## Coding guidelines
 
 - Prefer small, clear commits.
