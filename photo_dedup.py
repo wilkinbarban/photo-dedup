@@ -9,6 +9,15 @@ import warnings
 import logging
 import os
 
+
+def resolve_asset_path(*parts: str) -> str:
+    """Resolve asset paths for both source execution and PyInstaller bundles."""
+    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+        base_dir = getattr(sys, "_MEIPASS")
+    else:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_dir, *parts)
+
 def show_dependency_error(error_msg: str) -> None:
     """
     Displays a dependency error message and instructions on how to install them.
@@ -111,7 +120,7 @@ def main() -> None:
     app.setFont(QFont("Segoe UI", 10))
     
     from PyQt6.QtGui import QIcon
-    icon_path = os.path.join("assets", "Icon.ico")
+    icon_path = resolve_asset_path("assets", "Icon.ico")
     if os.path.exists(icon_path):
         app.setWindowIcon(QIcon(icon_path))
 

@@ -1,14 +1,24 @@
 import os
+import sys
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QComboBox, QWidget
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 from ui.theme import DARK_BG, TEXT_PRI, ACCENT, PANEL_BG, BORDER, CARD_BG
 
+
+def resolve_asset_path(*parts: str) -> str:
+    """Resolve asset paths for both source execution and PyInstaller bundles."""
+    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+        base_dir = getattr(sys, "_MEIPASS")
+    else:
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_dir, *parts)
+
 class LanguageDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Language / Idioma / Idioma")
-        icon_path = os.path.join("assets", "Icon.ico")
+        icon_path = resolve_asset_path("assets", "Icon.ico")
         if os.path.exists(icon_path):
             self.setWindowIcon(QIcon(icon_path))
         self.setFixedSize(320, 200)
