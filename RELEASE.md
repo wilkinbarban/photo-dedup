@@ -1,17 +1,17 @@
-# PhotoDedup v1.0.3
+# PhotoDedup v1.0.4
 
 *(Scroll down for Portuguese and Spanish versions / Role para baixo para Português e Espanhol / Desplácese hacia abajo para Portugués y Español)*
 
 🇺🇸 **English**
 
-## What's new in v1.0.3
-This release strengthens the Windows distribution pipeline and makes the secure installer available through a stable release channel for non-technical users.
+## What's new in v1.0.4
+This release focuses on zero-friction distribution for novice users by publishing a standalone single-file executable and aligning CI validation to that packaging mode.
 
 ### Highlights
-- **Stable secure installer channel**: `install_secure.ps1` is now published as a release asset, enabling stable install commands via `releases/latest/download`.
-- **Automated smoke testing for EXE**: Added a Windows smoke-test workflow to validate executable startup and controlled shutdown.
-- **Improved release assets**: Published releases now include both `PhotoDedup-vX.Y.Z-windows.zip` and `install_secure.ps1`.
-- **User-focused documentation updates**: README now includes multilingual direct-download instructions for Windows EXE and updated secure installer commands.
+- **Standalone EXE published**: Release assets now include direct `PhotoDedup.exe` download for users who do not want extraction steps.
+- **Single-file packaging mode**: PyInstaller moved to `onefile`, bundling runtime components into one executable.
+- **Smoke test aligned to onefile output**: CI now validates startup of `dist/PhotoDedup.exe`.
+- **User-focused documentation updates**: README now highlights direct standalone EXE download in ES/EN/PT.
 
 ### Recommended secure install (PowerShell)
 ```powershell
@@ -28,14 +28,14 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://github
 
 🇧🇷 **Português (Brasil)**
 
-## O que há de novo na v1.0.3
-Esta versão fortalece o pipeline de distribuição para Windows e disponibiliza o instalador seguro por um canal estável de release para usuários não técnicos.
+## O que há de novo na v1.0.4
+Esta versao prioriza distribuicao sem atrito para usuarios iniciantes, publicando um executavel unico e alinhando a validacao de CI para esse modo.
 
 ### Destaques
-- **Canal estável para instalador seguro**: `install_secure.ps1` agora é publicado como asset do release, permitindo comandos estáveis com `releases/latest/download`.
-- **Teste automatizado de fumaça do EXE**: Novo workflow em Windows para validar inicialização do executável e encerramento controlado.
-- **Assets de release aprimorados**: Releases publicados agora incluem `PhotoDedup-vX.Y.Z-windows.zip` e `install_secure.ps1`.
-- **Documentação focada no usuário final**: README com instruções multilíngues para download direto do EXE e comandos atualizados do instalador seguro.
+- **EXE standalone publicado**: Os assets do release agora incluem `PhotoDedup.exe` para download direto sem etapa de extracao.
+- **Empacotamento em arquivo unico**: PyInstaller migrado para `onefile`, com dependencias de runtime empacotadas no executavel.
+- **Smoke test alinhado ao onefile**: CI agora valida inicializacao de `dist/PhotoDedup.exe`.
+- **Documentacao focada no usuario final**: README destaca download direto do EXE standalone em ES/EN/PT.
 
 ### Instalação segura recomendada (PowerShell)
 ```powershell
@@ -52,14 +52,14 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://github
 
 🇪🇸 **Español**
 
-## Novedades en la v1.0.3
-Esta versión fortalece el pipeline de distribución para Windows y habilita un canal estable del instalador seguro para usuarios no técnicos.
+## Novedades en la v1.0.4
+Esta version se centra en distribucion sin friccion para usuarios novatos, publicando un ejecutable unico y alineando la validacion de CI con ese modo.
 
 ### Cambios destacados
-- **Canal estable para instalador seguro**: `install_secure.ps1` ahora se publica como asset del release, permitiendo comandos estables con `releases/latest/download`.
-- **Smoke-test automatizado del EXE**: Nuevo workflow en Windows para validar el arranque del ejecutable y su cierre controlado.
-- **Assets de release mejorados**: Los releases publicados ahora incluyen `PhotoDedup-vX.Y.Z-windows.zip` e `install_secure.ps1`.
-- **Documentación orientada al usuario final**: README con instrucciones multilingües para descarga directa del EXE y comandos actualizados del instalador seguro.
+- **EXE standalone publicado**: Los assets del release ahora incluyen `PhotoDedup.exe` para descarga directa sin pasos de extraccion.
+- **Empaquetado en archivo unico**: PyInstaller migrado a `onefile`, con dependencias de runtime dentro del ejecutable.
+- **Smoke-test alineado con onefile**: CI ahora valida el arranque de `dist/PhotoDedup.exe`.
+- **Documentacion orientada al usuario final**: README destaca la descarga directa del EXE standalone en ES/EN/PT.
 
 ### Instalación segura recomendada (PowerShell)
 ```powershell

@@ -164,3 +164,8 @@ cache.json
 embeddings.pkl
 Json/
 Sin_fecha/
+
+# Local AI operational memory (do not version)
+memoria.mc
+agents.mc
+AGENTS_1.MD

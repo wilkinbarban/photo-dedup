@@ -19,6 +19,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 - _No changes yet._
 
+## [1.0.4] - 2026-04-12
+
+### Added
+- **Standalone EXE release asset**: The release workflow now uploads `PhotoDedup.exe` directly for non-technical users.
+
+### Changed
+- **PyInstaller packaging mode**: Switched from folder-based (`onedir`) output to single-file (`onefile`) output so the app is distributed as one executable with bundled runtime dependencies.
+- **Build and smoke-test paths**: Updated build scripts and smoke-test workflow to validate `dist/PhotoDedup.exe`.
+
+### Documentation
+- Updated README (ES/EN/PT) to mention direct `PhotoDedup.exe` download option.
+
 ## [1.0.3] - 2026-04-11
 
 ### Added

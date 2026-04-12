@@ -32,9 +32,9 @@ try {
     Write-Host "[INFO] Building PhotoDedup version: $Version"
     python -m PyInstaller --noconfirm --clean "PhotoDedup.spec"
 
-    $distAppPath = Join-Path $repoRoot "dist\PhotoDedup"
-    if (-not (Test-Path $distAppPath)) {
-        throw "Build output folder not found: $distAppPath"
+    $distExePath = Join-Path $repoRoot "dist\PhotoDedup.exe"
+    if (-not (Test-Path $distExePath)) {
+        throw "Build output executable not found: $distExePath"
     }
 
     $zipName = "PhotoDedup-$Version-windows.zip"
@@ -44,7 +44,7 @@ try {
         Remove-Item -Path $zipPath -Force
     }
 
-    Compress-Archive -Path (Join-Path $distAppPath "*") -DestinationPath $zipPath -Force
+    Compress-Archive -Path $distExePath -DestinationPath $zipPath -Force
     Write-Host "[OK] Build completed. Artifact: $zipPath"
 }
 finally {

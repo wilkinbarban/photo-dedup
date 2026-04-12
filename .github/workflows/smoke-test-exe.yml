@@ -34,7 +34,7 @@ jobs:
       - name: Smoke test EXE (start and controlled shutdown)
         shell: pwsh
         run: |
-          $exePath = Join-Path $PWD "dist\PhotoDedup\PhotoDedup.exe"
+          $exePath = Join-Path $PWD "dist\PhotoDedup.exe"
           if (-not (Test-Path $exePath)) {
             throw "EXE was not generated: $exePath"
           }

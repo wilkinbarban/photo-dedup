@@ -48,6 +48,7 @@ Si prefieres evitar la consola, descarga el ejecutable precompilado desde Releas
 https://github.com/wilkinbarban/photo-dedup/releases/latest
 
 Busca el archivo `PhotoDedup-vX.Y.Z-windows.zip`, descomprímelo y ejecuta `PhotoDedup.exe`.
+También puedes descargar directamente `PhotoDedup.exe` (ejecutable único).
 
 ### Instalación con un solo comando (PowerShell)
 
@@ -89,6 +90,7 @@ If you prefer not to use the console, download the prebuilt executable from Rele
 https://github.com/wilkinbarban/photo-dedup/releases/latest
 
 Look for `PhotoDedup-vX.Y.Z-windows.zip`, extract it, and run `PhotoDedup.exe`.
+You can also download `PhotoDedup.exe` directly (single-file executable).
 
 ### One-command install (PowerShell)
 
@@ -130,6 +132,7 @@ Se preferir nao usar console, baixe o executavel precompilado em Releases:
 https://github.com/wilkinbarban/photo-dedup/releases/latest
 
 Procure por `PhotoDedup-vX.Y.Z-windows.zip`, extraia e execute `PhotoDedup.exe`.
+Voce tambem pode baixar `PhotoDedup.exe` diretamente (executavel unico).
 
 ### Instalacao com um unico comando (PowerShell)
 
