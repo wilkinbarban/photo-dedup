@@ -11,6 +11,13 @@ import logging
 import os
 
 
+# Ensure absolute imports like src.* work when running this file directly
+# (python src/main/photo_dedup.py) and when frozen by PyInstaller.
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
+
 def show_dependency_error(error_msg: str) -> None:
     """
     Displays a dependency error message and instructions on how to install them.
