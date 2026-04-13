@@ -3,7 +3,7 @@ PhotoDedup - Intelligent Duplicate Photo Finder.
 Canonical application entry point.
 """
 
-__version__ = "1.0.7"
+__version__ = "1.0.8"
 
 import sys
 import warnings
@@ -128,3 +128,7 @@ def main() -> None:
     window = MainWindow()
     window.show()
     sys.exit(app.exec())
+
+
+if __name__ == "__main__":
+    main()

@@ -19,6 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 - _No changes yet._
 
+## [1.0.8] - 2026-04-12
+
+### Fixed
+- **Application startup invocation**: Restored explicit `main()` execution guard in `src/main/photo_dedup.py` (`if __name__ == "__main__": main()`), preventing silent exit on launch.
+
 ## [1.0.7] - 2026-04-12
 
 ### Fixed

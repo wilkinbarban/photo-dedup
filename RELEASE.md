@@ -1,4 +1,4 @@
-# PhotoDedup v1.0.7
+# PhotoDedup v1.0.8
 
 *(Auto-generated from CHANGELOG. Do not edit manually.)*
 
@@ -6,15 +6,12 @@
 
 ## English
 
-### What's new in v1.0.7
+### What's new in v1.0.8
 Release date: 2026-04-12
 
 ### Highlights
-### Changed
-- **Release reliability**: Updated CI triggers so release build and smoke-test workflows run from tag-based publication flow without GitHub token event-chaining issues.
-
 ### Fixed
-- **Runtime import bootstrap**: Added startup path bootstrap in `src/main/photo_dedup.py` to guarantee `src.*` imports resolve correctly when launching the entrypoint directly and in frozen runtime.
+- **Application startup invocation**: Restored explicit `main()` execution guard in `src/main/photo_dedup.py` (`if __name__ == "__main__": main()`), preventing silent exit on launch.
 
 ### Recommended secure install (PowerShell)
 ```powershell
@@ -31,15 +28,12 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 ## Portugues (Brasil)
 
-### O que ha de novo na v1.0.7
+### O que ha de novo na v1.0.8
 Data do release: 2026-04-12
 
 ### Destaques
-### Alterado
-- **Release reliability**: Updated CI triggers so release build and smoke-test workflows run from tag-based publication flow without GitHub token event-chaining issues.
-
 ### Corrigido
-- **Runtime import bootstrap**: Added startup path bootstrap in `src/main/photo_dedup.py` to guarantee `src.*` imports resolve correctly when launching the entrypoint directly and in frozen runtime.
+- **Application startup invocation**: Restored explicit `main()` execution guard in `src/main/photo_dedup.py` (`if __name__ == "__main__": main()`), preventing silent exit on launch.
 
 ### Instalacao segura recomendada (PowerShell)
 ```powershell
@@ -56,15 +50,12 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 ## Espanol
 
-### Novedades en la v1.0.7
+### Novedades en la v1.0.8
 Fecha de release: 2026-04-12
 
 ### Cambios destacados
-### Cambiado
-- **Release reliability**: Updated CI triggers so release build and smoke-test workflows run from tag-based publication flow without GitHub token event-chaining issues.
-
 ### Corregido
-- **Runtime import bootstrap**: Added startup path bootstrap in `src/main/photo_dedup.py` to guarantee `src.*` imports resolve correctly when launching the entrypoint directly and in frozen runtime.
+- **Application startup invocation**: Restored explicit `main()` execution guard in `src/main/photo_dedup.py` (`if __name__ == "__main__": main()`), preventing silent exit on launch.
 
 ### Instalacion segura recomendada (PowerShell)
 ```powershell
