@@ -31,12 +31,14 @@ try {
     $variantResults = @()
     $variants = @("full", "lite")
 
-    foreach ($variant in $variants) {
+    for ($index = 0; $index -lt $variants.Count; $index++) {
+        $variant = $variants[$index]
         Write-Host "[INFO] Building variant: $variant"
         $env:PHOTO_DEDUP_BUILD_FLAVOR = $variant
 
         $variantVersion = "$Version-$variant"
-        & $buildScript -Version $variantVersion -Clean -SmokeTest:$SmokeTest -SmokeTimeoutSeconds $SmokeTimeoutSeconds
+        $useClean = $index -eq 0
+        & $buildScript -Version $variantVersion -Clean:$useClean -SmokeTest:$SmokeTest -SmokeTimeoutSeconds $SmokeTimeoutSeconds
 
         $exePath = Join-Path $repoRoot "dist\PhotoDedup.exe"
         if (-not (Test-Path $exePath)) {

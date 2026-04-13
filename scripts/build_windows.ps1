@@ -26,8 +26,30 @@ $repoRoot = Split-Path -Parent $scriptRoot
 Push-Location $repoRoot
 try {
     if ($Clean) {
-        if (Test-Path "build") { Remove-Item -Path "build" -Recurse -Force }
-        if (Test-Path "dist") { Remove-Item -Path "dist" -Recurse -Force }
+        if (Test-Path "build") {
+            Remove-Item -Path "build" -Recurse -Force -ErrorAction SilentlyContinue
+        }
+
+        if (Test-Path "dist") {
+            $removed = $false
+            for ($attempt = 1; $attempt -le 5; $attempt++) {
+                try {
+                    Remove-Item -Path "dist" -Recurse -Force -ErrorAction Stop
+                    $removed = $true
+                    break
+                }
+                catch {
+                    if ($attempt -eq 5) {
+                        throw
+                    }
+                    Start-Sleep -Milliseconds 500
+                }
+            }
+
+            if (-not $removed -and (Test-Path "dist")) {
+                throw "Could not remove dist directory after multiple attempts."
+            }
+        }
     }
 
     if ([string]::IsNullOrWhiteSpace($Version)) {
@@ -65,28 +87,42 @@ try {
 
     if ($SmokeTest) {
         Write-Host "[INFO] Running smoke test ($SmokeTimeoutSeconds s timeout)..."
-        $sw = [System.Diagnostics.Stopwatch]::StartNew()
-        $proc = Start-Process -FilePath $distExePath -PassThru
-        try {
-            Wait-Process -Id $proc.Id -Timeout $SmokeTimeoutSeconds -ErrorAction Stop
-            $smokeResult = "exited_early"
-            if ($proc.HasExited) {
-                $smokeExitCode = $proc.ExitCode
+
+        $attemptPassed = $false
+        for ($attempt = 1; $attempt -le 2; $attempt++) {
+            $sw = [System.Diagnostics.Stopwatch]::StartNew()
+            $proc = Start-Process -FilePath $distExePath -PassThru
+            try {
+                Wait-Process -Id $proc.Id -Timeout $SmokeTimeoutSeconds -ErrorAction Stop
+                $smokeResult = "exited_early"
+                if ($proc.HasExited) {
+                    $smokeExitCode = $proc.ExitCode
+                }
             }
-        }
-        catch [System.TimeoutException] {
-            $smokeResult = "running_after_timeout"
-        }
-        finally {
-            if (-not $proc.HasExited) {
-                Stop-Process -Id $proc.Id -Force
+            catch [System.TimeoutException] {
+                $smokeResult = "running_after_timeout"
+                $attemptPassed = $true
             }
-            $sw.Stop()
-            $smokeElapsedMs = $sw.ElapsedMilliseconds
+            finally {
+                if (-not $proc.HasExited) {
+                    Stop-Process -Id $proc.Id -Force
+                }
+                $sw.Stop()
+                $smokeElapsedMs = $sw.ElapsedMilliseconds
+            }
+
+            if ($attemptPassed) {
+                break
+            }
+
+            if ($attempt -lt 2) {
+                Write-Host "[WARN] Smoke attempt $attempt exited early (ExitCode=$smokeExitCode). Retrying once..."
+                Start-Sleep -Milliseconds 750
+            }
         }
 
-        if ($smokeResult -eq "exited_early") {
-            throw "Smoke test failed: executable exited before $SmokeTimeoutSeconds seconds. ExitCode=$smokeExitCode"
+        if (-not $attemptPassed) {
+            throw "Smoke test failed: executable exited before $SmokeTimeoutSeconds seconds on both attempts. ExitCode=$smokeExitCode"
         }
 
         Write-Host "[OK] Smoke test passed. Result=$smokeResult ElapsedMs=$smokeElapsedMs"

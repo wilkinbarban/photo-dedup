@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 - _No changes yet._
 
+## [1.0.10] - 2026-04-12
+
+### Fixed
+- **Dual-release CI reliability**: Prevented cleanup lock failures between `full` and `lite` builds by running `-Clean` only for the first variant in `scripts/build_variants.ps1`.
+- **Smoke-test stability**: Added retry logic in `scripts/build_windows.ps1` when the executable exits early on first launch (transient onefile startup behavior in CI).
+- **Cleanup robustness**: Added retry loop for removing `dist` during clean builds to avoid transient file-handle errors on Windows runners.
+
 ## [1.0.9] - 2026-04-12
 
 ### Added

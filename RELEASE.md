@@ -1,4 +1,4 @@
-# PhotoDedup v1.0.9
+# PhotoDedup v1.0.10
 
 *(Auto-generated from CHANGELOG. Do not edit manually.)*
 
@@ -6,20 +6,14 @@
 
 ## English
 
-### What's new in v1.0.9
+### What's new in v1.0.10
 Release date: 2026-04-12
 
 ### Highlights
-### Added
-- **Dual build automation**: Added `scripts/build_variants.ps1` to generate `full` and `lite` Windows builds in one command, run smoke tests, and write a comparison report in JSON.
-
-### Changed
-- **Release artifacts (dual assets)**: Release pipeline now publishes both variants (`PhotoDedup-full.exe` / `PhotoDedup-lite.exe`) and their ZIP packages.
-- **Build script telemetry**: `scripts/build_windows.ps1` now supports integrated smoke testing and writes build metrics JSON files.
-- **Packaging flavors**: `PhotoDedup.spec` now supports `full` and `lite` modes using `PHOTO_DEDUP_BUILD_FLAVOR`.
-
 ### Fixed
-- **Lite runtime resilience**: Added fallback to hash-only detection when AI dependencies are unavailable in lite builds.
+- **Dual-release CI reliability**: Prevented cleanup lock failures between `full` and `lite` builds by running `-Clean` only for the first variant in `scripts/build_variants.ps1`.
+- **Smoke-test stability**: Added retry logic in `scripts/build_windows.ps1` when the executable exits early on first launch (transient onefile startup behavior in CI).
+- **Cleanup robustness**: Added retry loop for removing `dist` during clean builds to avoid transient file-handle errors on Windows runners.
 
 ### Recommended secure install (PowerShell)
 ```powershell
@@ -36,20 +30,14 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 ## Portugues (Brasil)
 
-### O que ha de novo na v1.0.9
+### O que ha de novo na v1.0.10
 Data do release: 2026-04-12
 
 ### Destaques
-### Adicionado
-- **Dual build automation**: Added `scripts/build_variants.ps1` to generate `full` and `lite` Windows builds in one command, run smoke tests, and write a comparison report in JSON.
-
-### Alterado
-- **Release artifacts (dual assets)**: Release pipeline now publishes both variants (`PhotoDedup-full.exe` / `PhotoDedup-lite.exe`) and their ZIP packages.
-- **Build script telemetry**: `scripts/build_windows.ps1` now supports integrated smoke testing and writes build metrics JSON files.
-- **Packaging flavors**: `PhotoDedup.spec` now supports `full` and `lite` modes using `PHOTO_DEDUP_BUILD_FLAVOR`.
-
 ### Corrigido
-- **Lite runtime resilience**: Added fallback to hash-only detection when AI dependencies are unavailable in lite builds.
+- **Dual-release CI reliability**: Prevented cleanup lock failures between `full` and `lite` builds by running `-Clean` only for the first variant in `scripts/build_variants.ps1`.
+- **Smoke-test stability**: Added retry logic in `scripts/build_windows.ps1` when the executable exits early on first launch (transient onefile startup behavior in CI).
+- **Cleanup robustness**: Added retry loop for removing `dist` during clean builds to avoid transient file-handle errors on Windows runners.
 
 ### Instalacao segura recomendada (PowerShell)
 ```powershell
@@ -66,20 +54,14 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 ## Espanol
 
-### Novedades en la v1.0.9
+### Novedades en la v1.0.10
 Fecha de release: 2026-04-12
 
 ### Cambios destacados
-### Anadido
-- **Dual build automation**: Added `scripts/build_variants.ps1` to generate `full` and `lite` Windows builds in one command, run smoke tests, and write a comparison report in JSON.
-
-### Cambiado
-- **Release artifacts (dual assets)**: Release pipeline now publishes both variants (`PhotoDedup-full.exe` / `PhotoDedup-lite.exe`) and their ZIP packages.
-- **Build script telemetry**: `scripts/build_windows.ps1` now supports integrated smoke testing and writes build metrics JSON files.
-- **Packaging flavors**: `PhotoDedup.spec` now supports `full` and `lite` modes using `PHOTO_DEDUP_BUILD_FLAVOR`.
-
 ### Corregido
-- **Lite runtime resilience**: Added fallback to hash-only detection when AI dependencies are unavailable in lite builds.
+- **Dual-release CI reliability**: Prevented cleanup lock failures between `full` and `lite` builds by running `-Clean` only for the first variant in `scripts/build_variants.ps1`.
+- **Smoke-test stability**: Added retry logic in `scripts/build_windows.ps1` when the executable exits early on first launch (transient onefile startup behavior in CI).
+- **Cleanup robustness**: Added retry loop for removing `dist` during clean builds to avoid transient file-handle errors on Windows runners.
 
 ### Instalacion segura recomendada (PowerShell)
 ```powershell
