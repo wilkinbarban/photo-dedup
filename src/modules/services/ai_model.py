@@ -1,9 +1,6 @@
 import logging
 
 import numpy as np
-import torch
-import torchvision.models as models
-import torchvision.transforms as transforms
 from PIL import Image
 
 
@@ -18,6 +15,11 @@ class PhotoAIAnalyzer:
 
     def __init__(self):
         logging.info("Initializing AI model (MobileNetV2)...")
+        import torch
+        import torchvision.models as models
+        import torchvision.transforms as transforms
+
+        self._torch = torch
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
         self.model = models.mobilenet_v2(weights=models.MobileNet_V2_Weights.DEFAULT)
@@ -36,7 +38,7 @@ class PhotoAIAnalyzer:
             with Image.open(img_path) as img:
                 img_rgb = img.convert('RGB')
                 tensor = self.transform(img_rgb).unsqueeze(0).to(self.device)
-                with torch.no_grad():
+                with self._torch.no_grad():
                     embedding = self.model(tensor)
                 emb_array = embedding.cpu().numpy().flatten()
                 return emb_array

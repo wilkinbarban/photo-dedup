@@ -28,16 +28,19 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      - name: Build EXE and ZIP artifact
+      - name: Build full and lite variants
         shell: pwsh
         run: |
-          ./scripts/build_windows.ps1 -Version "${{ github.ref_name }}" -Clean
+          ./scripts/build_variants.ps1 -Version "${{ github.ref_name }}" -SmokeTest
 
       - name: Upload asset to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/PhotoDedup.exe
-            dist/PhotoDedup-${{ github.ref_name }}-windows.zip
+            dist/PhotoDedup-full.exe
+            dist/PhotoDedup-lite.exe
+            dist/PhotoDedup-${{ github.ref_name }}-full-windows.zip
+            dist/PhotoDedup-${{ github.ref_name }}-lite-windows.zip
+            dist/build-variants-${{ github.ref_name }}.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

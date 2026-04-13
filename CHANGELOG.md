@@ -19,6 +19,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 - _No changes yet._
 
+## [1.0.9] - 2026-04-12
+
+### Added
+- **Dual build automation**: Added `scripts/build_variants.ps1` to generate `full` and `lite` Windows builds in one command, run smoke tests, and write a comparison report in JSON.
+
+### Changed
+- **Release artifacts (dual assets)**: Release pipeline now publishes both variants (`PhotoDedup-full.exe` / `PhotoDedup-lite.exe`) and their ZIP packages.
+- **Build script telemetry**: `scripts/build_windows.ps1` now supports integrated smoke testing and writes build metrics JSON files.
+- **Packaging flavors**: `PhotoDedup.spec` now supports `full` and `lite` modes using `PHOTO_DEDUP_BUILD_FLAVOR`.
+
+### Fixed
+- **Lite runtime resilience**: Added fallback to hash-only detection when AI dependencies are unavailable in lite builds.
+
 ## [1.0.8] - 2026-04-12
 
 ### Fixed

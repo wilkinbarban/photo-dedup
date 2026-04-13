@@ -1,13 +1,25 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-from PyInstaller.utils.hooks import collect_submodules
+import os
 
 block_cipher = None
 
-hiddenimports = []
-hiddenimports += collect_submodules('torch')
-hiddenimports += collect_submodules('torchvision')
-hiddenimports += ['pillow_heif']
+build_flavor = os.environ.get('PHOTO_DEDUP_BUILD_FLAVOR', 'full').strip().lower()
+is_lite_build = build_flavor == 'lite'
+
+hiddenimports = [
+    'pillow_heif',
+]
+
+if not is_lite_build:
+    hiddenimports += [
+        'torch',
+        'torchvision',
+    ]
+
+excludes = []
+if is_lite_build:
+    excludes += ['torch', 'torchvision']
 
 
 a = Analysis(
@@ -16,17 +28,12 @@ a = Analysis(
     binaries=[],
     datas=[
         ('assets',                    'assets'),
-        ('src/main',                  'src/main'),
-        ('src/interfaces',            'src/interfaces'),
-        ('src/modules/config',        'src/modules/config'),
-        ('src/modules/services',      'src/modules/services'),
-        ('src/modules/utils',         'src/modules/utils'),
     ],
     hiddenimports=hiddenimports,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=excludes,
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,

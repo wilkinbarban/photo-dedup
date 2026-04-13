@@ -3,7 +3,7 @@ PhotoDedup - Intelligent Duplicate Photo Finder.
 Canonical application entry point.
 """
 
-__version__ = "1.0.8"
+__version__ = "1.0.9"
 
 import sys
 import warnings
@@ -64,8 +64,6 @@ try:
     from PyQt6.QtWidgets import QApplication
     from PyQt6.QtGui import QFont
 
-    import torch
-    import torchvision
     from src.modules.utils.paths import resolve_asset_path
 
     try:

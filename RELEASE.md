@@ -1,4 +1,4 @@
-# PhotoDedup v1.0.8
+# PhotoDedup v1.0.9
 
 *(Auto-generated from CHANGELOG. Do not edit manually.)*
 
@@ -6,12 +6,20 @@
 
 ## English
 
-### What's new in v1.0.8
+### What's new in v1.0.9
 Release date: 2026-04-12
 
 ### Highlights
+### Added
+- **Dual build automation**: Added `scripts/build_variants.ps1` to generate `full` and `lite` Windows builds in one command, run smoke tests, and write a comparison report in JSON.
+
+### Changed
+- **Release artifacts (dual assets)**: Release pipeline now publishes both variants (`PhotoDedup-full.exe` / `PhotoDedup-lite.exe`) and their ZIP packages.
+- **Build script telemetry**: `scripts/build_windows.ps1` now supports integrated smoke testing and writes build metrics JSON files.
+- **Packaging flavors**: `PhotoDedup.spec` now supports `full` and `lite` modes using `PHOTO_DEDUP_BUILD_FLAVOR`.
+
 ### Fixed
-- **Application startup invocation**: Restored explicit `main()` execution guard in `src/main/photo_dedup.py` (`if __name__ == "__main__": main()`), preventing silent exit on launch.
+- **Lite runtime resilience**: Added fallback to hash-only detection when AI dependencies are unavailable in lite builds.
 
 ### Recommended secure install (PowerShell)
 ```powershell
@@ -28,12 +36,20 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 ## Portugues (Brasil)
 
-### O que ha de novo na v1.0.8
+### O que ha de novo na v1.0.9
 Data do release: 2026-04-12
 
 ### Destaques
+### Adicionado
+- **Dual build automation**: Added `scripts/build_variants.ps1` to generate `full` and `lite` Windows builds in one command, run smoke tests, and write a comparison report in JSON.
+
+### Alterado
+- **Release artifacts (dual assets)**: Release pipeline now publishes both variants (`PhotoDedup-full.exe` / `PhotoDedup-lite.exe`) and their ZIP packages.
+- **Build script telemetry**: `scripts/build_windows.ps1` now supports integrated smoke testing and writes build metrics JSON files.
+- **Packaging flavors**: `PhotoDedup.spec` now supports `full` and `lite` modes using `PHOTO_DEDUP_BUILD_FLAVOR`.
+
 ### Corrigido
-- **Application startup invocation**: Restored explicit `main()` execution guard in `src/main/photo_dedup.py` (`if __name__ == "__main__": main()`), preventing silent exit on launch.
+- **Lite runtime resilience**: Added fallback to hash-only detection when AI dependencies are unavailable in lite builds.
 
 ### Instalacao segura recomendada (PowerShell)
 ```powershell
@@ -50,12 +66,20 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 ## Espanol
 
-### Novedades en la v1.0.8
+### Novedades en la v1.0.9
 Fecha de release: 2026-04-12
 
 ### Cambios destacados
+### Anadido
+- **Dual build automation**: Added `scripts/build_variants.ps1` to generate `full` and `lite` Windows builds in one command, run smoke tests, and write a comparison report in JSON.
+
+### Cambiado
+- **Release artifacts (dual assets)**: Release pipeline now publishes both variants (`PhotoDedup-full.exe` / `PhotoDedup-lite.exe`) and their ZIP packages.
+- **Build script telemetry**: `scripts/build_windows.ps1` now supports integrated smoke testing and writes build metrics JSON files.
+- **Packaging flavors**: `PhotoDedup.spec` now supports `full` and `lite` modes using `PHOTO_DEDUP_BUILD_FLAVOR`.
+
 ### Corregido
-- **Application startup invocation**: Restored explicit `main()` execution guard in `src/main/photo_dedup.py` (`if __name__ == "__main__": main()`), preventing silent exit on launch.
+- **Lite runtime resilience**: Added fallback to hash-only detection when AI dependencies are unavailable in lite builds.
 
 ### Instalacion segura recomendada (PowerShell)
 ```powershell

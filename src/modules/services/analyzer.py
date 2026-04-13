@@ -265,8 +265,13 @@ class AnalysisWorker(QThread):
 
             if self.use_ai:
                 self.progress.emit(0, get_text("msg_load_ai"))
-                from src.modules.services.ai_model import PhotoAIAnalyzer
-                self.ai_model = PhotoAIAnalyzer.get_instance()
+                try:
+                    from src.modules.services.ai_model import PhotoAIAnalyzer
+                    self.ai_model = PhotoAIAnalyzer.get_instance()
+                except Exception as error:
+                    logging.warning(f"AI unavailable, falling back to hash-only mode: {error}")
+                    self.use_ai = False
+                    self.ai_model = None
 
             self.progress.emit(0, get_text("msg_search_img"))
             all_files = []
