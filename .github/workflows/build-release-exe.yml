@@ -39,8 +39,6 @@ jobs:
           files: |
             dist/PhotoDedup-full.exe
             dist/PhotoDedup-lite.exe
-            dist/PhotoDedup-${{ github.ref_name }}-full-windows.zip
-            dist/PhotoDedup-${{ github.ref_name }}-lite-windows.zip
             dist/build-variants-${{ github.ref_name }}.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 - _No changes yet._
 
+## [1.0.11] - 2026-04-13
+
+### Fixed
+- **CI lock conflict resolved**: Each build variant (`full`, `lite`) now compiles into its own isolated directory (`dist-full/`, `dist-lite/`) via `--distpath`, eliminating the `PermissionError` caused by Windows Defender holding a lock on `dist/PhotoDedup.exe` while the next variant tried to overwrite it.
+- **Removed ZIP artifacts**: Build pipeline no longer generates `.zip` packages; only `.exe` files are produced and uploaded to the GitHub Release.
+
 ## [1.0.10] - 2026-04-12
 
 ### Fixed

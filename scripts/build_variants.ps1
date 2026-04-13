@@ -31,24 +31,30 @@ try {
     $variantResults = @()
     $variants = @("full", "lite")
 
-    for ($index = 0; $index -lt $variants.Count; $index++) {
-        $variant = $variants[$index]
+    # Ensure dist/ output folder exists for final renamed EXE files
+    $distOut = Join-Path $repoRoot "dist"
+    if (-not (Test-Path $distOut)) {
+        New-Item -ItemType Directory -Path $distOut | Out-Null
+    }
+
+    foreach ($variant in $variants) {
         Write-Host "[INFO] Building variant: $variant"
         $env:PHOTO_DEDUP_BUILD_FLAVOR = $variant
 
         $variantVersion = "$Version-$variant"
-        $useClean = $index -eq 0
-        & $buildScript -Version $variantVersion -Clean:$useClean -SmokeTest:$SmokeTest -SmokeTimeoutSeconds $SmokeTimeoutSeconds
+        # Each variant builds into its own directory to avoid file-lock conflicts
+        $variantDistPath = "dist-$variant"
+        & $buildScript -Version $variantVersion -Clean -DistPath $variantDistPath -SmokeTest:$SmokeTest -SmokeTimeoutSeconds $SmokeTimeoutSeconds
 
-        $exePath = Join-Path $repoRoot "dist\PhotoDedup.exe"
+        $exePath = Join-Path $repoRoot "$variantDistPath\PhotoDedup.exe"
         if (-not (Test-Path $exePath)) {
             throw "Expected EXE not found after $variant build: $exePath"
         }
 
-        $variantExePath = Join-Path $repoRoot ("dist\PhotoDedup-" + $variant + ".exe")
+        $variantExePath = Join-Path $repoRoot "dist\PhotoDedup-$variant.exe"
         Copy-Item -Path $exePath -Destination $variantExePath -Force
 
-        $metricsPath = Join-Path $repoRoot ("dist\build-metrics-" + $variantVersion + ".json")
+        $metricsPath = Join-Path $repoRoot "$variantDistPath\build-metrics-$variantVersion.json"
         if (-not (Test-Path $metricsPath)) {
             throw "Expected metrics not found: $metricsPath"
         }
@@ -56,10 +62,8 @@ try {
         $metrics = Get-Content $metricsPath -Raw | ConvertFrom-Json
         $variantResults += [ordered]@{
             variant = $variant
-            exe = (Split-Path -Leaf $variantExePath)
-            zip = ("PhotoDedup-" + $variantVersion + "-windows.zip")
+            exe = "PhotoDedup-$variant.exe"
             exe_size_bytes = $metrics.exe_size_bytes
-            zip_size_bytes = $metrics.zip_size_bytes
             smoke_test = $metrics.smoke_test
             smoke_elapsed_ms = $metrics.smoke_elapsed_ms
         }
@@ -76,9 +80,7 @@ try {
         variants = $variantResults
         deltas_lite_vs_full = [ordered]@{
             exe_bytes = ($lite.exe_size_bytes - $full.exe_size_bytes)
-            zip_bytes = ($lite.zip_size_bytes - $full.zip_size_bytes)
             exe_percent = [math]::Round((($lite.exe_size_bytes - $full.exe_size_bytes) * 100.0) / [double]$full.exe_size_bytes, 2)
-            zip_percent = [math]::Round((($lite.zip_size_bytes - $full.zip_size_bytes) * 100.0) / [double]$full.zip_size_bytes, 2)
         }
     }
 

@@ -7,6 +7,9 @@ param(
     [switch]$Clean,
 
     [Parameter(Mandatory = $false)]
+    [string]$DistPath = "dist",
+
+    [Parameter(Mandatory = $false)]
     [switch]$SmokeTest,
 
     [Parameter(Mandatory = $false)]
@@ -30,11 +33,11 @@ try {
             Remove-Item -Path "build" -Recurse -Force -ErrorAction SilentlyContinue
         }
 
-        if (Test-Path "dist") {
+        if (Test-Path $DistPath) {
             $removed = $false
             for ($attempt = 1; $attempt -le 5; $attempt++) {
                 try {
-                    Remove-Item -Path "dist" -Recurse -Force -ErrorAction Stop
+                    Remove-Item -Path $DistPath -Recurse -Force -ErrorAction Stop
                     $removed = $true
                     break
                 }
@@ -46,8 +49,8 @@ try {
                 }
             }
 
-            if (-not $removed -and (Test-Path "dist")) {
-                throw "Could not remove dist directory after multiple attempts."
+            if (-not $removed -and (Test-Path $DistPath)) {
+                throw "Could not remove $DistPath directory after multiple attempts."
             }
         }
     }
@@ -61,25 +64,15 @@ try {
         $Version = $versionLine.Matches[0].Groups[1].Value
     }
 
-    Write-Host "[INFO] Building PhotoDedup version: $Version"
-    python -m PyInstaller --noconfirm --clean "PhotoDedup.spec"
+    Write-Host "[INFO] Building PhotoDedup version: $Version (distpath: $DistPath)"
+    python -m PyInstaller --noconfirm --clean --distpath "$DistPath" "PhotoDedup.spec"
 
-    $distExePath = Join-Path $repoRoot "dist\PhotoDedup.exe"
+    $distExePath = Join-Path $repoRoot "$DistPath\PhotoDedup.exe"
     if (-not (Test-Path $distExePath)) {
         throw "Build output executable not found: $distExePath"
     }
 
-    $zipName = "PhotoDedup-$Version-windows.zip"
-    $zipPath = Join-Path $repoRoot ("dist\" + $zipName)
-
-    if (Test-Path $zipPath) {
-        Remove-Item -Path $zipPath -Force
-    }
-
-    Compress-Archive -Path $distExePath -DestinationPath $zipPath -Force
-
     $exeSizeBytes = (Get-Item $distExePath).Length
-    $zipSizeBytes = (Get-Item $zipPath).Length
 
     $smokeResult = "not_run"
     $smokeElapsedMs = 0
@@ -130,8 +123,8 @@ try {
 
     $metrics = [ordered]@{
         version = $Version
+        dist_path = $DistPath
         exe_size_bytes = $exeSizeBytes
-        zip_size_bytes = $zipSizeBytes
         smoke_test = $smokeResult
         smoke_elapsed_ms = $smokeElapsedMs
         smoke_exit_code = $smokeExitCode
@@ -139,15 +132,14 @@ try {
     }
 
     if ([string]::IsNullOrWhiteSpace($MetricsOut)) {
-        $MetricsOut = Join-Path $repoRoot ("dist\build-metrics-" + $Version + ".json")
+        $MetricsOut = Join-Path $repoRoot ("$DistPath\build-metrics-" + $Version + ".json")
     }
 
     $metrics | ConvertTo-Json -Depth 4 | Set-Content -Path $MetricsOut -Encoding UTF8
 
-    Write-Host "[OK] Build completed. Artifact: $zipPath"
+    Write-Host "[OK] Build completed. EXE: $distExePath"
     Write-Host "[INFO] Metrics written to: $MetricsOut"
     Write-Host "[INFO] EXE size: $exeSizeBytes bytes"
-    Write-Host "[INFO] ZIP size: $zipSizeBytes bytes"
 }
 finally {
     Pop-Location
