@@ -28,7 +28,6 @@ try {
         $Version = $versionLine.Matches[0].Groups[1].Value
     }
 
-    $variantResults = @()
     $variants = @("full", "lite")
 
     # Ensure dist/ output folder exists for final renamed EXE files
@@ -60,35 +59,12 @@ try {
         }
 
         $metrics = Get-Content $metricsPath -Raw | ConvertFrom-Json
-        $variantResults += [ordered]@{
-            variant = $variant
-            exe = "PhotoDedup-$variant.exe"
-            exe_size_bytes = $metrics.exe_size_bytes
-            smoke_test = $metrics.smoke_test
-            smoke_elapsed_ms = $metrics.smoke_elapsed_ms
-        }
+        Write-Host "[INFO] PhotoDedup-$variant.exe size: $($metrics.exe_size_bytes) bytes"
     }
 
     Remove-Item Env:PHOTO_DEDUP_BUILD_FLAVOR -ErrorAction SilentlyContinue
 
-    $full = $variantResults | Where-Object { $_.variant -eq "full" } | Select-Object -First 1
-    $lite = $variantResults | Where-Object { $_.variant -eq "lite" } | Select-Object -First 1
-
-    $summary = [ordered]@{
-        version = $Version
-        generated_at_utc = (Get-Date).ToUniversalTime().ToString("o")
-        variants = $variantResults
-        deltas_lite_vs_full = [ordered]@{
-            exe_bytes = ($lite.exe_size_bytes - $full.exe_size_bytes)
-            exe_percent = [math]::Round((($lite.exe_size_bytes - $full.exe_size_bytes) * 100.0) / [double]$full.exe_size_bytes, 2)
-        }
-    }
-
-    $summaryPath = Join-Path $repoRoot ("dist\build-variants-" + $Version + ".json")
-    $summary | ConvertTo-Json -Depth 6 | Set-Content -Path $summaryPath -Encoding UTF8
-
     Write-Host "[OK] Variant build automation complete."
-    Write-Host "[INFO] Summary written to: $summaryPath"
 }
 finally {
     Remove-Item Env:PHOTO_DEDUP_BUILD_FLAVOR -ErrorAction SilentlyContinue

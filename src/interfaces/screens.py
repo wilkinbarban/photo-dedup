@@ -12,8 +12,10 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, pyqtSignal, QTimer, QObject
 
 from src.modules.services.models import DuplicateGroup, PhotoInfo, Statistics
+from src.modules.services.ai_model import is_ai_runtime_available
 from src.modules.config.state import load_config, save_config
 from src.modules.config.i18n import get_text
+from src.modules.utils.paths import resolve_asset_path
 from src.interfaces.theme import *
 from src.interfaces.widgets import GroupWidget, StatisticsDialog
 
@@ -49,6 +51,9 @@ class WelcomeScreen(QWidget):
         """
         super().__init__(parent)
         self.config = load_config()
+        self.ai_runtime_available = is_ai_runtime_available()
+        self.chk_use_ai = None
+        self.ai_level_combo = None
         self._setup_ui()
 
     def _setup_ui(self) -> None:
@@ -177,51 +182,52 @@ class WelcomeScreen(QWidget):
         sens_layout.addLayout(slider_row)
         layout.addWidget(sens_group, alignment=Qt.AlignmentFlag.AlignCenter)
 
-        ai_group = QGroupBox(get_text("grp_ai"))
-        ai_group.setMaximumWidth(600)
-        ai_group.setStyleSheet(folder_group.styleSheet())
-        ai_layout = QVBoxLayout(ai_group)
-        
-        from PyQt6.QtWidgets import QCheckBox
-        self.chk_use_ai = QCheckBox(get_text("chk_use_ai"))
-        self.chk_use_ai.setChecked(self.config.get('use_ai', False))
-        self.chk_use_ai.setStyleSheet(f"color: {TEXT_PRI}; font-size: 12px; font-weight: bold;")
-        
-        ai_level_layout = QHBoxLayout()
-        ai_level_layout.addWidget(QLabel(get_text("lbl_ai_level")))
-        self.ai_level_combo = QComboBox()
-        self.ai_level_combo.addItems([get_text("opt_ai_fast"), get_text("opt_ai_balanced"), get_text("opt_ai_deep")])
-        
-        level_idx = {"fast": 0, "balanced": 1, "deep": 2}.get(self.config.get('ai_level', 'balanced'), 1)
-        if not self.config.get('use_ai', False):
-            level_idx = 0
-            
-        self.ai_level_combo.setCurrentIndex(level_idx)
-        ai_level_layout.addWidget(self.ai_level_combo)
-        ai_level_layout.addStretch()
-        
-        def on_ai_check(state):
-            use_ai = (state == Qt.CheckState.Checked.value)
-            self.ai_level_combo.setEnabled(use_ai)
-            if use_ai and self.ai_level_combo.currentIndex() == 0:
-                self.ai_level_combo.setCurrentIndex(1)
-            elif not use_ai:
-                self.ai_level_combo.setCurrentIndex(0)
-                
-        self.chk_use_ai.stateChanged.connect(on_ai_check)
-        self.ai_level_combo.setEnabled(self.chk_use_ai.isChecked())
-        
-        def on_combo_change(idx):
-            if idx == 0:
-                self.chk_use_ai.setChecked(False)
-            elif not self.chk_use_ai.isChecked():
-                self.chk_use_ai.setChecked(True)
-                
-        self.ai_level_combo.currentIndexChanged.connect(on_combo_change)
-        
-        ai_layout.addWidget(self.chk_use_ai)
-        ai_layout.addLayout(ai_level_layout)
-        layout.addWidget(ai_group, alignment=Qt.AlignmentFlag.AlignCenter)
+        if self.ai_runtime_available:
+            ai_group = QGroupBox(get_text("grp_ai"))
+            ai_group.setMaximumWidth(600)
+            ai_group.setStyleSheet(folder_group.styleSheet())
+            ai_layout = QVBoxLayout(ai_group)
+
+            from PyQt6.QtWidgets import QCheckBox
+            self.chk_use_ai = QCheckBox(get_text("chk_use_ai"))
+            self.chk_use_ai.setChecked(self.config.get('use_ai', False))
+            self.chk_use_ai.setStyleSheet(f"color: {TEXT_PRI}; font-size: 12px; font-weight: bold;")
+
+            ai_level_layout = QHBoxLayout()
+            ai_level_layout.addWidget(QLabel(get_text("lbl_ai_level")))
+            self.ai_level_combo = QComboBox()
+            self.ai_level_combo.addItems([get_text("opt_ai_fast"), get_text("opt_ai_balanced"), get_text("opt_ai_deep")])
+
+            level_idx = {"fast": 0, "balanced": 1, "deep": 2}.get(self.config.get('ai_level', 'balanced'), 1)
+            if not self.config.get('use_ai', False):
+                level_idx = 0
+
+            self.ai_level_combo.setCurrentIndex(level_idx)
+            ai_level_layout.addWidget(self.ai_level_combo)
+            ai_level_layout.addStretch()
+
+            def on_ai_check(state):
+                use_ai = (state == Qt.CheckState.Checked.value)
+                self.ai_level_combo.setEnabled(use_ai)
+                if use_ai and self.ai_level_combo.currentIndex() == 0:
+                    self.ai_level_combo.setCurrentIndex(1)
+                elif not use_ai:
+                    self.ai_level_combo.setCurrentIndex(0)
+
+            self.chk_use_ai.stateChanged.connect(on_ai_check)
+            self.ai_level_combo.setEnabled(self.chk_use_ai.isChecked())
+
+            def on_combo_change(idx):
+                if idx == 0:
+                    self.chk_use_ai.setChecked(False)
+                elif not self.chk_use_ai.isChecked():
+                    self.chk_use_ai.setChecked(True)
+
+            self.ai_level_combo.currentIndexChanged.connect(on_combo_change)
+
+            ai_layout.addWidget(self.chk_use_ai)
+            ai_layout.addLayout(ai_level_layout)
+            layout.addWidget(ai_group, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.btn_start = QPushButton(get_text("btn_start"))
         self.btn_start.setFixedSize(240, 40)
@@ -314,10 +320,14 @@ class WelcomeScreen(QWidget):
         l.addWidget(msg)
         
         qr_label = QLabel()
-        qr_path = os.path.join("assets", "QR_Paypal.png")
+        qr_path = resolve_asset_path("assets", "QR_Paypal.png")
         if os.path.exists(qr_path):
             pixmap = QPixmap(qr_path)
-            qr_label.setPixmap(pixmap.scaled(300, 300, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
+            if not pixmap.isNull():
+                qr_label.setPixmap(pixmap.scaled(300, 300, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
+            else:
+                qr_label.setText("QR not found")
+                qr_label.setStyleSheet(f"color: {TEXT_MUT};")
         else:
             qr_label.setText("QR not found")
             qr_label.setStyleSheet(f"color: {TEXT_MUT};")
@@ -345,10 +355,14 @@ class WelcomeScreen(QWidget):
             mode = "exact" if self.mode_combo.currentIndex() == 1 else "similar"
             self.config['duplicate_mode'] = mode
             self.config['threshold'] = self.slider.value()
-            self.config['use_ai'] = self.chk_use_ai.isChecked()
-            
-            ai_level_map = {0: "fast", 1: "balanced", 2: "deep"}
-            self.config['ai_level'] = ai_level_map.get(self.ai_level_combo.currentIndex(), "balanced")
+            if self.ai_runtime_available and self.chk_use_ai is not None and self.ai_level_combo is not None:
+                self.config['use_ai'] = self.chk_use_ai.isChecked()
+
+                ai_level_map = {0: "fast", 1: "balanced", 2: "deep"}
+                self.config['ai_level'] = ai_level_map.get(self.ai_level_combo.currentIndex(), "balanced")
+            else:
+                self.config['use_ai'] = False
+                self.config['ai_level'] = "fast"
             
             save_config(self.config)
             self.start_requested.emit(self._folder, self.slider.value(), mode)

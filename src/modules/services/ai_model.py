@@ -1,7 +1,16 @@
 import logging
+import importlib.util
 
 import numpy as np
 from PIL import Image
+
+
+def is_ai_runtime_available() -> bool:
+    """Return True only when optional AI dependencies are available."""
+    return (
+        importlib.util.find_spec('torch') is not None and
+        importlib.util.find_spec('torchvision') is not None
+    )
 
 
 class PhotoAIAnalyzer:

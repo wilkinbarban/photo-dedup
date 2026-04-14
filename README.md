@@ -47,8 +47,12 @@ Si prefieres evitar la consola, descarga el ejecutable precompilado desde Releas
 
 https://github.com/wilkinbarban/photo-dedup/releases/latest
 
-Busca el archivo `PhotoDedup-vX.Y.Z-windows.zip`, descomprímelo y ejecuta `PhotoDedup.exe`.
-También puedes descargar directamente `PhotoDedup.exe` (ejecutable único).
+Descarga directamente una de estas variantes:
+
+- `PhotoDedup-full.exe` (incluye opciones de IA si las dependencias están disponibles)
+- `PhotoDedup-lite.exe` (sin IA; interfaz simplificada sin controles de IA)
+
+No se publican archivos ZIP: los artefactos oficiales son EXE directos.
 
 ### Instalación con un solo comando (PowerShell)
 
@@ -62,7 +66,16 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
 
-`install_secure.ps1` verifica conectividad, reintenta descargas, valida ZIP, calcula SHA-256 y limpia temporales.
+`install_secure.ps1` valida la descarga, extrae en carpeta temporal, actualiza la instalación local y delega al instalador local `install.ps1`.
+
+### Flujo actual de instaladores (1 clic)
+- `install_secure.ps1`: descarga el repositorio por HTTPS/TLS, valida la descarga, instala/actualiza en una carpeta local (preservando `.venv`) y delega en `install.ps1`.
+- `install.ps1`: valida entorno local, busca/instala Python compatible (`>=3.8,<3.14`, preferido 3.11), crea/reutiliza `.venv`, instala dependencias y lanza la aplicación.
+- Ambos scripts soportan actualización en sitio sin destruir el entorno virtual existente.
+
+### Coherencia visual por variante
+- En `PhotoDedup-full.exe`, el bloque de IA aparece normalmente.
+- En `PhotoDedup-lite.exe`, el bloque de IA se oculta automáticamente para evitar opciones no disponibles.
 
 ### Instalación manual
 1. Clona o descarga este repositorio.
@@ -89,8 +102,12 @@ If you prefer not to use the console, download the prebuilt executable from Rele
 
 https://github.com/wilkinbarban/photo-dedup/releases/latest
 
-Look for `PhotoDedup-vX.Y.Z-windows.zip`, extract it, and run `PhotoDedup.exe`.
-You can also download `PhotoDedup.exe` directly (single-file executable).
+Download one of these direct executables:
+
+- `PhotoDedup-full.exe` (AI options available when AI dependencies exist)
+- `PhotoDedup-lite.exe` (no AI; UI hides AI controls automatically)
+
+ZIP artifacts are not published; official release assets are direct EXE files.
 
 ### One-command install (PowerShell)
 
@@ -104,7 +121,16 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
 
-`install_secure.ps1` checks connectivity, retries downloads, validates ZIP format, calculates SHA-256, and cleans temp files.
+`install_secure.ps1` validates download integrity, extracts to a temp folder, updates local install (preserving `.venv`), and delegates execution to local `install.ps1`.
+
+### Current one-click installer behavior
+- `install_secure.ps1`: secure remote bootstrap (HTTPS/TLS), repository download/update, then delegation to local installer.
+- `install.ps1`: local setup and launch flow with Python compatibility check (`>=3.8,<3.14`, preferred 3.11), `.venv` create/reuse, dependency install, and app launch.
+- Existing local installation is updated in place while keeping `.venv`.
+
+### Full vs Lite UI coherence
+- In `PhotoDedup-full.exe`, AI controls are shown as usual.
+- In `PhotoDedup-lite.exe`, AI controls are hidden when AI runtime is unavailable.
 
 ### Manual install
 1. Clone or download this repository.
@@ -131,8 +157,12 @@ Se preferir nao usar console, baixe o executavel precompilado em Releases:
 
 https://github.com/wilkinbarban/photo-dedup/releases/latest
 
-Procure por `PhotoDedup-vX.Y.Z-windows.zip`, extraia e execute `PhotoDedup.exe`.
-Voce tambem pode baixar `PhotoDedup.exe` diretamente (executavel unico).
+Baixe diretamente uma das variantes:
+
+- `PhotoDedup-full.exe` (mostra opcoes de IA quando as dependencias estao disponiveis)
+- `PhotoDedup-lite.exe` (sem IA; interface oculta os controles de IA)
+
+Nao publicamos arquivos ZIP: os artefatos oficiais sao EXE diretos.
 
 ### Instalacao com um unico comando (PowerShell)
 
@@ -146,7 +176,16 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
 
-`install_secure.ps1` verifica conectividade, repete downloads, valida ZIP, calcula SHA-256 e limpa arquivos temporarios.
+`install_secure.ps1` valida download, extrai em pasta temporaria, atualiza instalacao local e delega para o instalador local `install.ps1`.
+
+### Fluxo atual dos instaladores (1 clique)
+- `install_secure.ps1`: bootstrap remoto seguro (HTTPS/TLS), download/atualizacao do repositorio e delegacao para o instalador local.
+- `install.ps1`: fluxo local de setup e execucao com verificacao de Python compativel (`>=3.8,<3.14`, preferido 3.11), criacao/reuso de `.venv`, instalacao de dependencias e inicializacao do app.
+- Instalacoes existentes sao atualizadas no local preservando `.venv`.
+
+### Coerencia visual full vs lite
+- No `PhotoDedup-full.exe`, os controles de IA aparecem normalmente.
+- No `PhotoDedup-lite.exe`, os controles de IA ficam ocultos quando o runtime de IA nao esta disponivel.
 
 ### Instalacao manual
 1. Clone ou baixe este repositorio.

@@ -4,11 +4,13 @@ from pathlib import Path
 
 from PyQt6.QtWidgets import QMainWindow, QStackedWidget, QMessageBox
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QIcon
 
 from src.modules.services.analyzer import AnalysisWorker
 from src.modules.services.models import DuplicateGroup, Statistics
 from src.modules.config.state import CACHE_FILE
 from src.modules.config.i18n import get_text
+from src.modules.utils.paths import resolve_asset_path
 from src.interfaces.theme import *
 from src.interfaces.screens import WelcomeScreen, ProgressScreen, ResultsScreen
 
@@ -29,6 +31,9 @@ class MainWindow(QMainWindow):
         """
         super().__init__()
         self.setWindowTitle(get_text("app_title"))
+        icon_path = resolve_asset_path("assets", "Icon.ico")
+        if os.path.exists(icon_path):
+            self.setWindowIcon(QIcon(icon_path))
         self.setMinimumSize(1000, 700)
         self.resize(1280, 800)
         self._worker = None
