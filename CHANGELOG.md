@@ -19,6 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 - _No changes yet._
 
+## [1.0.13] - 2026-04-14
+
+### Fixed
+- **README badge rendering**: Replaced markdown badges inside HTML container with HTML badge links to ensure all five header badges render consistently across viewers.
+- **Icon transparency diagnosis**: Confirmed both `assets/Icon.ico` and `assets/Icon.png` are currently opaque (alpha `255`), explaining white/solid icon background in UI surfaces.
+
+### Documentation
+- Updated release notes and changelog wording for the new documentation/UI-visual diagnostics release.
+
 ## [1.0.12] - 2026-04-13
 
 ### Added

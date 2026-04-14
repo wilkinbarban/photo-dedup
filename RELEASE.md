@@ -1,4 +1,4 @@
-# PhotoDedup v1.0.12
+# PhotoDedup v1.0.13
 
 *(Auto-generated from CHANGELOG. Do not edit manually.)*
 
@@ -6,23 +6,16 @@
 
 ## English
 
-### What's new in v1.0.12
-Release date: 2026-04-13
+### What's new in v1.0.13
+Release date: 2026-04-14
 
 ### Highlights
-### Added
-- **Runtime AI capability gate**: Added runtime detection for optional AI dependencies (`torch` + `torchvision`) so the UI can adapt automatically by build flavor.
-
-### Changed
-- **One-click installer architecture**: `install.ps1` now follows a robust local-installer pattern with project-root validation, bootstrap fallback (download/update repository when needed), Python runtime checks (`>=3.8,<3.14`), `.venv` lifecycle handling, dependency installation, and app launch.
-- **Secure remote installer flow**: `install_secure.ps1` now follows a secure bootstrap-and-delegate model (download over TLS, basic archive validation, install/update preserving `.venv`, then delegate to local `install.ps1`).
-- **Release artifact policy**: Dual-variant build now publishes only executables (`PhotoDedup-full.exe`, `PhotoDedup-lite.exe`); no ZIPs and no `build-variants-vX.Y.Z.json` summary file.
-
 ### Fixed
-- **Main window icon rendering**: Explicitly set `Icon.ico` on `MainWindow`, fixing cases where only secondary dialogs had the icon.
-- **Donation QR rendering**: Switched donation QR path resolution to `resolve_asset_path(...)` with pixmap validity checks, fixing missing `QR_Paypal.png` in packaged/runtime contexts.
-- **Lite UI coherence**: In `PhotoDedup-lite.exe`, AI controls are now hidden from the welcome screen when AI runtime dependencies are unavailable, and analysis config is forced to non-AI mode.
-- **Smoke test workflow artifact mismatch**: Updated smoke-test workflow to upload the actual generated EXE artifact instead of a removed ZIP path.
+- **README badge rendering**: Replaced markdown badges inside HTML container with HTML badge links to ensure all five header badges render consistently across viewers.
+- **Icon transparency diagnosis**: Confirmed both `assets/Icon.ico` and `assets/Icon.png` are currently opaque (alpha `255`), explaining white/solid icon background in UI surfaces.
+
+### Documentation
+- Updated release notes and changelog wording for the new documentation/UI-visual diagnostics release.
 
 ### Recommended secure install (PowerShell)
 ```powershell
@@ -39,23 +32,16 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 ## Portugues (Brasil)
 
-### O que ha de novo na v1.0.12
-Data do release: 2026-04-13
+### O que ha de novo na v1.0.13
+Data do release: 2026-04-14
 
 ### Destaques
-### Adicionado
-- **Runtime AI capability gate**: Added runtime detection for optional AI dependencies (`torch` + `torchvision`) so the UI can adapt automatically by build flavor.
-
-### Alterado
-- **One-click installer architecture**: `install.ps1` now follows a robust local-installer pattern with project-root validation, bootstrap fallback (download/update repository when needed), Python runtime checks (`>=3.8,<3.14`), `.venv` lifecycle handling, dependency installation, and app launch.
-- **Secure remote installer flow**: `install_secure.ps1` now follows a secure bootstrap-and-delegate model (download over TLS, basic archive validation, install/update preserving `.venv`, then delegate to local `install.ps1`).
-- **Release artifact policy**: Dual-variant build now publishes only executables (`PhotoDedup-full.exe`, `PhotoDedup-lite.exe`); no ZIPs and no `build-variants-vX.Y.Z.json` summary file.
-
 ### Corrigido
-- **Main window icon rendering**: Explicitly set `Icon.ico` on `MainWindow`, fixing cases where only secondary dialogs had the icon.
-- **Donation QR rendering**: Switched donation QR path resolution to `resolve_asset_path(...)` with pixmap validity checks, fixing missing `QR_Paypal.png` in packaged/runtime contexts.
-- **Lite UI coherence**: In `PhotoDedup-lite.exe`, AI controls are now hidden from the welcome screen when AI runtime dependencies are unavailable, and analysis config is forced to non-AI mode.
-- **Smoke test workflow artifact mismatch**: Updated smoke-test workflow to upload the actual generated EXE artifact instead of a removed ZIP path.
+- **README badge rendering**: Replaced markdown badges inside HTML container with HTML badge links to ensure all five header badges render consistently across viewers.
+- **Icon transparency diagnosis**: Confirmed both `assets/Icon.ico` and `assets/Icon.png` are currently opaque (alpha `255`), explaining white/solid icon background in UI surfaces.
+
+### Documentacao
+- Updated release notes and changelog wording for the new documentation/UI-visual diagnostics release.
 
 ### Instalacao segura recomendada (PowerShell)
 ```powershell
@@ -72,23 +58,16 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 ## Espanol
 
-### Novedades en la v1.0.12
-Fecha de release: 2026-04-13
+### Novedades en la v1.0.13
+Fecha de release: 2026-04-14
 
 ### Cambios destacados
-### Anadido
-- **Runtime AI capability gate**: Added runtime detection for optional AI dependencies (`torch` + `torchvision`) so the UI can adapt automatically by build flavor.
-
-### Cambiado
-- **One-click installer architecture**: `install.ps1` now follows a robust local-installer pattern with project-root validation, bootstrap fallback (download/update repository when needed), Python runtime checks (`>=3.8,<3.14`), `.venv` lifecycle handling, dependency installation, and app launch.
-- **Secure remote installer flow**: `install_secure.ps1` now follows a secure bootstrap-and-delegate model (download over TLS, basic archive validation, install/update preserving `.venv`, then delegate to local `install.ps1`).
-- **Release artifact policy**: Dual-variant build now publishes only executables (`PhotoDedup-full.exe`, `PhotoDedup-lite.exe`); no ZIPs and no `build-variants-vX.Y.Z.json` summary file.
-
 ### Corregido
-- **Main window icon rendering**: Explicitly set `Icon.ico` on `MainWindow`, fixing cases where only secondary dialogs had the icon.
-- **Donation QR rendering**: Switched donation QR path resolution to `resolve_asset_path(...)` with pixmap validity checks, fixing missing `QR_Paypal.png` in packaged/runtime contexts.
-- **Lite UI coherence**: In `PhotoDedup-lite.exe`, AI controls are now hidden from the welcome screen when AI runtime dependencies are unavailable, and analysis config is forced to non-AI mode.
-- **Smoke test workflow artifact mismatch**: Updated smoke-test workflow to upload the actual generated EXE artifact instead of a removed ZIP path.
+- **README badge rendering**: Replaced markdown badges inside HTML container with HTML badge links to ensure all five header badges render consistently across viewers.
+- **Icon transparency diagnosis**: Confirmed both `assets/Icon.ico` and `assets/Icon.png` are currently opaque (alpha `255`), explaining white/solid icon background in UI surfaces.
+
+### Documentacion
+- Updated release notes and changelog wording for the new documentation/UI-visual diagnostics release.
 
 ### Instalacion segura recomendada (PowerShell)
 ```powershell
