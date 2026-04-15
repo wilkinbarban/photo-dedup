@@ -3,7 +3,7 @@ PhotoDedup - Intelligent Duplicate Photo Finder.
 Canonical application entry point.
 """
 
-__version__ = "1.0.14"
+__version__ = "1.0.15"
 
 import sys
 import warnings

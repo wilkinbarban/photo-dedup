@@ -31,6 +31,31 @@
 
 ---
 
+## Screenshots / Capturas / Capturas
+
+**`Captura_1.png` - Lite interface**
+- ES: Vista de la edición Lite, enfocada en flujo hash/visual sin controles de IA.
+- EN: Lite edition view focused on hash/visual workflow without AI controls.
+- PT: Visual da edição Lite com fluxo hash/visual sem controles de IA.
+
+![Lite interface](assets/Captura_1.png)
+
+**`Captura_2.png` - Full interface**
+- ES: Vista de la edición Full, con configuración completa y opciones de IA disponibles.
+- EN: Full edition view with complete configuration and AI options available.
+- PT: Visual da edição Full com configuração completa e opções de IA disponíveis.
+
+![Full interface](assets/Captura_2.png)
+
+**`Captura_3.png` - Duplicate resolution**
+- ES: Pantalla para escoger qué imagen conservar dentro de un grupo de duplicados.
+- EN: Screen to choose which image to keep within a duplicate group.
+- PT: Tela para escolher qual imagem manter dentro de um grupo de duplicadas.
+
+![Duplicate resolution](assets/Captura_3.png)
+
+---
+
 ## Español
 
 ### Descripción Profesional
@@ -52,20 +77,6 @@ Su objetivo principal es reducir espacio ocupado, mejorar organización y permit
 |---|---|---|---|---|
 | Full | `PhotoDedup-full.exe` | Disponible (si runtime IA está presente) | Muestra controles IA | Usuarios que quieren máxima precisión con soporte IA |
 | Lite | `PhotoDedup-lite.exe` | No disponible | Oculta controles IA automáticamente | Usuarios que priorizan menor peso, arranque rápido y flujo hash/visual |
-
-### Capturas de Pantalla
-
-**Interfaz Lite (`Captura_1.png`)**
-
-![Interfaz Lite](assets/Captura_1.png)
-
-**Interfaz Full (`Captura_2.png`)**
-
-![Interfaz Full](assets/Captura_2.png)
-
-**Selección de imagen a conservar en duplicados (`Captura_3.png`)**
-
-![Selección de archivo a conservar](assets/Captura_3.png)
 
 ### Descarga de EXE para Windows
 Releases oficiales:
@@ -131,20 +142,6 @@ The main goal is to reduce storage usage, improve media organization, and provid
 | Full | `PhotoDedup-full.exe` | Available (when AI runtime exists) | AI controls visible | Users who need highest detection depth with AI support |
 | Lite | `PhotoDedup-lite.exe` | Not available | AI controls hidden automatically | Users prioritizing smaller binary size and hash/visual flow |
 
-### Screenshots
-
-**Lite interface (`Captura_1.png`)**
-
-![Lite interface](assets/Captura_1.png)
-
-**Full interface (`Captura_2.png`)**
-
-![Full interface](assets/Captura_2.png)
-
-**Duplicate resolution: choose which image to keep (`Captura_3.png`)**
-
-![Choose file to keep](assets/Captura_3.png)
-
 ### Windows EXE Download
 Official releases:
 
@@ -208,20 +205,6 @@ O objetivo é reduzir espaço ocupado, melhorar organização da biblioteca e of
 |---|---|---|---|---|
 | Full | `PhotoDedup-full.exe` | Disponível (quando runtime IA existe) | Controles de IA visíveis | Usuários que precisam de maior profundidade de detecção |
 | Lite | `PhotoDedup-lite.exe` | Não disponível | Controles de IA ocultos automaticamente | Usuários que priorizam executável menor e fluxo hash/visual |
-
-### Capturas de Tela
-
-**Interface Lite (`Captura_1.png`)**
-
-![Interface Lite](assets/Captura_1.png)
-
-**Interface Full (`Captura_2.png`)**
-
-![Interface Full](assets/Captura_2.png)
-
-**Seleção da imagem a manter entre duplicadas (`Captura_3.png`)**
-
-![Seleção de arquivo para manter](assets/Captura_3.png)
 
 ### Download do EXE para Windows
 Releases oficiais:

@@ -1,4 +1,4 @@
-# PhotoDedup v1.0.14
+# PhotoDedup v1.0.15
 
 *(Auto-generated from CHANGELOG. Do not edit manually.)*
 
@@ -6,19 +6,15 @@
 
 ## English
 
-### What's new in v1.0.14
+### What's new in v1.0.15
 Release date: 2026-04-14
 
 ### Highlights
-### Added
-- **README visual documentation set**: Added three UI screenshots to the project docs (`assets/Captura_1.png`, `assets/Captura_2.png`, `assets/Captura_3.png`) covering Lite interface, Full interface, and duplicate-resolution selection flow.
-
 ### Changed
-- **Professional README rewrite (ES/EN/PT)**: Rewrote `README.md` with expanded, professional multilingual content including clearer project positioning, capabilities, executable edition comparison (`PhotoDedup-full.exe` vs `PhotoDedup-lite.exe`), and improved one-click installer technical explanation.
-- **Header rendering consistency**: Kept HTML-based badge/header layout to preserve stable rendering across markdown viewers.
+- **README screenshot structure**: Consolidated duplicate screenshot sections into a single shared section (`Screenshots / Capturas / Capturas`) with brief explanations for each capture in Spanish, English, and Portuguese.
 
 ### Documentation
-- Improved installation guidance quality in all three languages with clearer structure and operational context.
+- Reduced multilingual repetition in README while preserving the same visual references and trilingual context.
 
 ### Recommended secure install (PowerShell)
 ```powershell
@@ -35,19 +31,15 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 ## Portugues (Brasil)
 
-### O que ha de novo na v1.0.14
+### O que ha de novo na v1.0.15
 Data do release: 2026-04-14
 
 ### Destaques
-### Adicionado
-- **README visual documentation set**: Added three UI screenshots to the project docs (`assets/Captura_1.png`, `assets/Captura_2.png`, `assets/Captura_3.png`) covering Lite interface, Full interface, and duplicate-resolution selection flow.
-
 ### Alterado
-- **Professional README rewrite (ES/EN/PT)**: Rewrote `README.md` with expanded, professional multilingual content including clearer project positioning, capabilities, executable edition comparison (`PhotoDedup-full.exe` vs `PhotoDedup-lite.exe`), and improved one-click installer technical explanation.
-- **Header rendering consistency**: Kept HTML-based badge/header layout to preserve stable rendering across markdown viewers.
+- **README screenshot structure**: Consolidated duplicate screenshot sections into a single shared section (`Screenshots / Capturas / Capturas`) with brief explanations for each capture in Spanish, English, and Portuguese.
 
 ### Documentacao
-- Improved installation guidance quality in all three languages with clearer structure and operational context.
+- Reduced multilingual repetition in README while preserving the same visual references and trilingual context.
 
 ### Instalacao segura recomendada (PowerShell)
 ```powershell
@@ -64,19 +56,15 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 ## Espanol
 
-### Novedades en la v1.0.14
+### Novedades en la v1.0.15
 Fecha de release: 2026-04-14
 
 ### Cambios destacados
-### Anadido
-- **README visual documentation set**: Added three UI screenshots to the project docs (`assets/Captura_1.png`, `assets/Captura_2.png`, `assets/Captura_3.png`) covering Lite interface, Full interface, and duplicate-resolution selection flow.
-
 ### Cambiado
-- **Professional README rewrite (ES/EN/PT)**: Rewrote `README.md` with expanded, professional multilingual content including clearer project positioning, capabilities, executable edition comparison (`PhotoDedup-full.exe` vs `PhotoDedup-lite.exe`), and improved one-click installer technical explanation.
-- **Header rendering consistency**: Kept HTML-based badge/header layout to preserve stable rendering across markdown viewers.
+- **README screenshot structure**: Consolidated duplicate screenshot sections into a single shared section (`Screenshots / Capturas / Capturas`) with brief explanations for each capture in Spanish, English, and Portuguese.
 
 ### Documentacion
-- Improved installation guidance quality in all three languages with clearer structure and operational context.
+- Reduced multilingual repetition in README while preserving the same visual references and trilingual context.
 
 ### Instalacion segura recomendada (PowerShell)
 ```powershell
