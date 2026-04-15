@@ -21,6 +21,13 @@ Release date: 2026-04-14
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
 
+### Windows SmartScreen notice
+If Windows shows that Microsoft Defender SmartScreen blocked an unrecognized app, this usually means the executable is not code-signed yet and Windows reports it as an unknown publisher. It does not automatically mean the file is malicious.
+
+To open it manually:
+1. Click `More info`.
+2. Click `Run anyway`.
+
 ### Standard install
 1. Download the Source Code (`zip` or `tar.gz`) below.
 2. Extract the files and open a terminal in the folder.
@@ -46,6 +53,13 @@ Data do release: 2026-04-14
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
 
+### Aviso do Windows SmartScreen
+Se o Windows informar que o Microsoft Defender SmartScreen bloqueou um aplicativo não reconhecido, isso normalmente significa que o executável ainda não é assinado digitalmente e por isso aparece como fornecedor desconhecido. Isso não significa automaticamente que o arquivo seja malicioso.
+
+Para abrir manualmente:
+1. Clique em `Mais informações`.
+2. Clique em `Executar assim mesmo`.
+
 ### Instalacao padrao
 1. Baixe o Codigo Fonte (`zip` ou `tar.gz`) abaixo.
 2. Extraia os arquivos e abra um terminal na pasta.
@@ -70,6 +84,13 @@ Fecha de release: 2026-04-14
 ```powershell
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
+
+### Aviso de Windows SmartScreen
+Si Windows informa que Microsoft Defender SmartScreen bloqueó una aplicación no reconocida, normalmente significa que el ejecutable todavía no está firmado digitalmente y por eso aparece como editor desconocido. Esto no significa automáticamente que el archivo sea malicioso.
+
+Para abrirlo manualmente:
+1. Haz clic en `Más información`.
+2. Haz clic en `Ejecutar de todas formas`.
 
 ### Instalacion estandar
 1. Descarga el Codigo Fuente (`zip` o `tar.gz`) a continuacion.

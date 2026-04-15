@@ -33,21 +33,21 @@
 
 ## Screenshots / Capturas / Capturas
 
-**`Captura_1.png` - Lite interface**
+**`PhotoDedup-lite.exe` - Lite interface**
 - ES: Vista de la edición Lite, enfocada en flujo hash/visual sin controles de IA.
 - EN: Lite edition view focused on hash/visual workflow without AI controls.
 - PT: Visual da edição Lite com fluxo hash/visual sem controles de IA.
 
 ![Lite interface](assets/Captura_1.png)
 
-**`Captura_2.png` - Full interface**
+**`PhotoDedup-full.exe` - Full interface**
 - ES: Vista de la edición Full, con configuración completa y opciones de IA disponibles.
 - EN: Full edition view with complete configuration and AI options available.
 - PT: Visual da edição Full com configuração completa e opções de IA disponíveis.
 
 ![Full interface](assets/Captura_2.png)
 
-**`Captura_3.png` - Duplicate resolution**
+**`Interfaz` - Duplicate resolution**
 - ES: Pantalla para escoger qué imagen conservar dentro de un grupo de duplicados.
 - EN: Screen to choose which image to keep within a duplicate group.
 - PT: Tela para escolher qual imagem manter dentro de um grupo de duplicadas.
@@ -88,6 +88,23 @@ Artefactos publicados:
 - `PhotoDedup-lite.exe`
 
 No se publican ZIP como artefacto principal en el flujo actual.
+
+### Aviso de Windows SmartScreen
+Si Windows muestra el mensaje "Microsoft Defender SmartScreen impidió que una aplicación no reconocida se iniciara", no significa necesariamente que el archivo sea malicioso. Esto ocurre porque el ejecutable no está firmado con un certificado de firma de código y, por tanto, Windows lo muestra como "editor desconocido" mientras el binario no acumula reputación suficiente.
+
+Para abrirlo manualmente:
+1. Haz clic en `Más información`.
+2. Haz clic en `Ejecutar de todas formas`.
+
+Qué significa este aviso:
+- El archivo es nuevo o tiene poca reputación en SmartScreen.
+- El ejecutable no está firmado digitalmente con un certificado de code signing.
+- Cambios frecuentes de versión generan binarios nuevos y reinician esa reputación.
+
+Mitigación futura prevista:
+- Publicación estable desde GitHub Releases.
+- Publicación de hashes SHA-256 cuando corresponda.
+- Posible firma de código en futuras versiones si el proyecto incorpora certificado de firma.
 
 ### Instalación con un Clic (PowerShell)
 
@@ -153,6 +170,23 @@ Published artifacts:
 
 ZIP bundles are not part of the current primary release artifact policy.
 
+### Windows SmartScreen Notice
+If Windows shows the message that Microsoft Defender SmartScreen blocked an unrecognized app, it does not automatically mean the file is malicious. This happens because the executable is not code-signed yet, so Windows reports it as an "unknown publisher" until the binary gains enough reputation.
+
+To open it manually:
+1. Click `More info`.
+2. Click `Run anyway`.
+
+Why this happens:
+- The file is new or has low SmartScreen reputation.
+- The executable is not digitally signed with a code-signing certificate.
+- Frequent releases create new binaries and reset reputation.
+
+Planned mitigation:
+- Stable distribution through GitHub Releases.
+- SHA-256 hash publication when appropriate.
+- Possible code signing in future versions if the project adopts a signing certificate.
+
 ### One-Click Installation (PowerShell)
 
 **Option A: Standard installer**
@@ -216,6 +250,23 @@ Artefatos publicados:
 - `PhotoDedup-lite.exe`
 
 Pacotes ZIP não fazem parte da política principal de artefatos no fluxo atual.
+
+### Aviso do Windows SmartScreen
+Se o Windows mostrar a mensagem de que o Microsoft Defender SmartScreen bloqueou um aplicativo não reconhecido, isso não significa automaticamente que o arquivo seja malicioso. Isso acontece porque o executável ainda não é assinado digitalmente e, por isso, o Windows o apresenta como "fornecedor desconhecido" até que o binário acumule reputação suficiente.
+
+Para abrir manualmente:
+1. Clique em `Mais informações`.
+2. Clique em `Executar assim mesmo`.
+
+Por que isso acontece:
+- O arquivo é novo ou tem pouca reputação no SmartScreen.
+- O executável não possui assinatura digital com certificado de code signing.
+- Releases frequentes geram novos binários e reiniciam a reputação.
+
+Mitigação prevista:
+- Distribuição estável via GitHub Releases.
+- Publicação de hash SHA-256 quando apropriado.
+- Possível assinatura de código em versões futuras, caso o projeto adote certificado de assinatura.
 
 ### Instalação com Um Clique (PowerShell)
 
