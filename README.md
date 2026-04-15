@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
   <img src="assets/Icon.png" alt="PhotoDedup Logo" width="220" style="max-width: 42vw; border-radius: 20px; box-shadow: 0 10px 28px rgba(0,0,0,0.28);">
   <h1>PhotoDedup</h1>
 
@@ -17,9 +17,9 @@
 >
 > This project is developed strictly for educational purposes to demonstrate Python desktop development with PyQt6, image analysis workflows, background processing, and installer automation.
 >
-> Este proyecto se desarrolla estrictamente con fines educativos para demostrar desarrollo de aplicaciones de escritorio con Python/PyQt6, analisis de imagenes, procesos en segundo plano y automatizacion de instaladores.
+> Este proyecto se desarrolla estrictamente con fines educativos para demostrar desarrollo de aplicaciones de escritorio con Python/PyQt6, análisis de imágenes, procesos en segundo plano y automatización de instaladores.
 >
-> Este projeto e desenvolvido estritamente para fins educacionais para demonstrar desenvolvimento desktop com Python/PyQt6, analise de imagens, processamento em segundo plano e automacao de instaladores.
+> Este projeto é desenvolvido estritamente para fins educacionais para demonstrar desenvolvimento desktop com Python/PyQt6, análise de imagens, processamento em segundo plano e automação de instaladores.
 
 ---
 
@@ -33,165 +33,234 @@
 
 ## Español
 
-### Descripción
-PhotoDedup es una aplicación de escritorio para Windows creada con Python y PyQt6 para encontrar fotos duplicadas y organizar medios automáticamente. Detecta duplicados exactos y similares, integra archivos JSON de Google Takeout para restaurar metadatos EXIF y ordena tu biblioteca.
+### Descripción Profesional
+PhotoDedup es una aplicación de escritorio para Windows orientada al análisis y gestión de bibliotecas fotográficas con gran volumen de archivos. El proyecto combina análisis hash, comparación visual y, en la edición Full, análisis asistido por IA para ayudarte a detectar duplicados con criterio técnico y con control total sobre qué archivo conservar.
 
-### Características
-- Detección de duplicados exactos y visualmente similares.
-- Integración con Google Takeout (`*.json`) para restaurar EXIF.
-- Organización automática por fecha en estructura `AAAA/MM`.
-- Visor de logs en tiempo real.
-- Interfaz multilenguaje: Español, English y Português (Brasil).
-- Borrado seguro (Papelera del sistema).
+Su objetivo principal es reducir espacio ocupado, mejorar organización y permitir una limpieza segura y auditable de contenido duplicado.
 
-### Descargar EXE de Windows
-Si prefieres evitar la consola, descarga el ejecutable precompilado desde Releases:
+### Capacidades Principales
+- Detección de duplicados exactos y similares.
+- Integración con metadatos de Google Takeout (`*.json`) para recuperación de información relevante.
+- Flujo de revisión por grupos de duplicados para decidir qué imagen conservar.
+- Cálculo de estadísticas de ahorro potencial y resultados de análisis.
+- Interfaz multilenguaje (ES / EN / PT).
+- Eliminación segura hacia Papelera del sistema.
+
+### Versiones Ejecutables (Full vs Lite)
+
+| Variante | Archivo | IA | UI | Caso de uso recomendado |
+|---|---|---|---|---|
+| Full | `PhotoDedup-full.exe` | Disponible (si runtime IA está presente) | Muestra controles IA | Usuarios que quieren máxima precisión con soporte IA |
+| Lite | `PhotoDedup-lite.exe` | No disponible | Oculta controles IA automáticamente | Usuarios que priorizan menor peso, arranque rápido y flujo hash/visual |
+
+### Capturas de Pantalla
+
+**Interfaz Lite (`Captura_1.png`)**
+
+![Interfaz Lite](assets/Captura_1.png)
+
+**Interfaz Full (`Captura_2.png`)**
+
+![Interfaz Full](assets/Captura_2.png)
+
+**Selección de imagen a conservar en duplicados (`Captura_3.png`)**
+
+![Selección de archivo a conservar](assets/Captura_3.png)
+
+### Descarga de EXE para Windows
+Releases oficiales:
 
 https://github.com/wilkinbarban/photo-dedup/releases/latest
 
-Descarga directamente una de estas variantes:
+Artefactos publicados:
+- `PhotoDedup-full.exe`
+- `PhotoDedup-lite.exe`
 
-- `PhotoDedup-full.exe` (incluye opciones de IA si las dependencias están disponibles)
-- `PhotoDedup-lite.exe` (sin IA; interfaz simplificada sin controles de IA)
+No se publican ZIP como artefacto principal en el flujo actual.
 
-No se publican archivos ZIP: los artefactos oficiales son EXE directos.
+### Instalación con un Clic (PowerShell)
 
-### Instalación con un solo comando (PowerShell)
-
-**Opción A - Instalación automática estándar:**
+**Opción A: Instalador estándar**
 ```powershell
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
 ```
 
-**Opción B - Instalación automática segura (canal estable):**
+**Opción B: Instalador seguro (recomendado)**
 ```powershell
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
 
-`install_secure.ps1` valida la descarga, extrae en carpeta temporal, actualiza la instalación local y delega al instalador local `install.ps1`.
+### Flujo Técnico de Instaladores
+- `install_secure.ps1`:
+  - Descarga el repositorio por HTTPS/TLS.
+  - Valida descarga y estructura extraída.
+  - Actualiza instalación local preservando `.venv`.
+  - Delega ejecución en `install.ps1` local.
+- `install.ps1`:
+  - Verifica raíz de proyecto o activa modo bootstrap.
+  - Busca Python compatible (`>=3.8,<3.14`, recomendado 3.11).
+  - Crea/reutiliza entorno virtual `.venv`.
+  - Instala dependencias y lanza la aplicación.
 
-### Flujo actual de instaladores (1 clic)
-- `install_secure.ps1`: descarga el repositorio por HTTPS/TLS, valida la descarga, instala/actualiza en una carpeta local (preservando `.venv`) y delega en `install.ps1`.
-- `install.ps1`: valida entorno local, busca/instala Python compatible (`>=3.8,<3.14`, preferido 3.11), crea/reutiliza `.venv`, instala dependencias y lanza la aplicación.
-- Ambos scripts soportan actualización en sitio sin destruir el entorno virtual existente.
-
-### Coherencia visual por variante
-- En `PhotoDedup-full.exe`, el bloque de IA aparece normalmente.
-- En `PhotoDedup-lite.exe`, el bloque de IA se oculta automáticamente para evitar opciones no disponibles.
-
-### Instalación manual
+### Instalación Manual
 1. Clona o descarga este repositorio.
-2. Ejecuta `install_dependencies.bat` o instala manualmente con `pip install -r requirements.txt`.
+2. Ejecuta `install_dependencies.bat` o instala con `pip install -r requirements.txt`.
 3. Ejecuta `python src/main/photo_dedup.py`.
 
 ---
 
 ## English
 
-### Description
-PhotoDedup is a Windows desktop application built with Python and PyQt6 to find duplicate photos and organize media automatically. It detects exact and visual duplicates, integrates Google Takeout JSON files to restore EXIF metadata, and structures your library.
+### Professional Overview
+PhotoDedup is a Windows desktop application designed for high-volume photo library analysis and cleanup. It combines hash-based detection, visual similarity matching, and (in the Full edition) AI-assisted comparison to help users identify duplicates while keeping full control over which file to preserve.
 
-### Features
-- Exact and visual duplicate detection.
-- Google Takeout (`*.json`) integration for EXIF restoration.
-- Automatic date-based media organization (`YYYY/MM`).
-- Real-time log viewer.
-- Multilingual UI: Español, English, and Português (Brasil).
-- Safe deletion to Recycle Bin.
+The main goal is to reduce storage usage, improve media organization, and provide a safe, reviewable duplicate-resolution workflow.
 
-### Download Windows EXE
-If you prefer not to use the console, download the prebuilt executable from Releases:
+### Core Capabilities
+- Exact and similar duplicate detection.
+- Google Takeout JSON (`*.json`) metadata integration.
+- Group-based review flow to choose the best file to keep.
+- Analysis summaries and recoverable-space statistics.
+- Multilingual UI (ES / EN / PT).
+- Safe delete workflow to Recycle Bin.
+
+### Executable Editions (Full vs Lite)
+
+| Edition | File | AI | UI behavior | Recommended use |
+|---|---|---|---|---|
+| Full | `PhotoDedup-full.exe` | Available (when AI runtime exists) | AI controls visible | Users who need highest detection depth with AI support |
+| Lite | `PhotoDedup-lite.exe` | Not available | AI controls hidden automatically | Users prioritizing smaller binary size and hash/visual flow |
+
+### Screenshots
+
+**Lite interface (`Captura_1.png`)**
+
+![Lite interface](assets/Captura_1.png)
+
+**Full interface (`Captura_2.png`)**
+
+![Full interface](assets/Captura_2.png)
+
+**Duplicate resolution: choose which image to keep (`Captura_3.png`)**
+
+![Choose file to keep](assets/Captura_3.png)
+
+### Windows EXE Download
+Official releases:
 
 https://github.com/wilkinbarban/photo-dedup/releases/latest
 
-Download one of these direct executables:
+Published artifacts:
+- `PhotoDedup-full.exe`
+- `PhotoDedup-lite.exe`
 
-- `PhotoDedup-full.exe` (AI options available when AI dependencies exist)
-- `PhotoDedup-lite.exe` (no AI; UI hides AI controls automatically)
+ZIP bundles are not part of the current primary release artifact policy.
 
-ZIP artifacts are not published; official release assets are direct EXE files.
+### One-Click Installation (PowerShell)
 
-### One-command install (PowerShell)
-
-**Option A - Standard automatic install:**
+**Option A: Standard installer**
 ```powershell
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
 ```
 
-**Option B - Secure automatic install (stable channel):**
+**Option B: Secure installer (recommended)**
 ```powershell
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
 
-`install_secure.ps1` validates download integrity, extracts to a temp folder, updates local install (preserving `.venv`), and delegates execution to local `install.ps1`.
+### Installer Technical Flow
+- `install_secure.ps1`:
+  - Downloads repository via HTTPS/TLS.
+  - Validates downloaded archive and extracted structure.
+  - Updates local installation while preserving `.venv`.
+  - Delegates to local `install.ps1`.
+- `install.ps1`:
+  - Validates project-root context or enters bootstrap mode.
+  - Detects compatible Python (`>=3.8,<3.14`, preferred 3.11).
+  - Creates/reuses `.venv`.
+  - Installs dependencies and launches application.
 
-### Current one-click installer behavior
-- `install_secure.ps1`: secure remote bootstrap (HTTPS/TLS), repository download/update, then delegation to local installer.
-- `install.ps1`: local setup and launch flow with Python compatibility check (`>=3.8,<3.14`, preferred 3.11), `.venv` create/reuse, dependency install, and app launch.
-- Existing local installation is updated in place while keeping `.venv`.
-
-### Full vs Lite UI coherence
-- In `PhotoDedup-full.exe`, AI controls are shown as usual.
-- In `PhotoDedup-lite.exe`, AI controls are hidden when AI runtime is unavailable.
-
-### Manual install
-1. Clone or download this repository.
-2. Run `install_dependencies.bat` or install manually with `pip install -r requirements.txt`.
+### Manual Installation
+1. Clone or download repository.
+2. Run `install_dependencies.bat` or `pip install -r requirements.txt`.
 3. Run `python src/main/photo_dedup.py`.
 
 ---
 
 ## Português (Brasil)
 
-### Descrição
-PhotoDedup e um aplicativo desktop para Windows, desenvolvido com Python e PyQt6, para localizar fotos duplicadas e organizar midias automaticamente. Detecta duplicatas exatas e visuais, integra JSON do Google Takeout para restaurar metadados EXIF e estrutura a biblioteca.
+### Descrição Profissional
+PhotoDedup é um aplicativo desktop para Windows voltado para análise e limpeza de bibliotecas de fotos com grande volume de arquivos. O projeto combina detecção por hash, comparação visual e, na edição Full, análise assistida por IA para ajudar na identificação de duplicatas com controle completo sobre qual arquivo manter.
 
-### Recursos
-- Deteccao de duplicatas exatas e visuais.
-- Integracao com Google Takeout (`*.json`) para restauracao de EXIF.
-- Organizacao automatica por data (`AAAA/MM`).
-- Visualizador de logs em tempo real.
-- Interface multilíngue: Español, English e Português (Brasil).
-- Exclusao segura para a Lixeira.
+O objetivo é reduzir espaço ocupado, melhorar organização da biblioteca e oferecer um fluxo seguro e auditável de resolução de duplicados.
+
+### Capacidades Principais
+- Detecção de duplicatas exatas e similares.
+- Integração com metadados do Google Takeout (`*.json`).
+- Fluxo por grupos para escolher qual imagem manter.
+- Estatísticas de análise e de espaço recuperável.
+- Interface multilíngue (ES / EN / PT).
+- Exclusão segura para a Lixeira.
+
+### Versões Executáveis (Full vs Lite)
+
+| Versão | Arquivo | IA | Comportamento da UI | Uso recomendado |
+|---|---|---|---|---|
+| Full | `PhotoDedup-full.exe` | Disponível (quando runtime IA existe) | Controles de IA visíveis | Usuários que precisam de maior profundidade de detecção |
+| Lite | `PhotoDedup-lite.exe` | Não disponível | Controles de IA ocultos automaticamente | Usuários que priorizam executável menor e fluxo hash/visual |
+
+### Capturas de Tela
+
+**Interface Lite (`Captura_1.png`)**
+
+![Interface Lite](assets/Captura_1.png)
+
+**Interface Full (`Captura_2.png`)**
+
+![Interface Full](assets/Captura_2.png)
+
+**Seleção da imagem a manter entre duplicadas (`Captura_3.png`)**
+
+![Seleção de arquivo para manter](assets/Captura_3.png)
 
 ### Download do EXE para Windows
-Se preferir nao usar console, baixe o executavel precompilado em Releases:
+Releases oficiais:
 
 https://github.com/wilkinbarban/photo-dedup/releases/latest
 
-Baixe diretamente uma das variantes:
+Artefatos publicados:
+- `PhotoDedup-full.exe`
+- `PhotoDedup-lite.exe`
 
-- `PhotoDedup-full.exe` (mostra opcoes de IA quando as dependencias estao disponiveis)
-- `PhotoDedup-lite.exe` (sem IA; interface oculta os controles de IA)
+Pacotes ZIP não fazem parte da política principal de artefatos no fluxo atual.
 
-Nao publicamos arquivos ZIP: os artefatos oficiais sao EXE diretos.
+### Instalação com Um Clique (PowerShell)
 
-### Instalacao com um unico comando (PowerShell)
-
-**Opcao A - Instalacao automatica padrao:**
+**Opção A: Instalador padrão**
 ```powershell
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
 ```
 
-**Opcao B - Instalacao automatica segura (canal estavel):**
+**Opção B: Instalador seguro (recomendado)**
 ```powershell
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
 
-`install_secure.ps1` valida download, extrai em pasta temporaria, atualiza instalacao local e delega para o instalador local `install.ps1`.
+### Fluxo Técnico dos Instaladores
+- `install_secure.ps1`:
+  - Faz download do repositório via HTTPS/TLS.
+  - Valida arquivo baixado e estrutura extraída.
+  - Atualiza instalação local preservando `.venv`.
+  - Delega execução ao `install.ps1` local.
+- `install.ps1`:
+  - Valida contexto de raiz do projeto ou entra em modo bootstrap.
+  - Detecta Python compatível (`>=3.8,<3.14`, recomendado 3.11).
+  - Cria/reutiliza `.venv`.
+  - Instala dependências e inicia a aplicação.
 
-### Fluxo atual dos instaladores (1 clique)
-- `install_secure.ps1`: bootstrap remoto seguro (HTTPS/TLS), download/atualizacao do repositorio e delegacao para o instalador local.
-- `install.ps1`: fluxo local de setup e execucao com verificacao de Python compativel (`>=3.8,<3.14`, preferido 3.11), criacao/reuso de `.venv`, instalacao de dependencias e inicializacao do app.
-- Instalacoes existentes sao atualizadas no local preservando `.venv`.
-
-### Coerencia visual full vs lite
-- No `PhotoDedup-full.exe`, os controles de IA aparecem normalmente.
-- No `PhotoDedup-lite.exe`, os controles de IA ficam ocultos quando o runtime de IA nao esta disponivel.
-
-### Instalacao manual
-1. Clone ou baixe este repositorio.
-2. Execute `install_dependencies.bat` ou instale manualmente com `pip install -r requirements.txt`.
+### Instalação Manual
+1. Clone ou baixe o repositório.
+2. Execute `install_dependencies.bat` ou `pip install -r requirements.txt`.
 3. Execute `python src/main/photo_dedup.py`.
 
 ---
@@ -203,14 +272,15 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 | `src/main/` | Canonical application entry point and startup flow |
 | `src/modules/` | Core logic: analysis, models, state, i18n, logging, utilities |
 | `src/interfaces/` | User interface components, dialogs, screens, and theme |
-| `scripts/maintenance/` | Migration and text-update maintenance helpers |
-| `assets/` | Icons and visual resources |
+| `scripts/maintenance/` | Maintenance utilities and migration helpers |
+| `assets/` | Icons and visual resources (including screenshots) |
 | `install_dependencies.bat` | Windows dependency installer |
-| `install.ps1` | Standard PowerShell installer |
-| `install_secure.ps1` | Secure installer script (repository source) |
-| `scripts/build_windows.ps1` | Builds and packages Windows EXE |
-| `.github/workflows/build-release-exe.yml` | Builds and uploads release assets |
-| `.github/workflows/smoke-test-exe.yml` | Smoke-test for EXE startup/shutdown |
+| `install.ps1` | Standard one-click PowerShell installer |
+| `install_secure.ps1` | Secure one-click PowerShell bootstrap installer |
+| `scripts/build_windows.ps1` | Windows EXE build script |
+| `scripts/build_variants.ps1` | Full/Lite build orchestrator |
+| `.github/workflows/build-release-exe.yml` | Tag-based EXE release pipeline |
+| `.github/workflows/smoke-test-exe.yml` | Smoke-test pipeline for executable startup |
 
 ---
 
@@ -224,4 +294,3 @@ This software is provided for educational purposes only. Use of this tool must c
 
 This project is licensed under the GNU General Public License v3.0.
 See [LICENSE](LICENSE) for full details.
-

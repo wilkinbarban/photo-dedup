@@ -1,4 +1,4 @@
-# PhotoDedup v1.0.13
+# PhotoDedup v1.0.14
 
 *(Auto-generated from CHANGELOG. Do not edit manually.)*
 
@@ -6,16 +6,19 @@
 
 ## English
 
-### What's new in v1.0.13
+### What's new in v1.0.14
 Release date: 2026-04-14
 
 ### Highlights
-### Fixed
-- **README badge rendering**: Replaced markdown badges inside HTML container with HTML badge links to ensure all five header badges render consistently across viewers.
-- **Icon transparency diagnosis**: Confirmed both `assets/Icon.ico` and `assets/Icon.png` are currently opaque (alpha `255`), explaining white/solid icon background in UI surfaces.
+### Added
+- **README visual documentation set**: Added three UI screenshots to the project docs (`assets/Captura_1.png`, `assets/Captura_2.png`, `assets/Captura_3.png`) covering Lite interface, Full interface, and duplicate-resolution selection flow.
+
+### Changed
+- **Professional README rewrite (ES/EN/PT)**: Rewrote `README.md` with expanded, professional multilingual content including clearer project positioning, capabilities, executable edition comparison (`PhotoDedup-full.exe` vs `PhotoDedup-lite.exe`), and improved one-click installer technical explanation.
+- **Header rendering consistency**: Kept HTML-based badge/header layout to preserve stable rendering across markdown viewers.
 
 ### Documentation
-- Updated release notes and changelog wording for the new documentation/UI-visual diagnostics release.
+- Improved installation guidance quality in all three languages with clearer structure and operational context.
 
 ### Recommended secure install (PowerShell)
 ```powershell
@@ -32,16 +35,19 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 ## Portugues (Brasil)
 
-### O que ha de novo na v1.0.13
+### O que ha de novo na v1.0.14
 Data do release: 2026-04-14
 
 ### Destaques
-### Corrigido
-- **README badge rendering**: Replaced markdown badges inside HTML container with HTML badge links to ensure all five header badges render consistently across viewers.
-- **Icon transparency diagnosis**: Confirmed both `assets/Icon.ico` and `assets/Icon.png` are currently opaque (alpha `255`), explaining white/solid icon background in UI surfaces.
+### Adicionado
+- **README visual documentation set**: Added three UI screenshots to the project docs (`assets/Captura_1.png`, `assets/Captura_2.png`, `assets/Captura_3.png`) covering Lite interface, Full interface, and duplicate-resolution selection flow.
+
+### Alterado
+- **Professional README rewrite (ES/EN/PT)**: Rewrote `README.md` with expanded, professional multilingual content including clearer project positioning, capabilities, executable edition comparison (`PhotoDedup-full.exe` vs `PhotoDedup-lite.exe`), and improved one-click installer technical explanation.
+- **Header rendering consistency**: Kept HTML-based badge/header layout to preserve stable rendering across markdown viewers.
 
 ### Documentacao
-- Updated release notes and changelog wording for the new documentation/UI-visual diagnostics release.
+- Improved installation guidance quality in all three languages with clearer structure and operational context.
 
 ### Instalacao segura recomendada (PowerShell)
 ```powershell
@@ -58,16 +64,19 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 
 ## Espanol
 
-### Novedades en la v1.0.13
+### Novedades en la v1.0.14
 Fecha de release: 2026-04-14
 
 ### Cambios destacados
-### Corregido
-- **README badge rendering**: Replaced markdown badges inside HTML container with HTML badge links to ensure all five header badges render consistently across viewers.
-- **Icon transparency diagnosis**: Confirmed both `assets/Icon.ico` and `assets/Icon.png` are currently opaque (alpha `255`), explaining white/solid icon background in UI surfaces.
+### Anadido
+- **README visual documentation set**: Added three UI screenshots to the project docs (`assets/Captura_1.png`, `assets/Captura_2.png`, `assets/Captura_3.png`) covering Lite interface, Full interface, and duplicate-resolution selection flow.
+
+### Cambiado
+- **Professional README rewrite (ES/EN/PT)**: Rewrote `README.md` with expanded, professional multilingual content including clearer project positioning, capabilities, executable edition comparison (`PhotoDedup-full.exe` vs `PhotoDedup-lite.exe`), and improved one-click installer technical explanation.
+- **Header rendering consistency**: Kept HTML-based badge/header layout to preserve stable rendering across markdown viewers.
 
 ### Documentacion
-- Updated release notes and changelog wording for the new documentation/UI-visual diagnostics release.
+- Improved installation guidance quality in all three languages with clearer structure and operational context.
 
 ### Instalacion segura recomendada (PowerShell)
 ```powershell

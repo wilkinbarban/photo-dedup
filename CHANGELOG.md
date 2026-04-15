@@ -5,19 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+
+## [1.0.14] - 2026-04-14
 
 ### Added
-- _No changes yet._
+- **README visual documentation set**: Added three UI screenshots to the project docs (`assets/Captura_1.png`, `assets/Captura_2.png`, `assets/Captura_3.png`) covering Lite interface, Full interface, and duplicate-resolution selection flow.
 
 ### Changed
-- _No changes yet._
-
-### Fixed
-- _No changes yet._
+- **Professional README rewrite (ES/EN/PT)**: Rewrote `README.md` with expanded, professional multilingual content including clearer project positioning, capabilities, executable edition comparison (`PhotoDedup-full.exe` vs `PhotoDedup-lite.exe`), and improved one-click installer technical explanation.
+- **Header rendering consistency**: Kept HTML-based badge/header layout to preserve stable rendering across markdown viewers.
 
 ### Documentation
-- _No changes yet._
+- Improved installation guidance quality in all three languages with clearer structure and operational context.
 
 ## [1.0.13] - 2026-04-14
 
