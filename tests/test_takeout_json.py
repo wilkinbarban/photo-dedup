@@ -3,8 +3,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from PIL import Image
+
 from src.modules.services.models import PhotoInfo
-from src.modules.services.takeout import find_takeout_json, organize_takeout_photos
+from src.modules.services.takeout import enrich_image_with_json, find_takeout_json, organize_takeout_photos
 
 
 class TakeoutJsonTests(unittest.TestCase):
@@ -42,6 +44,30 @@ class TakeoutJsonTests(unittest.TestCase):
             self.assertTrue(moved_json.exists())
             self.assertFalse(image_path.exists())
             self.assertFalse(json_path.exists())
+
+    def test_skips_heic_exif_write_without_error_log(self):
+        try:
+            import pillow_heif
+        except ImportError:
+            self.skipTest("pillow-heif is not installed")
+
+        pillow_heif.register_heif_opener()
+
+        with tempfile.TemporaryDirectory() as tmp:
+            image_path = Path(tmp) / "photo.HEIC"
+            Image.new("RGB", (32, 24), color=(80, 120, 160)).save(image_path, format="HEIF")
+
+            with self.assertNoLogs(level="ERROR"):
+                enriched = enrich_image_with_json(
+                    str(image_path),
+                    {
+                        "exif_date": "2024:01:01 00:00:00",
+                        "geo_data": {"latitude": 18.5, "longitude": -69.9, "altitude": 12.0},
+                        "description": "heic metadata",
+                    },
+                )
+
+            self.assertFalse(enriched)
 
 
 if __name__ == "__main__":

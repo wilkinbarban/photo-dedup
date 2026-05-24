@@ -13,6 +13,7 @@ except ImportError:
     piexif = None
 
 SUPPORTED_VIDEO_FORMATS = {'.mp4', '.mov', '.mkv', '.3gp', '.avi', '.m4v', '.webm'}
+PIEXIF_WRITABLE_FORMATS = {'.jpg', '.jpeg'}
 
 
 def find_takeout_json(image_path: str) -> Optional[str]:
@@ -114,6 +115,11 @@ def enrich_image_with_json(image_path: str, json_data: dict) -> bool:
     """
     if not piexif:
         logging.warning("piexif library is missing, skipping EXIF write.")
+        return False
+
+    suffix = Path(image_path).suffix.lower()
+    if suffix not in PIEXIF_WRITABLE_FORMATS:
+        logging.info("Skipping EXIF write for unsupported format %s: %s", suffix, image_path)
         return False
 
     try:
