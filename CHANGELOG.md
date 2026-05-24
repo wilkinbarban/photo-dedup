@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dependency bounds in `requirements.txt`, build-only dependencies in `requirements-build.txt`, Windows installers, build scripts, and GitHub Actions were updated for the Python 3.14 runtime line.
 - Unified the previous `install.ps1` + `install_secure.ps1` flow into a single `install.ps1` that works as both remote bootstrapper and local installer/launcher.
 - Standardized the local cloned-repository launcher as `Iniciar.bat`, replacing both the earlier `Install.bat` naming and the dependency-only `install_dependencies.bat` path.
+- Removed the external funding UI behavior and related assets from the desktop interface.
 - Redesigned the PyQt6 interface with a stronger shared visual system: refreshed palette, reusable theme helpers, updated welcome/progress/results screens, and cleaner duplicate review cards.
 - Reworked README structure for clearer ES/EN/PT onboarding, executable edition guidance, local validation, and error behavior documentation.
 
@@ -63,7 +64,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - **Main window icon rendering**: Explicitly set `Icon.ico` on `MainWindow`, fixing cases where only secondary dialogs had the icon.
-- **Donation QR rendering**: Switched donation QR path resolution to `resolve_asset_path(...)` with pixmap validity checks, fixing missing `QR_Paypal.png` in packaged/runtime contexts.
 - **Lite UI coherence**: In `PhotoDedup-lite.exe`, AI controls are now hidden from the welcome screen when AI runtime dependencies are unavailable, and analysis config is forced to non-AI mode.
 - **Smoke test workflow artifact mismatch**: Updated smoke-test workflow to upload the actual generated EXE artifact instead of a removed ZIP path.
 

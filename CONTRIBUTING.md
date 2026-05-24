@@ -64,7 +64,7 @@ pip install -r requirements-build.txt
 ./scripts/build_windows.ps1 -Version local-test -Clean
 ```
 
-If your change touches installer behavior, keep `install.ps1`, `Iniciar.bat`, README.md, CHANGELOG.md, and RELEASE.template.md aligned. `install.ps1` is the only remote one-command installer; do not reintroduce a separate secure installer path or a second dependency-only batch installer.
+If your change touches installer behavior, keep `install.ps1`, `Iniciar.bat`, README.md, CHANGELOG.md, and RELEASE.template.md aligned. `install.ps1` is the only remote one-command installer; do not reintroduce a second remote installer or a second dependency-only batch installer.
 
 Before creating a new release tag, regenerate release notes from template:
 

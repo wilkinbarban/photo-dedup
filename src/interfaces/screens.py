@@ -1,4 +1,3 @@
-import os
 import shutil
 import logging
 from pathlib import Path
@@ -15,7 +14,6 @@ from src.modules.services.models import DuplicateGroup, PhotoInfo, Statistics
 from src.modules.services.ai_model import is_ai_runtime_available
 from src.modules.config.state import load_config, save_config
 from src.modules.config.i18n import get_text
-from src.modules.utils.paths import resolve_asset_path
 from src.modules.utils.errors import file_error_message
 from src.interfaces.theme import *
 from src.interfaces.widgets import GroupWidget, StatisticsDialog
@@ -253,58 +251,10 @@ class WelcomeScreen(QWidget):
         fmt_layout.addLayout(fmt_row)
         layout.addWidget(fmt_container, alignment=Qt.AlignmentFlag.AlignCenter)
 
-        layout.addSpacing(20)
-        
-        # Donation Button
-        self.btn_donate = QPushButton(get_text("btn_donate"))
-        self.btn_donate.setFixedSize(140, 32)
-        self.btn_donate.setStyleSheet(button_style("ghost", compact=True))
-        self.btn_donate.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.btn_donate.clicked.connect(self._show_donation)
-        layout.addWidget(self.btn_donate, alignment=Qt.AlignmentFlag.AlignCenter)
-
         scroll.setWidget(content_widget)
         main_layout.addWidget(scroll)
 
         self._folder = None
-
-    def _show_donation(self) -> None:
-        """Shows the donation dialog with a QR code."""
-        from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel
-        from PyQt6.QtGui import QPixmap
-        import os
-        
-        dialog = QDialog(self)
-        dialog.setWindowTitle(get_text("title_donate"))
-        dialog.setFixedSize(350, 450)
-        dialog.setStyleSheet(f"QDialog {{ background: {DARK_BG}; }} QLabel {{ color: {TEXT_PRI}; }}")
-        
-        l = QVBoxLayout(dialog)
-        l.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        l.setSpacing(15)
-        
-        msg = QLabel(get_text("msg_donate"))
-        msg.setStyleSheet(f"color: {TEXT_PRI}; font-size: 14px; line-height: 1.4;")
-        msg.setWordWrap(True)
-        msg.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        l.addWidget(msg)
-        
-        qr_label = QLabel()
-        qr_path = resolve_asset_path("assets", "QR_Paypal.png")
-        if os.path.exists(qr_path):
-            pixmap = QPixmap(qr_path)
-            if not pixmap.isNull():
-                qr_label.setPixmap(pixmap.scaled(300, 300, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
-            else:
-                qr_label.setText(get_text("msg_qr_missing"))
-                qr_label.setStyleSheet(f"color: {TEXT_MUT};")
-        else:
-            qr_label.setText(get_text("msg_qr_missing"))
-            qr_label.setStyleSheet(f"color: {TEXT_MUT};")
-        qr_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        l.addWidget(qr_label)
-        
-        dialog.exec()
 
     def _browse(self) -> None:
         """
