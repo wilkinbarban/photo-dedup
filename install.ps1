@@ -29,7 +29,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-$Version = "1.0.15"
+$Version = "1.1.0"
 
 $Host.UI.RawUI.WindowTitle = "PhotoDedup - Instalando..."
 Clear-Host

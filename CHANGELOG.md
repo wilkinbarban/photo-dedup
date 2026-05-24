@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- _No changes yet._
+
+### Fixed
+- _No changes yet._
+
+## [1.1.0] - 2026-05-24
+
+### Changed
 - Runtime policy now targets Python `3.14.x`, matching the installed local Python used for development and validation from this version onward.
 - Dependency bounds in `requirements.txt`, build-only dependencies in `requirements-build.txt`, Windows installers, build scripts, and GitHub Actions were updated for the Python 3.14 runtime line.
 - Unified the previous `install.ps1` + `install_secure.ps1` flow into a single `install.ps1` that works as both remote bootstrapper and local installer/launcher.

@@ -6,6 +6,7 @@ PhotoDedup follows SemVer and keeps completed work separate from future mileston
 
 | Version | Status | Summary |
 |---|---|---|
+| 1.1.0 | Released | Python 3.14 runtime line, unified installer, stronger UI/error handling/docs, donation UI removal, and robust Google Takeout JSON/media organization. |
 | 1.0.15 | Released | Consolidated README screenshots into one shared ES/EN/PT section. |
 | 1.0.14 | Released | Professional trilingual README rewrite and screenshot documentation set. |
 | 1.0.13 | Released | README badge rendering fix and icon transparency diagnostics. |
@@ -17,9 +18,6 @@ PhotoDedup follows SemVer and keeps completed work separate from future mileston
 
 | Milestone | Goal |
 |---|---|
-| UI consistency pass | Keep the refreshed PyQt6 visual system consistent across dialogs, cards, logs, summaries, and language selection. |
-| Error resilience pass | Continue replacing silent broad catches with recoverable errors, clear user messages, and useful technical logs. |
-| Python 3.14 runtime line | Keep installers, CI, packaging, and dependency bounds aligned with Python 3.14.x. |
 | Documentation parity | Keep README, CHANGELOG, RELEASE notes, installer behavior, and validation commands synchronized. |
 | Release validation | Maintain Full/Lite executable smoke tests and publish clear artifact metadata for release builds. |
 | Accessibility review | Improve keyboard focus, contrast checks, text wrapping, and long-path readability in dense result views. |
