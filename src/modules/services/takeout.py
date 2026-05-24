@@ -32,6 +32,8 @@ def find_takeout_json(image_path: str) -> Optional[str]:
     candidates = [
         f"{base_name}.json",
         f"{stem}.json",
+        f"{base_name}.supplemental-metadata.json",
+        f"{stem}.supplemental-metadata.json",
         f"{base_name}.supplemen.json",
         f"{stem}.supplemen.json",
     ]
@@ -43,6 +45,8 @@ def find_takeout_json(image_path: str) -> Optional[str]:
             num = parts[1][:-1]
             candidates.append(f"{orig_name}{path.suffix}({num}).json")
             candidates.append(f"{orig_name}({num}){path.suffix}.json")
+            candidates.append(f"{orig_name}{path.suffix}({num}).supplemental-metadata.json")
+            candidates.append(f"{orig_name}({num}){path.suffix}.supplemental-metadata.json")
             candidates.append(f"{orig_name}{path.suffix}({num}).supplemen.json")
             candidates.append(f"{orig_name}({num}){path.suffix}.supplemen.json")
 
