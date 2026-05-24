@@ -4,7 +4,7 @@
     Photo Dedup - One-click installer and launcher for Windows.
 
 .DESCRIPTION
-    Validates Python (>=3.8, <3.14; prefers 3.11), creates or reuses
+    Validates Python 3.14.x, creates or reuses
     a local .venv, installs dependencies, and launches Photo Dedup.
 
     If executed outside the project root (for example from a remote
@@ -126,45 +126,45 @@ if (-not $isProjectRoot) {
     exit $LASTEXITCODE
 }
 
-Write-Step "Locating compatible Python runtime (>=3.8, <3.14; prefer 3.11)..."
+Write-Step "Locating compatible Python runtime (3.14.x; prefer the Python already installed on this PC)..."
 
 $pythonCmd = $null
 try {
-    $null = & py -3.11 --version 2>&1
+    $null = & python --version 2>&1
     if ($LASTEXITCODE -eq 0) {
-        $pythonCmd = @('py', '-3.11')
-        Write-Ok "Python 3.11 found via py launcher."
+        $null = & python -c "import sys; raise SystemExit(0 if (3,14) <= sys.version_info < (3,15) else 1)" 2>&1
+        if ($LASTEXITCODE -eq 0) {
+            $pythonCmd = @('python')
+            Write-Ok "Python 3.14.x found in PATH."
+        }
+        else {
+            Write-Warn "Python in PATH is outside supported range (3.14.x)."
+        }
     }
 }
 catch { }
 
 if (-not $pythonCmd) {
     try {
-        $null = & python --version 2>&1
+        $null = & py -3.14 --version 2>&1
         if ($LASTEXITCODE -eq 0) {
-            $null = & python -c "import sys; raise SystemExit(0 if (3,8) <= sys.version_info < (3,14) else 1)" 2>&1
-            if ($LASTEXITCODE -eq 0) {
-                $pythonCmd = @('python')
-                Write-Ok "Compatible Python found in PATH."
-            }
-            else {
-                Write-Warn "Python in PATH is outside supported range (>=3.8, <3.14)."
-            }
+            $pythonCmd = @('py', '-3.14')
+            Write-Ok "Python 3.14.x found via py launcher."
         }
     }
     catch { }
 }
 
 if (-not $pythonCmd) {
-    Write-Info "No compatible Python found. Attempting automatic install via winget..."
+    Write-Info "No compatible Python 3.14.x found. Attempting automatic install via winget..."
     if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
-        Write-Fail "winget is not available. Install Python 3.11 manually from https://www.python.org/downloads/."
+        Write-Fail "winget is not available. Install Python 3.14 manually from https://www.python.org/downloads/."
         exit 1
     }
 
-    & winget install --id Python.Python.3.11 --accept-source-agreements --accept-package-agreements
+    & winget install --id Python.Python.3.14 --accept-source-agreements --accept-package-agreements
     if ($LASTEXITCODE -ne 0) {
-        Write-Fail "winget installation failed. Please install Python 3.11 manually."
+        Write-Fail "winget installation failed. Please install Python 3.14 manually."
         exit 1
     }
 
@@ -172,10 +172,10 @@ if (-not $pythonCmd) {
                 [System.Environment]::GetEnvironmentVariable('PATH', 'User')
 
     try {
-        $null = & py -3.11 --version 2>&1
+        $null = & py -3.14 --version 2>&1
         if ($LASTEXITCODE -eq 0) {
-            $pythonCmd = @('py', '-3.11')
-            Write-Ok "Python 3.11 installed and ready."
+            $pythonCmd = @('py', '-3.14')
+            Write-Ok "Python 3.14 installed and ready."
         }
     }
     catch { }
@@ -195,9 +195,9 @@ $venvPython = Join-Path $venvDir 'Scripts\python.exe'
 $venvPip = Join-Path $venvDir 'Scripts\pip.exe'
 
 if (Test-Path $venvPython) {
-    $null = & $venvPython -c "import sys; raise SystemExit(0 if (3,8) <= sys.version_info < (3,14) else 1)" 2>&1
+    $null = & $venvPython -c "import sys; raise SystemExit(0 if (3,14) <= sys.version_info < (3,15) else 1)" 2>&1
     if ($LASTEXITCODE -ne 0) {
-        Write-Warn "Existing .venv uses an incompatible Python version. Recreating..."
+        Write-Warn "Existing .venv does not use Python 3.14.x. Recreating..."
         Remove-Item -Recurse -Force $venvDir
     }
 }

@@ -4,7 +4,7 @@
 
   <p align="center">
     <a href="https://www.gnu.org/licenses/gpl-3.0"><img alt="License: GPL v3" src="https://img.shields.io/badge/License-GPLv3-blue.svg"></a>
-    <a href="https://www.python.org/downloads/release/python-3110/"><img alt="Python 3.11" src="https://img.shields.io/badge/Python-3.11-green.svg"></a>
+    <a href="https://www.python.org/downloads/"><img alt="Python 3.14" src="https://img.shields.io/badge/Python-3.14-green.svg"></a>
     <a href="https://www.microsoft.com/windows"><img alt="Platform Windows 10/11" src="https://img.shields.io/badge/Platform-Windows%2010%2F11-lightgrey.svg"></a>
     <a href="https://github.com/wilkinbarban/photo-dedup/releases"><img alt="Releases" src="https://img.shields.io/github/v/release/wilkinbarban/photo-dedup"></a>
     <a href="#educational-disclaimer--aviso-educativo--aviso-educacional"><img alt="Purpose Educational" src="https://img.shields.io/badge/Purpose-Educational-orange.svg"></a>
@@ -80,7 +80,8 @@ pip install -r requirements.txt
 python src\main\photo_dedup.py
 ```
 
-Python compatible: `>=3.8,<3.14`; recomendado: `3.11`.
+Python compatible: `3.14.x`; recomendado: usar el Python instalado en la PC y disponible en `PATH`.
+Las dependencias de `requirements.txt` estan ajustadas para Python 3.14.x, incluyendo PyQt6 6.11, NumPy 2.4, OpenCV 4.13, PyTorch 2.12 y torchvision 0.27.
 
 ### Comportamiento ante errores
 
@@ -150,7 +151,8 @@ pip install -r requirements.txt
 python src\main\photo_dedup.py
 ```
 
-Compatible Python: `>=3.8,<3.14`; recommended: `3.11`.
+Compatible Python: `3.14.x`; recommended: use the Python installed on the PC and available in `PATH`.
+`requirements.txt` is aligned with Python 3.14.x, including PyQt6 6.11, NumPy 2.4, OpenCV 4.13, PyTorch 2.12, and torchvision 0.27.
 
 ### Error Behavior
 
@@ -220,7 +222,8 @@ pip install -r requirements.txt
 python src\main\photo_dedup.py
 ```
 
-Python compativel: `>=3.8,<3.14`; recomendado: `3.11`.
+Python compativel: `3.14.x`; recomendado: usar o Python instalado no PC e disponivel no `PATH`.
+`requirements.txt` esta alinhado com Python 3.14.x, incluindo PyQt6 6.11, NumPy 2.4, OpenCV 4.13, PyTorch 2.12 e torchvision 0.27.
 
 ### Comportamento de erro
 
@@ -244,6 +247,8 @@ Os executaveis atuais nao possuem assinatura de codigo. O Windows pode mostra-lo
 | `src/modules/services/` | Duplicate analysis, AI model, Takeout handling, and domain models. |
 | `src/modules/config/` | i18n, app state, cache, config, and history. |
 | `src/modules/utils/` | Logging, asset path resolution, and shared error helpers. |
+| `requirements.txt` | Runtime dependencies pinned for Python 3.14.x. |
+| `requirements-build.txt` | Build-only dependencies such as PyInstaller. |
 | `scripts/build_windows.ps1` | Builds one Windows EXE flavor. |
 | `scripts/build_variants.ps1` | Builds Full and Lite variants. |
 | `.github/workflows/` | Release, build, and smoke-test automation. |
@@ -257,6 +262,7 @@ python -m py_compile src\main\photo_dedup.py src\interfaces\language_dialog.py s
 Packaging validation:
 
 ```powershell
+pip install -r requirements-build.txt
 .\scripts\build_variants.ps1 -Version local-test -SmokeTest
 ```
 

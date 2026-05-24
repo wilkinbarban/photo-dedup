@@ -1,0 +1,4 @@
+# Build dependencies for Python 3.14.x.
+# Runtime dependencies live in requirements.txt.
+
+pyinstaller>=6.17,<7

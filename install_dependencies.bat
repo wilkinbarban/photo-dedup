@@ -11,14 +11,21 @@ echo.
 :CHECK_PYTHON
 REM Check if python is available in PATH
 python --version >nul 2>&1
-if %errorlevel% equ 0 goto PY_OK
+if %errorlevel% equ 0 (
+    python -c "import sys; raise SystemExit(0 if (3,14) <= sys.version_info < (3,15) else 1)" >nul 2>&1
+    if !errorlevel! equ 0 goto PY_OK
+    color 0E
+    echo [WARN] Python was found, but it is not Python 3.14.x.
+    echo [INFO] PhotoDedup now targets Python 3.14.x from this version onward.
+    echo.
+)
 
 color 0E
-echo [INFO] Python was not found on this system.
+echo [INFO] Compatible Python 3.14.x was not found on this system.
 echo Trying to install Python automatically using winget...
 echo.
 
-winget install --id Python.Python.3.11 -e --source winget --accept-package-agreements --accept-source-agreements
+winget install --id Python.Python.3.14 -e --source winget --accept-package-agreements --accept-source-agreements
 if %errorlevel% neq 0 (
     color 0C
     echo [ERROR] Python could not be installed automatically.
@@ -75,6 +82,14 @@ exit /b
 color 0A
 echo [INFO] Python detected:
 python --version
+python -c "import sys; raise SystemExit(0 if (3,14) <= sys.version_info < (3,15) else 1)" >nul 2>&1
+if %errorlevel% neq 0 (
+    color 0C
+    echo [ERROR] This project now requires Python 3.14.x.
+    echo Please install Python 3.14 and ensure it is first in PATH.
+    pause
+    exit /b
+)
 echo.
 
 echo [INFO] Updating pip...
@@ -87,7 +102,7 @@ if %errorlevel% neq 0 (
 )
 
 echo [INFO] Installing packages from requirements.txt...
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 if %errorlevel% neq 0 (
     color 0C
     echo.

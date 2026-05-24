@@ -31,6 +31,8 @@ Please do not contribute features that encourage misuse, violate platform terms,
 
 ### Windows (recommended)
 
+PhotoDedup now targets Python `3.14.x`. Use the Python installed on the PC and ensure it is first in `PATH` before creating `.venv`.
+
 Use the existing dependency installer:
 
 ```cmd
@@ -64,6 +66,7 @@ python -m py_compile src\main\photo_dedup.py scripts\maintenance\update_analyzer
 If your change touches packaging/release flow, validate:
 
 ```powershell
+pip install -r requirements-build.txt
 ./scripts/build_windows.ps1 -Version local-test -Clean
 ```
 
@@ -96,6 +99,7 @@ Then `.github/workflows/build-release-exe.yml` runs on release publish and uploa
 - Preserve desktop usability and responsiveness.
 - Update README.md and/or CHANGELOG.md when behavior changes.
 - Do not add new dependencies without updating requirements.txt and explaining why.
+- Keep dependency bounds compatible with Python 3.14.x.
 - Write new comments and docstrings in English.
 - Keep reusable UI styling in `src/interfaces/theme.py` instead of duplicating large inline styles.
 - Keep recoverable failures visible: log technical context and show user-facing messages that explain what happened and what can be done.

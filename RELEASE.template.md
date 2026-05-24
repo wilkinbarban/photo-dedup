@@ -23,7 +23,7 @@ Current executables are not code-signed. Windows may show an unknown publisher w
 ### Standard install
 1. Download the Source Code (`zip` or `tar.gz`) below.
 2. Extract the files and open a terminal in the folder.
-3. Install dependencies: `install_dependencies.bat` (Windows) or `pip install -r requirements.txt`.
+3. Use Python `3.14.x`, then install dependencies: `install_dependencies.bat` (Windows) or `pip install -r requirements.txt`.
 4. Run: `python src/main/photo_dedup.py`.
 
 ---
@@ -47,7 +47,7 @@ Os executaveis atuais nao possuem assinatura de codigo. O Windows pode mostrar u
 ### Instalacao padrao
 1. Baixe o Codigo Fonte (`zip` ou `tar.gz`) abaixo.
 2. Extraia os arquivos e abra um terminal na pasta.
-3. Instale as dependencias: `install_dependencies.bat` (Windows) ou `pip install -r requirements.txt`.
+3. Use Python `3.14.x` e instale as dependencias: `install_dependencies.bat` (Windows) ou `pip install -r requirements.txt`.
 4. Execute: `python src/main/photo_dedup.py`.
 
 ---
@@ -71,5 +71,5 @@ Los ejecutables actuales no estan firmados con certificado de firma de codigo. W
 ### Instalacion estandar
 1. Descarga el Codigo Fuente (`zip` o `tar.gz`) a continuacion.
 2. Extrae los archivos y abre una terminal en la carpeta.
-3. Instala las dependencias: `install_dependencies.bat` (Windows) o `pip install -r requirements.txt`.
+3. Usa Python `3.14.x` e instala las dependencias: `install_dependencies.bat` (Windows) o `pip install -r requirements.txt`.
 4. Ejecuta: `python src/main/photo_dedup.py`.

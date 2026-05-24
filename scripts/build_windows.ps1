@@ -28,6 +28,11 @@ $repoRoot = Split-Path -Parent $scriptRoot
 
 Push-Location $repoRoot
 try {
+    $null = & python -c "import sys; raise SystemExit(0 if (3,14) <= sys.version_info < (3,15) else 1)" 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        throw "PhotoDedup builds now require Python 3.14.x. Ensure your installed Python 3.14 is first in PATH."
+    }
+
     if ($Clean) {
         if (Test-Path "build") {
             Remove-Item -Path "build" -Recurse -Force -ErrorAction SilentlyContinue

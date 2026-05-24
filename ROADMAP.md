@@ -19,6 +19,7 @@ PhotoDedup follows SemVer and keeps completed work separate from future mileston
 |---|---|
 | UI consistency pass | Keep the refreshed PyQt6 visual system consistent across dialogs, cards, logs, summaries, and language selection. |
 | Error resilience pass | Continue replacing silent broad catches with recoverable errors, clear user messages, and useful technical logs. |
+| Python 3.14 runtime line | Keep installers, CI, packaging, and dependency bounds aligned with Python 3.14.x. |
 | Documentation parity | Keep README, CHANGELOG, RELEASE notes, installer behavior, and validation commands synchronized. |
 | Release validation | Maintain Full/Lite executable smoke tests and publish clear artifact metadata for release builds. |
 | Accessibility review | Improve keyboard focus, contrast checks, text wrapping, and long-path readability in dense result views. |

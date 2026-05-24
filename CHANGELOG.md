@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- Runtime policy now targets Python `3.14.x`, matching the installed local Python used for development and validation from this version onward.
+- Dependency bounds in `requirements.txt`, build-only dependencies in `requirements-build.txt`, Windows installers, build scripts, and GitHub Actions were updated for the Python 3.14 runtime line.
 - Redesigned the PyQt6 interface with a stronger shared visual system: refreshed palette, reusable theme helpers, updated welcome/progress/results screens, and cleaner duplicate review cards.
 - Reworked README structure for clearer ES/EN/PT onboarding, executable edition guidance, local validation, and error behavior documentation.
 

@@ -2,32 +2,34 @@
 # To install these dependencies, you can use pip:
 # pip install -r requirements.txt
 
+# Runtime target: Python 3.14.x on Windows.
+
 # PyQt6 powers the desktop user interface.
-PyQt6
+PyQt6>=6.11,<7
 
 # Pillow handles image loading, conversion, and basic processing.
-Pillow
+Pillow>=12.2,<13
 
 # imagehash generates perceptual hashes for duplicate and similarity detection.
-imagehash
+imagehash>=4.3,<5
 
 # OpenCV provides additional image analysis and computer vision utilities.
-opencv-python
+opencv-python>=4.13,<5
 
 # NumPy supports array operations and numerical processing.
-numpy
+numpy>=2.4,<3
 
 # pillow-heif adds HEIF and HEIC image support to Pillow.
-pillow-heif
+pillow-heif>=1.3,<2
 
 # send2trash moves files to the recycle bin instead of deleting them permanently.
-send2trash
+send2trash>=2.1,<3
 
 # piexif reads and writes EXIF metadata in image files.
-piexif
+piexif>=1.1,<2
 
 # torch provides the core deep learning runtime used by the project.
-torch
+torch>=2.12,<3
 
 # torchvision adds vision models and image transforms built on top of PyTorch.
-torchvision
+torchvision>=0.27,<1
