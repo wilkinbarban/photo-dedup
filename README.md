@@ -89,6 +89,7 @@ PhotoDedup intenta degradar de forma controlada:
 
 - Si la IA no esta disponible, la app continua en modo hash/visual.
 - Si detecta metadatos de Google Takeout, usa los JSON para enriquecer JPEG cuando es compatible, organiza fotos/videos por fecha y mueve los JSON procesados a `Json`.
+- En carpetas Takeout parciales, tambien organiza medios sin JSON asociado: usa la fecha del nombre cuando existe y, si no puede inferirla, los mueve a `Sin_fecha`.
 - Si un HEIC/HEIF no admite escritura EXIF directa, omite esa escritura sin detener la organizacion por fecha.
 - Si una miniatura no se puede leer, se muestra un marcador visual neutro.
 - Si el cache o la configuracion local estan corruptos, se usan valores seguros y se registra el detalle tecnico.
@@ -162,6 +163,7 @@ PhotoDedup is designed to degrade gracefully:
 
 - If AI is unavailable, the app continues in hash/visual mode.
 - If Google Takeout metadata is detected, JSON sidecars are used to enrich compatible JPEGs, organize photos/videos by date, and move processed JSON files to `Json`.
+- In partial Takeout folders, media without a matching JSON sidecar is also organized: filename dates are used when available, otherwise files are moved to `Sin_fecha`.
 - If HEIC/HEIF cannot be written through direct EXIF insertion, that write is skipped without blocking date-based organization.
 - If a thumbnail cannot be read, the UI shows a neutral placeholder.
 - If local cache or config files are corrupt, safe defaults are used and the technical detail is logged.
@@ -235,6 +237,7 @@ PhotoDedup tenta degradar de forma controlada:
 
 - Se a IA nao estiver disponivel, o app continua em modo hash/visual.
 - Se metadados do Google Takeout forem detectados, os JSONs sao usados para enriquecer JPEGs compativeis, organizar fotos/videos por data e mover os JSONs processados para `Json`.
+- Em pastas Takeout parciais, midias sem JSON associado tambem sao organizadas: datas no nome do arquivo sao usadas quando existem; caso contrario, os arquivos vao para `Sin_fecha`.
 - Se HEIC/HEIF nao permitir escrita EXIF direta, essa escrita e ignorada sem bloquear a organizacao por data.
 - Se uma miniatura nao puder ser lida, a interface mostra um marcador neutro.
 - Se cache ou configuracao local estiverem corrompidos, valores seguros sao usados e o detalhe tecnico e registrado.

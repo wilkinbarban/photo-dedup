@@ -1,11 +1,10 @@
 import json
 import logging
-import os
 import re
 import shutil
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Optional, Tuple
 
 try:
     import piexif
@@ -15,6 +14,16 @@ except ImportError:
 
 SUPPORTED_VIDEO_FORMATS = {'.mp4', '.mov', '.mkv', '.3gp', '.avi', '.m4v', '.webm'}
 PIEXIF_WRITABLE_FORMATS = {'.jpg', '.jpeg'}
+FILENAME_DATE_PATTERNS = [
+    re.compile(
+        r"(?P<year>20\d{2}|19\d{2})[_-](?P<month>\d{2})[_-](?P<day>\d{2})"
+        r"[_\s-](?P<hour>\d{2})[_-](?P<minute>\d{2})(?:[_-](?P<second>\d{2}))?"
+    ),
+    re.compile(
+        r"(?P<year>20\d{2}|19\d{2})(?P<month>\d{2})(?P<day>\d{2})"
+        r"[_-]?(?P<hour>\d{2})(?P<minute>\d{2})(?P<second>\d{2})"
+    ),
+]
 
 
 def find_takeout_json(image_path: str) -> Optional[str]:
@@ -74,7 +83,11 @@ def find_takeout_json(image_path: str) -> Optional[str]:
     for search_dir in search_dirs:
         for json_path in search_dir.glob("*.json"):
             json_name = json_path.name.lower()
+            json_stem = json_path.stem.lower()
             if json_name in {f"{base_lower}.json", f"{base_lower}..json", f"{stem_lower}.json"}:
+                return str(json_path)
+
+            if base_lower.startswith(json_stem) and len(json_stem) >= 20:
                 return str(json_path)
 
             if json_name.startswith(f"{base_lower}.supp"):
@@ -85,11 +98,14 @@ def find_takeout_json(image_path: str) -> Optional[str]:
 
             if orig_base_lower and numbered_num:
                 number_token = f"({numbered_num})"
+                orig_name_lower = numbered_match.group('name').lower()
                 if json_name.startswith(f"{orig_base_lower}.supp") and number_token in json_name:
                     return str(json_path)
                 if json_name.startswith(f"{orig_base_lower}{number_token}.supp"):
                     return str(json_path)
                 if json_name.startswith(f"{orig_base_lower}{number_token}.json"):
+                    return str(json_path)
+                if json_name.startswith(f"{orig_name_lower}.") and ".supp" in json_name and number_token in json_name:
                     return str(json_path)
 
     return None
@@ -225,14 +241,64 @@ def enrich_image_with_json(image_path: str, json_data: dict) -> bool:
     return False
 
 
-def get_safe_filename(target_dir: Path, base_name: str, ext: str) -> Path:
+def get_safe_filename(target_dir: Path, base_name: str, ext: str, source_path: Optional[Path] = None) -> Path:
     """Returns a non-colliding file path by appending a counter if needed."""
     counter = 1
     new_path = target_dir / f"{base_name}{ext}"
     while new_path.exists():
+        if source_path and str(new_path.resolve()) == str(source_path.resolve()):
+            return new_path
         new_path = target_dir / f"{base_name}_{counter}{ext}"
         counter += 1
     return new_path
+
+
+def parse_date_from_filename(path: Path) -> Optional[str]:
+    """Extracts common camera/export timestamps embedded in filenames."""
+    for pattern in FILENAME_DATE_PATTERNS:
+        match = pattern.search(path.stem)
+        if not match:
+            continue
+
+        second = match.groupdict().get("second") or "00"
+        return (
+            f"{match.group('year')}:{match.group('month')}:{match.group('day')} "
+            f"{match.group('hour')}:{match.group('minute')}:{second}"
+        )
+
+    return None
+
+
+def build_target_from_date(root_path: Path, source_path: Path, exif_date: Optional[str]) -> Tuple[Path, str]:
+    if exif_date:
+        try:
+            date_part, time_part = exif_date.split(' ')
+            year, month, day = date_part.split(':')
+            hh, mm, ss = time_part.split(':')
+            return root_path / year / month, f"{year}-{month}-{day}_{hh}-{mm}-{ss}"
+        except Exception as error:
+            logging.warning(f"Error parsing date {exif_date} for {source_path}: {error}")
+
+    return root_path / "Sin_fecha", source_path.stem
+
+
+def move_file(source_path: Path, target_path: Path) -> bool:
+    """Moves a file without keeping the original path behind."""
+    if str(target_path.resolve()) == str(source_path.resolve()):
+        return True
+
+    try:
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+        original_size = source_path.stat().st_size
+        shutil.move(str(source_path), str(target_path))
+        if target_path.exists() and target_path.stat().st_size == original_size and not source_path.exists():
+            return True
+
+        logging.error(f"Failed to verify move for {target_path}")
+    except Exception as error:
+        logging.error(f"Error moving {source_path} to {target_path}: {error}")
+
+    return False
 
 
 def organize_takeout_photos(photos: list, root_folder: str, cache: dict, update_cb=None) -> Tuple[list, int, int]:
@@ -257,87 +323,48 @@ def organize_takeout_photos(photos: list, root_folder: str, cache: dict, update_
 
     for photo in photos:
         json_path_str = find_takeout_json(photo.path)
-        if not json_path_str:
-            continue
+        json_data = None
+        if json_path_str:
+            processed_jsons.add(json_path_str)
+            json_data = parse_takeout_json(json_path_str)
 
-        processed_jsons.add(json_path_str)
+        photo_path = Path(photo.path)
+        exif_date = photo.exif_date or (json_data or {}).get('exif_date') or parse_date_from_filename(photo_path)
+        target_dir, base_name = build_target_from_date(root_path, photo_path, exif_date)
 
-        if photo.exif_date:
-            try:
-                date_part, time_part = photo.exif_date.split(' ')
-                year, month, day = date_part.split(':')
-                hh, mm, ss = time_part.split(':')
-                target_dir = root_path / year / month
-                base_name = f"{year}-{month}-{day}_{hh}-{mm}-{ss}"
-            except Exception as error:
-                logging.warning(f"Error parsing date {photo.exif_date} for {photo.path}: {error}")
-                target_dir = root_path / "Sin_fecha"
-                base_name = Path(photo.path).stem
-        else:
-            target_dir = root_path / "Sin_fecha"
-            base_name = Path(photo.path).stem
+        ext = photo_path.suffix
+        new_path = get_safe_filename(target_dir, base_name, ext, photo_path)
 
-        target_dir.mkdir(parents=True, exist_ok=True)
-        ext = Path(photo.path).suffix
-        new_path = get_safe_filename(target_dir, base_name, ext)
-
-        if str(new_path.resolve()) != str(Path(photo.path).resolve()):
-            try:
-                shutil.copy2(photo.path, new_path)
-                if new_path.exists() and new_path.stat().st_size == Path(photo.path).stat().st_size:
-                    os.remove(photo.path)
-                    if photo.path in cache:
-                        cache[str(new_path)] = cache.pop(photo.path)
-                    photo.path = str(new_path)
-                else:
-                    logging.error(f"Failed to verify copy for {new_path}")
-            except Exception as error:
-                logging.error(f"Error moving {photo.path} to {new_path}: {error}")
+        old_path = photo.path
+        if move_file(photo_path, new_path):
+            if old_path in cache:
+                cache[str(new_path)] = cache.pop(old_path)
+            photo.path = str(new_path)
 
     if update_cb:
         update_cb("Organizando videos por fecha (JSON detectado)...")
 
-    for root, _, files in os.walk(root_path):
-        for file_name in files:
-            video_path = Path(root) / file_name
-            if video_path.suffix.lower() not in SUPPORTED_VIDEO_FORMATS:
-                continue
+    video_paths = [
+        path for path in root_path.rglob("*")
+        if path.is_file() and path.suffix.lower() in SUPPORTED_VIDEO_FORMATS
+    ]
 
-            json_path_str = find_takeout_json(str(video_path))
-            if not json_path_str:
-                continue
+    for video_path in video_paths:
+        if not video_path.exists():
+            continue
 
-            videos_count += 1
+        json_path_str = find_takeout_json(str(video_path))
+        json_data = None
+        if json_path_str:
             processed_jsons.add(json_path_str)
             json_data = parse_takeout_json(json_path_str)
 
-            if json_data and 'exif_date' in json_data:
-                try:
-                    date_part, time_part = json_data['exif_date'].split(' ')
-                    year, month, day = date_part.split(':')
-                    hh, mm, ss = time_part.split(':')
-                    target_dir = root_path / year / month
-                    base_name = f"{year}-{month}-{day}_{hh}-{mm}-{ss}"
-                except Exception as error:
-                    logging.warning(f"Error parsing date {json_data['exif_date']} for {video_path}: {error}")
-                    target_dir = root_path / "Sin_fecha"
-                    base_name = video_path.stem
-            else:
-                target_dir = root_path / "Sin_fecha"
-                base_name = video_path.stem
+        videos_count += 1
+        exif_date = (json_data or {}).get('exif_date') or parse_date_from_filename(video_path)
+        target_dir, base_name = build_target_from_date(root_path, video_path, exif_date)
+        new_path = get_safe_filename(target_dir, base_name, video_path.suffix, video_path)
 
-            target_dir.mkdir(parents=True, exist_ok=True)
-            new_path = get_safe_filename(target_dir, base_name, video_path.suffix)
-
-            if str(new_path.resolve()) != str(video_path.resolve()):
-                try:
-                    shutil.copy2(str(video_path), new_path)
-                    if new_path.exists() and new_path.stat().st_size == video_path.stat().st_size:
-                        os.remove(str(video_path))
-                    else:
-                        logging.error(f"Failed to verify copy for {new_path}")
-                except Exception as error:
-                    logging.error(f"Error moving {video_path} to {new_path}: {error}")
+        move_file(video_path, new_path)
 
     json_dir = root_path / "Json"
     for json_path in root_path.rglob("*.json"):
@@ -355,7 +382,9 @@ def organize_takeout_photos(photos: list, root_folder: str, cache: dict, update_
             try:
                 json_file = Path(json_path)
                 if json_file.exists():
-                    new_json_path = get_safe_filename(json_dir, json_file.stem, json_file.suffix)
+                    if json_dir in json_file.parents:
+                        continue
+                    new_json_path = get_safe_filename(json_dir, json_file.stem, json_file.suffix, json_file)
                     shutil.move(str(json_file), str(new_json_path))
             except Exception as error:
                 logging.error(f"Error moving JSON {json_path}: {error}")

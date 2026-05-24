@@ -82,6 +82,30 @@ class TakeoutJsonTests(unittest.TestCase):
 
             self.assertEqual(find_takeout_json(str(video_path)), str(json_path))
 
+    def test_finds_truncated_json_after_json_folder_move(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            json_dir = root / "Json"
+            json_dir.mkdir()
+            image_path = root / "2019_03_09_21_03_FDD89D67-9A23-497A-8EB5-FE0388.JPG"
+            json_path = json_dir / "2019_03_09_21_03_FDD89D67-9A23-497A-8EB5-FE038.json"
+            image_path.write_bytes(b"fake image bytes")
+            json_path.write_text("{}", encoding="utf-8")
+
+            self.assertEqual(find_takeout_json(str(image_path)), str(json_path))
+
+    def test_finds_numbered_live_photo_video_metadata_after_json_folder_move(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            json_dir = root / "Json"
+            json_dir.mkdir()
+            video_path = root / "IMG_0016(1).MP4"
+            json_path = json_dir / "IMG_0016.HEIC.supplemental-metadata(1).json"
+            video_path.write_bytes(b"fake video bytes")
+            json_path.write_text("{}", encoding="utf-8")
+
+            self.assertEqual(find_takeout_json(str(video_path)), str(json_path))
+
     def test_organizes_photo_and_json_when_supplemental_metadata_is_present(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -107,6 +131,56 @@ class TakeoutJsonTests(unittest.TestCase):
             self.assertFalse(image_path.exists())
             self.assertFalse(json_path.exists())
 
+    def test_organizes_photo_without_json_by_filename_date_when_takeout_folder_has_json(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            image_path = root / "2019_03_09_21_03_FDD89D67.JPG"
+            json_path = root / "orphan.jpg.suppl.json"
+            image_path.write_bytes(b"fake image bytes")
+            json_path.write_text(
+                json.dumps({
+                    "title": "orphan.jpg",
+                    "photoTakenTime": {"timestamp": "1704067200"},
+                    "googlePhotosOrigin": {"mobileUpload": {"deviceType": "IOS_PHONE"}},
+                }),
+                encoding="utf-8",
+            )
+
+            photo = PhotoInfo(path=str(image_path))
+            photos, videos_count, json_count = organize_takeout_photos([photo], str(root), {})
+
+            moved_photo = root / "2019" / "03" / "2019-03-09_21-03-00.JPG"
+
+            self.assertEqual(videos_count, 0)
+            self.assertEqual(json_count, 1)
+            self.assertEqual(photos[0].path, str(moved_photo))
+            self.assertTrue(moved_photo.exists())
+            self.assertFalse(image_path.exists())
+
+    def test_moves_video_without_json_to_sin_fecha_when_takeout_folder_has_json(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            video_path = root / "IMG_0016(1).MP4"
+            json_path = root / "orphan.jpg.suppl.json"
+            video_path.write_bytes(b"fake video bytes")
+            json_path.write_text(
+                json.dumps({
+                    "title": "orphan.jpg",
+                    "photoTakenTime": {"timestamp": "1704067200"},
+                    "googlePhotosOrigin": {"mobileUpload": {"deviceType": "IOS_PHONE"}},
+                }),
+                encoding="utf-8",
+            )
+
+            _, videos_count, json_count = organize_takeout_photos([], str(root), {})
+
+            moved_video = root / "Sin_fecha" / "IMG_0016(1).MP4"
+
+            self.assertEqual(videos_count, 1)
+            self.assertEqual(json_count, 1)
+            self.assertTrue(moved_video.exists())
+            self.assertFalse(video_path.exists())
+
     def test_moves_orphan_takeout_json_to_json_folder(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -125,6 +199,25 @@ class TakeoutJsonTests(unittest.TestCase):
             self.assertEqual(json_count, 1)
             self.assertFalse(json_path.exists())
             self.assertTrue((root / "Json" / "orphan.jpg.suppl.json").exists())
+
+    def test_does_not_rename_json_already_inside_json_folder(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            json_dir = root / "Json"
+            json_dir.mkdir()
+            image_path = root / "photo.jpg"
+            json_path = json_dir / "photo.jpg.supplemental-metadata.json"
+            image_path.write_bytes(b"fake image bytes")
+            json_path.write_text(
+                json.dumps({"photoTakenTime": {"timestamp": "1704067200"}}),
+                encoding="utf-8",
+            )
+
+            photo = PhotoInfo(path=str(image_path), exif_date="2024:01:01 00:00:00")
+            organize_takeout_photos([photo], str(root), {})
+
+            self.assertTrue(json_path.exists())
+            self.assertFalse((json_dir / "photo.jpg.supplemental-metadata_1.json").exists())
 
     def test_skips_heic_exif_write_without_error_log(self):
         try:

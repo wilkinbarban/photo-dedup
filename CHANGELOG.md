@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added support for Google Takeout `*.supplemental-metadata.json` sidecar files so JSON metadata is detected, EXIF enrichment runs, and photo/JSON organization is triggered for the common Takeout naming pattern.
 - Skipped direct EXIF writes for HEIC/HEIF files, avoiding noisy `piexif` errors while still using Takeout JSON metadata for date-based organization.
 - Expanded Google Takeout sidecar matching for truncated `.suppl*` names, numbered metadata files, `*.jpg..json` files, Live Photo videos that share HEIC sidecar metadata, and orphan Takeout JSON files.
+- Fixed partial Google Takeout re-runs so truncated JSON names already moved into `Json` are still matched, numbered Live Photo videos are organized, JSON sidecars already in `Json` are not renamed again, and media without matching JSON no longer remains in the root folder.
 - Improved recoverable error handling for cache/config/history loading, analysis failures, QR fallback, per-file move/delete/export failures, and empty-folder scans.
 - Replaced several mojibake-prone UI labels with clean synchronized ES/EN/PT text overrides.
 
