@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import re
 import shutil
 from datetime import datetime
 from pathlib import Path
@@ -32,6 +33,7 @@ def find_takeout_json(image_path: str) -> Optional[str]:
 
     candidates = [
         f"{base_name}.json",
+        f"{base_name}..json",
         f"{stem}.json",
         f"{base_name}.supplemental-metadata.json",
         f"{stem}.supplemental-metadata.json",
@@ -39,22 +41,56 @@ def find_takeout_json(image_path: str) -> Optional[str]:
         f"{stem}.supplemen.json",
     ]
 
-    if " (" in stem and stem.endswith(")"):
-        parts = stem.rsplit(" (", 1)
-        if len(parts) == 2:
-            orig_name = parts[0]
-            num = parts[1][:-1]
-            candidates.append(f"{orig_name}{path.suffix}({num}).json")
-            candidates.append(f"{orig_name}({num}){path.suffix}.json")
-            candidates.append(f"{orig_name}{path.suffix}({num}).supplemental-metadata.json")
-            candidates.append(f"{orig_name}({num}){path.suffix}.supplemental-metadata.json")
-            candidates.append(f"{orig_name}{path.suffix}({num}).supplemen.json")
-            candidates.append(f"{orig_name}({num}){path.suffix}.supplemen.json")
+    numbered_match = re.match(r"^(?P<name>.+?)\s*\((?P<num>\d+)\)$", stem)
+    if numbered_match:
+        orig_name = numbered_match.group("name")
+        num = numbered_match.group("num")
+        candidates.append(f"{orig_name}{path.suffix}({num}).json")
+        candidates.append(f"{orig_name}({num}){path.suffix}.json")
+        candidates.append(f"{orig_name}{path.suffix}({num}).supplemental-metadata.json")
+        candidates.append(f"{orig_name}({num}){path.suffix}.supplemental-metadata.json")
+        candidates.append(f"{orig_name}{path.suffix}.supplemental-metadata({num}).json")
+        candidates.append(f"{orig_name}{path.suffix}({num}).supplemen.json")
+        candidates.append(f"{orig_name}({num}){path.suffix}.supplemen.json")
+        candidates.append(f"{orig_name}{path.suffix}.supplemen({num}).json")
 
     for candidate in candidates:
         json_path = dir_name / candidate
         if json_path.exists():
             return str(json_path)
+
+    base_lower = base_name.lower()
+    stem_lower = stem.lower()
+    numbered_num = numbered_match.group("num") if numbered_match else None
+    orig_base_lower = None
+    if numbered_match:
+        orig_base_lower = f"{numbered_match.group('name')}{path.suffix}".lower()
+
+    search_dirs = [dir_name]
+    json_dir = dir_name / "Json"
+    if json_dir.exists():
+        search_dirs.append(json_dir)
+
+    for search_dir in search_dirs:
+        for json_path in search_dir.glob("*.json"):
+            json_name = json_path.name.lower()
+            if json_name in {f"{base_lower}.json", f"{base_lower}..json", f"{stem_lower}.json"}:
+                return str(json_path)
+
+            if json_name.startswith(f"{base_lower}.supp"):
+                return str(json_path)
+
+            if json_name.startswith(f"{stem_lower}.") and ".supp" in json_name:
+                return str(json_path)
+
+            if orig_base_lower and numbered_num:
+                number_token = f"({numbered_num})"
+                if json_name.startswith(f"{orig_base_lower}.supp") and number_token in json_name:
+                    return str(json_path)
+                if json_name.startswith(f"{orig_base_lower}{number_token}.supp"):
+                    return str(json_path)
+                if json_name.startswith(f"{orig_base_lower}{number_token}.json"):
+                    return str(json_path)
 
     return None
 
@@ -93,6 +129,21 @@ def parse_takeout_json(json_path: str) -> Optional[dict]:
     except Exception as error:
         logging.error(f"Error parsing Takeout JSON {json_path}: {error}")
         return None
+
+
+def is_takeout_metadata_json(json_path: Path) -> bool:
+    """Returns True when a JSON file looks like Google Takeout photo metadata."""
+    try:
+        with open(json_path, 'r', encoding='utf-8') as file_handle:
+            data = json.load(file_handle)
+    except Exception:
+        return False
+
+    if not isinstance(data, dict):
+        return False
+
+    takeout_keys = {'photoTakenTime', 'creationTime', 'geoData', 'googlePhotosOrigin', 'imageViews'}
+    return bool(takeout_keys.intersection(data.keys())) and 'title' in data
 
 
 def float_to_rational(value: float) -> Tuple[int, int]:
@@ -288,8 +339,17 @@ def organize_takeout_photos(photos: list, root_folder: str, cache: dict, update_
                 except Exception as error:
                     logging.error(f"Error moving {video_path} to {new_path}: {error}")
 
+    json_dir = root_path / "Json"
+    for json_path in root_path.rglob("*.json"):
+        try:
+            if json_dir in json_path.parents:
+                continue
+            if str(json_path) not in processed_jsons and is_takeout_metadata_json(json_path):
+                processed_jsons.add(str(json_path))
+        except Exception as error:
+            logging.error(f"Error checking orphan JSON {json_path}: {error}")
+
     if processed_jsons:
-        json_dir = root_path / "Json"
         json_dir.mkdir(parents=True, exist_ok=True)
         for json_path in processed_jsons:
             try:
