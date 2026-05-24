@@ -17,6 +17,9 @@ Release date: {{DATE}}
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
 
+### Windows SmartScreen notice
+Current executables are not code-signed. Windows may show an unknown publisher warning. If you trust the official GitHub Releases source, open `More info` and then `Run anyway`.
+
 ### Standard install
 1. Download the Source Code (`zip` or `tar.gz`) below.
 2. Extract the files and open a terminal in the folder.
@@ -38,6 +41,9 @@ Data do release: {{DATE}}
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
 
+### Aviso do Windows SmartScreen
+Os executaveis atuais nao possuem assinatura de codigo. O Windows pode mostrar um aviso de fornecedor desconhecido. Se voce confia na origem oficial do GitHub Releases, abra `Mais informacoes` e depois `Executar assim mesmo`.
+
 ### Instalacao padrao
 1. Baixe o Codigo Fonte (`zip` ou `tar.gz`) abaixo.
 2. Extraia os arquivos e abra um terminal na pasta.
@@ -58,6 +64,9 @@ Fecha de release: {{DATE}}
 ```powershell
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
 ```
+
+### Aviso de Windows SmartScreen
+Los ejecutables actuales no estan firmados con certificado de firma de codigo. Windows puede mostrar un aviso de editor desconocido. Si confias en el origen oficial de GitHub Releases, abre `Mas informacion` y luego `Ejecutar de todas formas`.
 
 ### Instalacion estandar
 1. Descarga el Codigo Fuente (`zip` o `tar.gz`) a continuacion.

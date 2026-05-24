@@ -16,6 +16,7 @@ from src.modules.services.ai_model import is_ai_runtime_available
 from src.modules.config.state import load_config, save_config
 from src.modules.config.i18n import get_text
 from src.modules.utils.paths import resolve_asset_path
+from src.modules.utils.errors import file_error_message
 from src.interfaces.theme import *
 from src.interfaces.widgets import GroupWidget, StatisticsDialog
 
@@ -29,8 +30,11 @@ class QPlainTextEditLogger(logging.Handler):
         self.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
 
     def emit(self, record):
-        msg = self.format(record)
-        self.emitter.log_signal.emit(msg)
+        try:
+            msg = self.format(record)
+            self.emitter.log_signal.emit(msg)
+        except Exception:
+            self.handleError(record)
 
 class WelcomeScreen(QWidget):
     """
@@ -70,45 +74,43 @@ class WelcomeScreen(QWidget):
         content_widget = QWidget()
         layout = QVBoxLayout(content_widget)
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.setSpacing(10)
-        layout.setContentsMargins(20, 20, 20, 20)
+        layout.setSpacing(12)
+        layout.setContentsMargins(28, 28, 28, 28)
+
+        hero = QWidget()
+        hero.setMaximumWidth(760)
+        hero.setStyleSheet(panel_style(radius=18, bg=PANEL_BG, border=BORDER_LT))
+        hero_layout = QVBoxLayout(hero)
+        hero_layout.setContentsMargins(34, 30, 34, 28)
+        hero_layout.setSpacing(10)
 
         title = QLabel(get_text("app_title"))
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title.setStyleSheet(f"""
             color: {TEXT_PRI};
-            font-size: 48px;
+            font-size: 46px;
             font-weight: 900;
-            letter-spacing: -2px;
+            letter-spacing: 0px;
         """)
-        layout.addWidget(title)
+        hero_layout.addWidget(title)
 
         subtitle = QLabel(get_text("app_subtitle"))
         subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        subtitle.setStyleSheet(f"color: {TEXT_SEC}; font-size: 14px;")
-        layout.addWidget(subtitle)
+        subtitle.setWordWrap(True)
+        subtitle.setStyleSheet(f"color: {TEXT_SEC}; font-size: 15px;")
+        hero_layout.addWidget(subtitle)
 
         accent_line = QFrame()
-        accent_line.setFixedHeight(3)
-        accent_line.setFixedWidth(80)
+        accent_line.setFixedHeight(4)
+        accent_line.setFixedWidth(120)
         accent_line.setStyleSheet(f"background: {ACCENT}; border-radius: 2px;")
-        layout.addWidget(accent_line, alignment=Qt.AlignmentFlag.AlignCenter)
+        hero_layout.addWidget(accent_line, alignment=Qt.AlignmentFlag.AlignCenter)
 
-        layout.addSpacing(20)
+        layout.addWidget(hero, alignment=Qt.AlignmentFlag.AlignCenter)
 
         folder_group = QGroupBox(get_text("grp_folder"))
-        folder_group.setMaximumWidth(600)
-        folder_group.setStyleSheet(f"""
-            QGroupBox {{
-                color: {TEXT_SEC}; font-size: 12px;
-                border: 1px solid {BORDER}; border-radius: 12px;
-                margin-top: 8px; padding: 10px;
-            }}
-            QGroupBox::title {{
-                subcontrol-origin: margin; subcontrol-position: top left;
-                padding: 0 8px; left: 16px;
-            }}
-        """)
+        folder_group.setMaximumWidth(680)
+        folder_group.setStyleSheet(group_box_style())
         folder_layout = QHBoxLayout(folder_group)
 
         self.folder_label = QLabel(get_text("lbl_no_folder"))
@@ -116,16 +118,8 @@ class WelcomeScreen(QWidget):
         self.folder_label.setWordWrap(True)
 
         btn_browse = QPushButton(get_text("btn_browse"))
-        btn_browse.setFixedWidth(130)
-        btn_browse.setStyleSheet(f"""
-            QPushButton {{
-                color: {TEXT_PRI}; background: {CARD_BG};
-                border: 1px solid {BORDER_LT}; border-radius: 10px;
-                padding: 9px 18px; font-size: 12px; font-weight: 600;
-            }}
-            QPushButton:hover {{ border-color: {ACCENT}; color: {ACCENT_LT}; background: {CARD_HOV}; }}
-            QPushButton:pressed {{ padding-top: 10px; padding-bottom: 8px; }}
-        """)
+        btn_browse.setFixedWidth(136)
+        btn_browse.setStyleSheet(button_style("secondary"))
         btn_browse.clicked.connect(self._browse)
 
         folder_layout.addWidget(self.folder_label)
@@ -133,8 +127,8 @@ class WelcomeScreen(QWidget):
         layout.addWidget(folder_group, alignment=Qt.AlignmentFlag.AlignCenter)
 
         mode_group = QGroupBox(get_text("grp_search_type"))
-        mode_group.setMaximumWidth(600)
-        mode_group.setStyleSheet(folder_group.styleSheet())
+        mode_group.setMaximumWidth(680)
+        mode_group.setStyleSheet(group_box_style())
         mode_layout = QHBoxLayout(mode_group)
         
         mode_layout.addWidget(QLabel(get_text("lbl_detect")))
@@ -146,12 +140,13 @@ class WelcomeScreen(QWidget):
         layout.addWidget(mode_group, alignment=Qt.AlignmentFlag.AlignCenter)
 
         sens_group = QGroupBox(get_text("grp_sensitivity"))
-        sens_group.setMaximumWidth(600)
-        sens_group.setStyleSheet(folder_group.styleSheet())
+        sens_group.setMaximumWidth(680)
+        sens_group.setStyleSheet(group_box_style())
         sens_layout = QVBoxLayout(sens_group)
 
         sens_desc = QLabel(get_text("desc_sensitivity"))
-        sens_desc.setStyleSheet(f"color: {TEXT_SEC}; font-size: 11px;")
+        sens_desc.setStyleSheet(muted_label(11))
+        sens_desc.setWordWrap(True)
         sens_layout.addWidget(sens_desc)
 
         slider_row = QHBoxLayout()
@@ -163,8 +158,8 @@ class WelcomeScreen(QWidget):
         self.slider.setStyleSheet(f"""
             QSlider::groove:horizontal {{ height: 4px; background: {BORDER}; border-radius: 2px; }}
             QSlider::handle:horizontal {{
-                width: 16px; height: 16px; margin: -6px 0;
-                background: {ACCENT}; border-radius: 8px;
+                width: 18px; height: 18px; margin: -7px 0;
+                background: {ACCENT}; border: 2px solid {TEXT_PRI}; border-radius: 9px;
             }}
             QSlider::sub-page:horizontal {{ background: {ACCENT}; border-radius: 2px; }}
         """)
@@ -184,8 +179,8 @@ class WelcomeScreen(QWidget):
 
         if self.ai_runtime_available:
             ai_group = QGroupBox(get_text("grp_ai"))
-            ai_group.setMaximumWidth(600)
-            ai_group.setStyleSheet(folder_group.styleSheet())
+            ai_group.setMaximumWidth(680)
+            ai_group.setStyleSheet(group_box_style())
             ai_layout = QVBoxLayout(ai_group)
 
             from PyQt6.QtWidgets import QCheckBox
@@ -230,29 +225,20 @@ class WelcomeScreen(QWidget):
             layout.addWidget(ai_group, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.btn_start = QPushButton(get_text("btn_start"))
-        self.btn_start.setFixedSize(240, 40)
+        self.btn_start.setFixedSize(260, 44)
         self.btn_start.setEnabled(False)
-        self.btn_start.setStyleSheet(f"""
-            QPushButton {{
-                color: #ffffff; background: {ACCENT};
-                border: none; border-radius: 14px;
-                font-size: 15px; font-weight: 800; letter-spacing: 0.5px;
-            }}
-            QPushButton:hover {{ background: {ACCENT_LT}; }}
-            QPushButton:pressed {{ background: {ACCENT_DK}; padding-top: 3px; }}
-            QPushButton:disabled {{ background: {BORDER}; color: {TEXT_MUT}; border: 1px solid {BORDER_LT}; }}
-        """)
+        self.btn_start.setStyleSheet(button_style("primary"))
         self.btn_start.clicked.connect(self._start)
         layout.addWidget(self.btn_start, alignment=Qt.AlignmentFlag.AlignCenter)
 
         fmt_container = QWidget()
-        fmt_container.setMaximumWidth(600)
+        fmt_container.setMaximumWidth(680)
         fmt_layout = QVBoxLayout(fmt_container)
         fmt_layout.setContentsMargins(0, 0, 0, 0)
         fmt_layout.setSpacing(8)
 
         fmt_title = QLabel(get_text("lbl_formats"))
-        fmt_title.setStyleSheet(f"color: {TEXT_MUT}; font-size: 10px; font-weight: 700; letter-spacing: 1px;")
+        fmt_title.setStyleSheet(f"color: {TEXT_MUT}; font-size: 10px; font-weight: 700; letter-spacing: 0px;")
         fmt_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         fmt_layout.addWidget(fmt_title)
 
@@ -262,12 +248,7 @@ class WelcomeScreen(QWidget):
         formats = ["JPG", "JPEG", "PNG", "BMP", "TIFF", "TIF", "WEBP", "HEIC", "HEIF"]
         for fmt in formats:
             pill = QLabel(fmt)
-            pill.setStyleSheet(f"""
-                color: {TEXT_SEC}; background: {CARD_BG};
-                border: 1px solid {BORDER_LT}; border-radius: 6px;
-                padding: 3px 9px; font-size: 10px; font-weight: 700;
-                letter-spacing: 0.5px;
-            """)
+            pill.setStyleSheet(badge_style(TEXT_SEC, SURFACE_ALT))
             fmt_row.addWidget(pill)
         fmt_layout.addLayout(fmt_row)
         layout.addWidget(fmt_container, alignment=Qt.AlignmentFlag.AlignCenter)
@@ -277,18 +258,7 @@ class WelcomeScreen(QWidget):
         # Donation Button
         self.btn_donate = QPushButton(get_text("btn_donate"))
         self.btn_donate.setFixedSize(140, 32)
-        self.btn_donate.setStyleSheet(f"""
-            QPushButton {{
-                color: {TEXT_SEC}; background: transparent;
-                border: 1px solid {BORDER_LT}; border-radius: 16px;
-                font-size: 12px; font-weight: 600;
-            }}
-            QPushButton:hover {{ 
-                color: #0079C1; border-color: #0079C1; 
-                background: rgba(0, 121, 193, 0.1); 
-            }}
-            QPushButton:pressed {{ background: rgba(0, 121, 193, 0.2); }}
-        """)
+        self.btn_donate.setStyleSheet(button_style("ghost", compact=True))
         self.btn_donate.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_donate.clicked.connect(self._show_donation)
         layout.addWidget(self.btn_donate, alignment=Qt.AlignmentFlag.AlignCenter)
@@ -307,14 +277,14 @@ class WelcomeScreen(QWidget):
         dialog = QDialog(self)
         dialog.setWindowTitle(get_text("title_donate"))
         dialog.setFixedSize(350, 450)
-        dialog.setStyleSheet(f"QDialog {{ background: {DARK_BG}; }}")
+        dialog.setStyleSheet(f"QDialog {{ background: {DARK_BG}; }} QLabel {{ color: {TEXT_PRI}; }}")
         
         l = QVBoxLayout(dialog)
         l.setAlignment(Qt.AlignmentFlag.AlignCenter)
         l.setSpacing(15)
         
         msg = QLabel(get_text("msg_donate"))
-        msg.setStyleSheet(f"color: {TEXT_PRI}; font-size: 14px;")
+        msg.setStyleSheet(f"color: {TEXT_PRI}; font-size: 14px; line-height: 1.4;")
         msg.setWordWrap(True)
         msg.setAlignment(Qt.AlignmentFlag.AlignCenter)
         l.addWidget(msg)
@@ -326,10 +296,10 @@ class WelcomeScreen(QWidget):
             if not pixmap.isNull():
                 qr_label.setPixmap(pixmap.scaled(300, 300, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
             else:
-                qr_label.setText("QR not found")
+                qr_label.setText(get_text("msg_qr_missing"))
                 qr_label.setStyleSheet(f"color: {TEXT_MUT};")
         else:
-            qr_label.setText("QR not found")
+            qr_label.setText(get_text("msg_qr_missing"))
             qr_label.setStyleSheet(f"color: {TEXT_MUT};")
         qr_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         l.addWidget(qr_label)
@@ -395,12 +365,12 @@ class ProgressScreen(QWidget):
         """
         layout = QVBoxLayout(self)
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.setSpacing(20)
-        layout.setContentsMargins(80, 80, 80, 80)
+        layout.setSpacing(18)
+        layout.setContentsMargins(64, 54, 64, 54)
 
         self.title = QLabel(get_text("title_analyzing"))
         self.title.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.title.setStyleSheet(f"color: {TEXT_PRI}; font-size: 24px; font-weight: bold;")
+        self.title.setStyleSheet(f"color: {TEXT_PRI}; font-size: 28px; font-weight: 900;")
         layout.addWidget(self.title)
 
         self.progress = QProgressBar()
@@ -408,7 +378,7 @@ class ProgressScreen(QWidget):
         self.progress.setMaximumWidth(500)
         self.progress.setTextVisible(False)
         self.progress.setStyleSheet(f"""
-            QProgressBar {{ background: {BORDER}; border-radius: 4px; border: none; }}
+            QProgressBar {{ background: {SURFACE_ALT}; border-radius: 4px; border: 1px solid {BORDER}; }}
             QProgressBar::chunk {{ background: {ACCENT}; border-radius: 4px; }}
         """)
         layout.addWidget(self.progress, alignment=Qt.AlignmentFlag.AlignCenter)
@@ -426,17 +396,17 @@ class ProgressScreen(QWidget):
         
         self.log_viewer = QPlainTextEdit()
         self.log_viewer.setReadOnly(True)
-        self.log_viewer.setMinimumWidth(900)
+        self.log_viewer.setMinimumWidth(860)
         self.log_viewer.setMinimumHeight(300)
         self.log_viewer.setStyleSheet(f"""
             QPlainTextEdit {{
-                font-family: Consolas, 'Courier New', monospace;
+                font-family: {MONO_STACK};
                 font-size: 11px;
-                background: #1e1e2e;
-                color: #a0a0b0;
+                background: {SURFACE};
+                color: {TEXT_SEC};
                 border: 1px solid {BORDER};
-                border-radius: 8px;
-                padding: 8px;
+                border-radius: 12px;
+                padding: 10px;
             }}
         """)
         layout.addWidget(self.log_viewer, alignment=Qt.AlignmentFlag.AlignCenter)
@@ -445,15 +415,7 @@ class ProgressScreen(QWidget):
         btn_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         self.btn_pause = QPushButton(get_text("btn_pause"))
-        self.btn_pause.setStyleSheet(f"""
-            QPushButton {{
-                color: {TEXT_PRI}; background: {ACCENT};
-                border: none; border-radius: 10px;
-                padding: 8px 20px; font-size: 12px; font-weight: 700;
-            }}
-            QPushButton:hover {{ background: {ACCENT_LT}; }}
-            QPushButton:pressed {{ background: {ACCENT_DK}; }}
-        """)
+        self.btn_pause.setStyleSheet(button_style("secondary"))
         self.btn_pause.clicked.connect(self._toggle_pause)
         btn_layout.addWidget(self.btn_pause)
         
@@ -508,23 +470,7 @@ class ProgressScreen(QWidget):
                 
         summary_panel = QGroupBox(get_text("lbl_summary_title", "Resumen Final"))
         summary_panel.setMinimumWidth(600)
-        summary_panel.setStyleSheet(f"""
-            QGroupBox {{
-                background: {CARD_BG};
-                border: 1px solid {BORDER};
-                border-radius: 8px;
-                margin-top: 15px;
-                padding: 15px;
-            }}
-            QGroupBox::title {{
-                subcontrol-origin: margin;
-                subcontrol-position: top left;
-                padding: 0 5px;
-                left: 15px;
-                color: {ACCENT};
-                font-weight: bold;
-            }}
-        """)
+        summary_panel.setStyleSheet(group_box_style())
         s_layout = QVBoxLayout(summary_panel)
         
         lbl_img = QLabel(get_text("lbl_total_images", "Total de imágenes analizadas: {n}").format(n=stats.total_photos))
@@ -544,16 +490,7 @@ class ProgressScreen(QWidget):
         btn_dynamic = QPushButton()
         btn_dynamic.setFixedHeight(40)
         btn_dynamic.setMinimumWidth(200)
-        btn_dynamic.setStyleSheet(f"""
-            QPushButton {{
-                color: #ffffff; background: {ACCENT};
-                border: none; border-radius: 8px;
-                font-size: 14px; font-weight: bold;
-                margin-top: 10px;
-            }}
-            QPushButton:hover {{ background: {ACCENT_LT}; }}
-            QPushButton:pressed {{ background: {ACCENT_DK}; }}
-        """)
+        btn_dynamic.setStyleSheet(button_style("primary"))
         
         if total_groups > 0:
             btn_dynamic.setText(get_text("btn_continue", "Continuar"))
@@ -616,15 +553,7 @@ class ResultsScreen(QWidget):
         h_layout.setContentsMargins(20, 0, 20, 0)
 
         btn_back = QPushButton(get_text("btn_new_search"))
-        btn_back.setStyleSheet(f"""
-            QPushButton {{
-                color: {TEXT_SEC}; background: transparent;
-                border: 1px solid {BORDER_LT}; border-radius: 10px;
-                padding: 7px 16px; font-size: 12px; font-weight: 600;
-            }}
-            QPushButton:hover {{ color: {TEXT_PRI}; border-color: {ACCENT}; background: #1e1e30; }}
-            QPushButton:pressed {{ padding-top: 8px; padding-bottom: 6px; }}
-        """)
+        btn_back.setStyleSheet(button_style("ghost"))
         btn_back.clicked.connect(self.back_requested.emit)
 
         self.summary_label = QLabel()
@@ -635,28 +564,11 @@ class ResultsScreen(QWidget):
 
         self.btn_apply_all = QPushButton(get_text("btn_apply_all"))
         self.btn_apply_all.setVisible(False)
-        self.btn_apply_all.setStyleSheet(f"""
-            QPushButton {{
-                color: #ffffff; background: {ACCENT};
-                border: none; border-radius: 10px;
-                padding: 8px 20px; font-size: 12px; font-weight: 700;
-                letter-spacing: 0.3px;
-            }}
-            QPushButton:hover {{ background: {ACCENT_LT}; }}
-            QPushButton:pressed {{ background: {ACCENT_DK}; padding-top: 9px; padding-bottom: 7px; }}
-        """)
+        self.btn_apply_all.setStyleSheet(button_style("primary"))
         self.btn_apply_all.clicked.connect(self._apply_all)
 
         btn_stats = QPushButton(get_text("btn_stats"))
-        btn_stats.setStyleSheet(f"""
-            QPushButton {{
-                color: {TEXT_SEC}; background: transparent;
-                border: 1px solid {BORDER_LT}; border-radius: 10px;
-                padding: 7px 16px; font-size: 12px; font-weight: 600;
-            }}
-            QPushButton:hover {{ color: {TEXT_PRI}; border-color: {ACCENT}; background: #1e1e30; }}
-            QPushButton:pressed {{ padding-top: 8px; padding-bottom: 6px; }}
-        """)
+        btn_stats.setStyleSheet(button_style("secondary"))
         btn_stats.clicked.connect(self._show_statistics)
 
         h_layout.addWidget(btn_back)
@@ -774,7 +686,7 @@ class ResultsScreen(QWidget):
                 try:
                     src = Path(photo.path).resolve()
                     if not src.exists():
-                        errors.append(f"{photo.filename}: not found")
+                        errors.append(get_text("err_file_not_found").format(file=photo.filename))
                         continue
                     dest_dir = Path(dest_folder) / "duplicados"
                     dest_dir.mkdir(parents=True, exist_ok=True)
@@ -785,7 +697,7 @@ class ResultsScreen(QWidget):
                         counter += 1
                     shutil.move(str(src), str(dest))
                 except Exception as e:
-                    errors.append(f"{photo.filename}: {e}")
+                    errors.append(file_error_message(get_text("err_action_move"), photo.filename, e))
 
             if errors:
                 errors_total.extend(errors)

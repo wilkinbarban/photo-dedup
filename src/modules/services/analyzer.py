@@ -283,7 +283,7 @@ class AnalysisWorker(QThread):
             total = len(all_files)
             if total == 0:
                 logging.warning("No images found in the selected folder.")
-                self.error.emit("No images found in the selected folder.")
+                self.error.emit(get_text("err_no_images_found"))
                 return
 
             logging.info(f"Found {total} supported images to analyze.")
@@ -325,7 +325,7 @@ class AnalysisWorker(QThread):
             self.finished.emit(groups, {"videos": videos_count, "jsons": jsons_count > 0, "total_photos": len(photos)})
 
         except Exception as error:
-            logging.error(f"Analysis error: {error}", exc_info=True)
+            logging.error("Analysis error while scanning %s: %s", self.folder, error, exc_info=True)
             self.error.emit(str(error))
 
     def _are_duplicates(self, a: PhotoInfo, b: PhotoInfo) -> tuple[bool, float, str]:

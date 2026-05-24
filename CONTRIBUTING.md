@@ -97,6 +97,9 @@ Then `.github/workflows/build-release-exe.yml` runs on release publish and uploa
 - Update README.md and/or CHANGELOG.md when behavior changes.
 - Do not add new dependencies without updating requirements.txt and explaining why.
 - Write new comments and docstrings in English.
+- Keep reusable UI styling in `src/interfaces/theme.py` instead of duplicating large inline styles.
+- Keep recoverable failures visible: log technical context and show user-facing messages that explain what happened and what can be done.
+- Keep ES/EN/PT user-facing labels synchronized through `src/modules/config/i18n.py`.
 
 ## Pull request checklist
 

@@ -1,38 +1,40 @@
-import os
 import csv
+import os
 import shutil
 from pathlib import Path
-from PIL import Image
 from typing import Optional
 
-from PyQt6.QtWidgets import (
-    QFrame, QVBoxLayout, QHBoxLayout, QLabel, QCheckBox,
-    QMessageBox, QScrollArea, QWidget, QPushButton, QComboBox, QFileDialog
-)
+from PIL import Image
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtGui import QPixmap, QImage, QColor, QCursor
+from PyQt6.QtGui import QColor, QCursor, QImage, QPixmap
+from PyQt6.QtWidgets import (
+    QFileDialog,
+    QCheckBox,
+    QComboBox,
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QMessageBox,
+    QPushButton,
+    QScrollArea,
+    QVBoxLayout,
+    QWidget,
+)
 
-from src.modules.services.models import PhotoInfo, DuplicateGroup, Statistics
-from src.modules.config.state import log_history
-from src.modules.config.i18n import get_text
 from src.interfaces.theme import *
+from src.modules.config.i18n import get_text
+from src.modules.config.state import log_history
+from src.modules.services.models import DuplicateGroup, PhotoInfo, Statistics
+from src.modules.utils.errors import file_error_message
+
 
 def make_thumbnail(path: str, size: int = 220) -> QPixmap:
-    """
-    Creates a thumbnail for a given image path.
-
-    Args:
-        path (str): File path of the image.
-        size (int, optional): The target size of the thumbnail (square). Defaults to 220.
-
-    Returns:
-        QPixmap: A QPixmap object containing the generated thumbnail or a solid color block if generation fails.
-    """
+    """Create a thumbnail, returning a neutral placeholder if the image cannot be read."""
     try:
         with Image.open(path) as img:
-            img = img.convert('RGB')
+            img = img.convert("RGB")
             img.thumbnail((size, size), Image.LANCZOS)
-            data = img.tobytes('raw', 'RGB')
+            data = img.tobytes("raw", "RGB")
             qimg = QImage(data, img.width, img.height, img.width * 3, QImage.Format.Format_RGB888)
             return QPixmap.fromImage(qimg)
     except Exception:
@@ -40,25 +42,13 @@ def make_thumbnail(path: str, size: int = 220) -> QPixmap:
         px.fill(QColor(CARD_BG))
         return px
 
-class PhotoCard(QFrame):
-    """
-    A widget representing a single photo within a duplicate group, 
-    allowing the user to select or deselect it.
 
-    Signals:
-        selected (bool): Emits the current selection state.
-    """
+class PhotoCard(QFrame):
+    """Selectable photo card inside a duplicate group."""
+
     selected = pyqtSignal(bool)
 
     def __init__(self, photo: PhotoInfo, is_best: bool = False, parent: Optional[QWidget] = None) -> None:
-        """
-        Initializes the PhotoCard widget.
-
-        Args:
-            photo (PhotoInfo): Photo information object.
-            is_best (bool, optional): Indicates whether this photo is the recommended one in the group. Defaults to False.
-            parent (Optional[QWidget]): Parent widget. Defaults to None.
-        """
         super().__init__(parent)
         self.photo = photo
         self.is_best = is_best
@@ -66,197 +56,137 @@ class PhotoCard(QFrame):
         self._setup_ui()
 
     def _setup_ui(self) -> None:
-        """
-        Sets up the internal user interface for the photo card.
-        """
-        self.setFixedWidth(240)
-        self.setMinimumHeight(340)
+        self.setFixedWidth(244)
+        self.setMinimumHeight(348)
         self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self._update_style(False)
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(10, 10, 10, 10)
-        layout.setSpacing(6)
+        layout.setSpacing(7)
 
         badge_row = QHBoxLayout()
         if self.is_best:
             badge = QLabel(get_text("badge_rec"))
-            badge.setStyleSheet(f"""
-                color: {SUCCESS}; background: {SUCCESS_BG};
-                border: 1px solid {SUCCESS}; border-radius: 20px;
-                padding: 3px 10px; font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
-            """)
+            badge.setStyleSheet(badge_style(SUCCESS, SUCCESS_BG))
             badge_row.addWidget(badge)
         badge_row.addStretch()
 
         self.chk = QCheckBox()
-        self.chk.setStyleSheet(f"""
-            QCheckBox::indicator {{ width: 18px; height: 18px; border-radius: 4px;
-                border: 2px solid {BORDER}; background: {CARD_BG}; }}
-            QCheckBox::indicator:checked {{ background: {ACCENT}; border-color: {ACCENT}; }}
-        """)
         self.chk.stateChanged.connect(self._on_check)
         badge_row.addWidget(self.chk)
         layout.addLayout(badge_row)
 
         thumb_label = QLabel()
         thumb_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        thumb_label.setFixedHeight(200)
-        px = make_thumbnail(self.photo.path, 200)
-        thumb_label.setPixmap(px)
-        thumb_label.setStyleSheet(f"border-radius: 8px; background: {DARK_BG};")
+        thumb_label.setFixedHeight(204)
+        thumb_label.setPixmap(make_thumbnail(self.photo.path, 204))
+        thumb_label.setStyleSheet(f"border-radius: 10px; background: {SURFACE};")
         layout.addWidget(thumb_label)
 
         name = QLabel(self.photo.filename)
-        name.setStyleSheet(f"color: {TEXT_PRI}; font-size: 11px; font-weight: 600;")
+        name.setStyleSheet(f"color: {TEXT_PRI}; font-size: 11px; font-weight: 800;")
         name.setWordWrap(True)
         name.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(name)
 
         location_str = ""
-        if getattr(self.photo, 'geo_data', None):
-            lat = self.photo.geo_data.get('latitude', 0)
-            lon = self.photo.geo_data.get('longitude', 0)
-            location_str = f"\n📍 {abs(lat):.4f}°{'N' if lat >= 0 else 'S'}, {abs(lon):.4f}°{'E' if lon >= 0 else 'W'}"
+        if getattr(self.photo, "geo_data", None):
+            lat = self.photo.geo_data.get("latitude", 0)
+            lon = self.photo.geo_data.get("longitude", 0)
+            location_str = f"\nLOC {abs(lat):.4f} deg {'N' if lat >= 0 else 'S'}, {abs(lon):.4f} deg {'E' if lon >= 0 else 'W'}"
 
         stats = QLabel(
-            f"📐 {self.photo.width}×{self.photo.height}  •  {self.photo.megapixels:.1f}MP\n"
-            f"💾 {self.photo.size_mb:.2f} MB"
-            f"{'  •  📷 EXIF' if self.photo.has_exif else ''}\n"
-            + get_text("lbl_sharpness").format(shp=f"{self.photo.sharpness:.0f}") + location_str
+            f"{self.photo.width}x{self.photo.height}  |  {self.photo.megapixels:.1f}MP\n"
+            f"{self.photo.size_mb:.2f} MB"
+            f"{'  |  EXIF' if self.photo.has_exif else ''}\n"
+            + get_text("lbl_sharpness").format(shp=f"{self.photo.sharpness:.0f}")
+            + location_str
         )
         stats.setStyleSheet(f"color: {TEXT_SEC}; font-size: 10px; line-height: 1.4;")
         stats.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(stats)
 
         score_pct = min(int(self.photo.score), 100)
-        score_bar = QFrame()
-        score_bar.setFixedHeight(4)
-        score_bar.setStyleSheet(f"background: {BORDER}; border-radius: 2px;")
-        fill = QFrame(score_bar)
-        fill.setFixedHeight(4)
-        fill.setFixedWidth(int(220 * score_pct / 100))
         color = SUCCESS if score_pct >= 60 else (WARNING if score_pct >= 30 else DANGER)
+
+        score_bar = QFrame()
+        score_bar.setFixedHeight(5)
+        score_bar.setStyleSheet(f"background: {SURFACE_ALT}; border-radius: 2px;")
+        fill = QFrame(score_bar)
+        fill.setFixedHeight(5)
+        fill.setFixedWidth(int(224 * score_pct / 100))
         fill.setStyleSheet(f"background: {color}; border-radius: 2px;")
         layout.addWidget(score_bar)
 
         score_lbl = QLabel(get_text("lbl_quality").format(pct=score_pct))
-        score_lbl.setStyleSheet(f"color: {color}; font-size: 10px; font-weight: bold;")
+        score_lbl.setStyleSheet(f"color: {color}; font-size: 10px; font-weight: 800;")
         score_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(score_lbl)
-
         layout.addStretch()
 
         if self.is_best:
             self.chk.setChecked(True)
 
     def _on_check(self, state: int) -> None:
-        """
-        Slot triggered when the checkbox state changes.
-
-        Args:
-            state (int): The new check state.
-        """
         self._selected = state == Qt.CheckState.Checked.value
         self._update_style(self._selected)
         self.selected.emit(self._selected)
 
-    def _update_style(self, sel: bool) -> None:
-        """
-        Updates the card's visual style depending on its selection state.
-
-        Args:
-            sel (bool): Whether the card is selected.
-        """
-        border_color = ACCENT if sel else BORDER
-        bg = "#22223a" if sel else CARD_BG
+    def _update_style(self, selected: bool) -> None:
+        border_color = ACCENT if selected else BORDER
+        bg = "#12312f" if selected else CARD_BG
         self.setStyleSheet(f"""
             PhotoCard {{
                 background: {bg};
                 border: 2px solid {border_color};
-                border-radius: 12px;
+                border-radius: 14px;
+            }}
+            PhotoCard:hover {{
+                background: {CARD_HOV};
+                border-color: {ACCENT_LT};
             }}
         """)
 
     def mousePressEvent(self, event: object) -> None:
-        """
-        Toggles the checkbox when the card itself is clicked.
-
-        Args:
-            event (object): The mouse event.
-        """
         self.chk.setChecked(not self.chk.isChecked())
 
     def is_checked(self) -> bool:
-        """
-        Returns whether the card is checked.
-
-        Returns:
-            bool: True if checked, False otherwise.
-        """
         return self.chk.isChecked()
 
-    def set_checked(self, val: bool) -> None:
-        """
-        Sets the checked state of the card.
-
-        Args:
-            val (bool): The check state.
-        """
-        self.chk.setChecked(val)
+    def set_checked(self, value: bool) -> None:
+        self.chk.setChecked(value)
 
 
 class StatisticsDialog(QMessageBox):
-    """
-    A dialog displaying analysis statistics.
-    """
-    def __init__(self, stats: Statistics, parent: Optional[QWidget] = None) -> None:
-        """
-        Initializes the statistics dialog.
+    """Dialog displaying analysis statistics."""
 
-        Args:
-            stats (Statistics): The generated statistics.
-            parent (Optional[QWidget]): Parent widget. Defaults to None.
-        """
+    def __init__(self, stats: Statistics, parent: Optional[QWidget] = None) -> None:
         super().__init__(parent)
         self.setWindowTitle(get_text("title_stats"))
         self.setIcon(QMessageBox.Icon.Information)
-        
+
         text = get_text("stats_html").format(
             total_photos=stats.total_photos,
             total_groups=stats.total_groups,
             avg_sim=stats.avg_similarity,
             total_size=stats.total_size_mb,
             dup_size=stats.duplicate_size_mb,
-            recov_size=stats.recoverable_mb
+            recov_size=stats.recoverable_mb,
         )
-        
-        for ext, data in sorted(stats.by_format.items(), key=lambda x: x[1]['size_mb'], reverse=True):
-            text += f"\n• {ext.upper()}: {data['count']} photos ({data['size_mb']:.2f} MB)"
-        
+        for ext, data in sorted(stats.by_format.items(), key=lambda item: item[1]["size_mb"], reverse=True):
+            text += f"\n- {ext.upper()}: {data['count']} photos ({data['size_mb']:.2f} MB)"
+
         self.setText(text)
         self.setStandardButtons(QMessageBox.StandardButton.Ok)
 
 
 class GroupWidget(QFrame):
-    """
-    A widget representing an entire group of duplicates, rendering multiple PhotoCards
-    and action buttons to process them.
+    """Widget representing a duplicate group and its available actions."""
 
-    Signals:
-        action_taken: Emitted when the group's duplicates are successfully resolved.
-    """
     action_taken = pyqtSignal()
 
     def __init__(self, group: DuplicateGroup, group_number: int, parent: Optional[QWidget] = None) -> None:
-        """
-        Initializes the GroupWidget.
-
-        Args:
-            group (DuplicateGroup): The duplicate group object.
-            group_number (int): The index of the group.
-            parent (Optional[QWidget]): Parent widget. Defaults to None.
-        """
         super().__init__(parent)
         self.group = group
         self.group_number = group_number
@@ -265,15 +195,11 @@ class GroupWidget(QFrame):
         self._setup_ui()
 
     def _setup_ui(self) -> None:
-        """
-        Sets up the internal user interface for the group, adding photo cards 
-        and action buttons.
-        """
         self.setStyleSheet(f"""
             GroupWidget {{
                 background: {PANEL_BG};
                 border: 1px solid {BORDER_LT};
-                border-radius: 18px;
+                border-radius: 16px;
                 margin: 4px 2px;
             }}
             GroupWidget:hover {{
@@ -286,52 +212,33 @@ class GroupWidget(QFrame):
         main.setSpacing(12)
 
         header = QHBoxLayout()
-        
         header_vbox = QVBoxLayout()
+
         title = QLabel(get_text("lbl_group").format(num=self.group_number))
-        title.setStyleSheet(f"color: {ACCENT}; font-size: 14px; font-weight: bold;")
-        
+        title.setStyleSheet(f"color: {TEXT_PRI}; font-size: 15px; font-weight: 900;")
+        header_vbox.addWidget(title)
+
         n = len(self.group.photos)
         sim_pct = f"{self.group.similarity:.0f}%"
-        match_type = getattr(self.group, 'match_type', 'similar (hash)')
-        
+        match_type = getattr(self.group, "match_type", "similar (hash)")
+
         subtitle_layout = QHBoxLayout()
         subtitle = QLabel(get_text("lbl_group_sub").format(n=n, sim=sim_pct))
-        subtitle.setStyleSheet(f"color: {TEXT_SEC}; font-size: 12px;")
+        subtitle.setStyleSheet(muted_label(12))
         subtitle_layout.addWidget(subtitle)
-        
+
+        match_color, match_bg = self._match_badge_colors(match_type)
         match_badge = QLabel(match_type.upper())
-        if "IA" in match_type:
-            match_color = "#9b51e0"
-            match_bg = "#2a163d"
-        elif "exact" in match_type:
-            match_color = SUCCESS
-            match_bg = SUCCESS_BG
-        else:
-            match_color = "#3498db"
-            match_bg = "#1a3a52"
-            
-        match_badge.setStyleSheet(f"""
-            color: {match_color}; background: {match_bg};
-            border: 1px solid {match_color}; border-radius: 8px;
-            padding: 2px 8px; font-size: 9px; font-weight: bold;
-        """)
+        match_badge.setStyleSheet(badge_style(match_color, match_bg))
         subtitle_layout.addWidget(match_badge)
         subtitle_layout.addStretch()
 
-        header_vbox.addWidget(title)
         header_vbox.addLayout(subtitle_layout)
-        
         header.addLayout(header_vbox)
         header.addStretch()
 
         self.status_badge = QLabel(get_text("badge_pending"))
-        self.status_badge.setStyleSheet(f"""
-            color: {WARNING}; background: {WARNING_BG};
-            border: 1px solid {WARNING}; border-radius: 20px;
-            padding: 3px 12px; font-size: 10px; font-weight: 700;
-            letter-spacing: 0.5px;
-        """)
+        self.status_badge.setStyleSheet(badge_style(WARNING, WARNING_BG))
         header.addWidget(self.status_badge)
         main.addLayout(header)
 
@@ -342,8 +249,8 @@ class GroupWidget(QFrame):
 
         cards_layout = QHBoxLayout()
         cards_layout.setSpacing(12)
-        for i, photo in enumerate(self.group.photos):
-            card = PhotoCard(photo, is_best=(i == self.group.best_index))
+        for index, photo in enumerate(self.group.photos):
+            card = PhotoCard(photo, is_best=(index == self.group.best_index))
             card.selected.connect(self._on_selection_changed)
             self.cards.append(card)
             cards_layout.addWidget(card)
@@ -353,26 +260,14 @@ class GroupWidget(QFrame):
         scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         scroll.setWidgetResizable(True)
-        scroll.setFixedHeight(380)
-        scroll.setStyleSheet(f"""
-            QScrollArea {{ border: none; background: transparent; }}
-            QScrollBar:horizontal {{ height: 6px; background: {BORDER}; border-radius: 3px; }}
-            QScrollBar::handle:horizontal {{ background: {ACCENT}; border-radius: 3px; }}
-        """)
+        scroll.setFixedHeight(388)
+        scroll.setStyleSheet("QScrollArea { border: none; background: transparent; }")
 
         container = QWidget()
         container.setLayout(cards_layout)
         container.setStyleSheet("background: transparent;")
         scroll.setWidget(container)
         main.addWidget(scroll)
-
-        btn_row = QHBoxLayout()
-        btn_row.setSpacing(8)
-
-        self.lbl_selection = QLabel(get_text("lbl_select_keep"))
-        self.lbl_selection.setStyleSheet(f"color: {TEXT_SEC}; font-size: 11px;")
-        btn_row.addWidget(self.lbl_selection)
-        btn_row.addStretch()
 
         action_row = QHBoxLayout()
         action_row.addWidget(QLabel(get_text("lbl_action")))
@@ -382,261 +277,210 @@ class GroupWidget(QFrame):
         action_row.addStretch()
         main.addLayout(action_row)
 
-        btn_best = QPushButton(get_text("btn_use_rec"))
-        btn_best.setStyleSheet(self._btn_style("success"))
-        btn_best.clicked.connect(self._select_best_only)
+        btn_row = QHBoxLayout()
+        btn_row.setSpacing(8)
+        self.lbl_selection = QLabel(get_text("lbl_select_keep"))
+        self.lbl_selection.setStyleSheet(muted_label(11))
+        btn_row.addWidget(self.lbl_selection)
+        btn_row.addStretch()
 
-        btn_all = QPushButton(get_text("btn_all"))
-        btn_all.setStyleSheet(self._btn_style("ghost_sm"))
-        btn_all.clicked.connect(self._select_all)
-
-        btn_none = QPushButton(get_text("btn_none"))
-        btn_none.setStyleSheet(self._btn_style("ghost_sm"))
-        btn_none.clicked.connect(self._select_none)
+        buttons = [
+            (get_text("btn_use_rec"), "success", self._select_best_only),
+            (get_text("btn_all"), "ghost", self._select_all),
+            (get_text("btn_none"), "ghost", self._select_none),
+        ]
+        for text, kind, callback in buttons:
+            button = QPushButton(text)
+            button.setStyleSheet(button_style(kind, compact=True))
+            button.clicked.connect(callback)
+            btn_row.addWidget(button)
 
         self.btn_apply = QPushButton(get_text("btn_apply_action"))
-        self.btn_apply.setStyleSheet(self._btn_style("primary"))
+        self.btn_apply.setStyleSheet(button_style("primary", compact=True))
         self.btn_apply.clicked.connect(self._apply_action)
+        btn_row.addWidget(self.btn_apply)
 
         btn_export = QPushButton(get_text("btn_export_csv"))
-        btn_export.setStyleSheet(self._btn_style("ghost"))
+        btn_export.setStyleSheet(button_style("secondary", compact=True))
         btn_export.clicked.connect(self._export_csv)
-
-        for b in [btn_best, btn_all, btn_none, self.btn_apply, btn_export]:
-            btn_row.addWidget(b)
-
+        btn_row.addWidget(btn_export)
         main.addLayout(btn_row)
 
-    def _btn_style(self, kind: str = "ghost") -> str:
-        """
-        Returns the CSS style string for a specific kind of button.
-
-        Args:
-            kind (str, optional): The style type (primary, success, danger, ghost, ghost_sm). Defaults to "ghost".
-
-        Returns:
-            str: The corresponding CSS string.
-        """
-        styles = {
-            "primary": f"""
-                QPushButton {{
-                    color: #ffffff; background: {ACCENT};
-                    border: none; border-radius: 10px;
-                    padding: 8px 20px; font-size: 12px; font-weight: 700;
-                    letter-spacing: 0.3px;
-                }}
-                QPushButton:hover {{ background: {ACCENT_LT}; }}
-                QPushButton:pressed {{ background: {ACCENT_DK}; padding-top: 9px; padding-bottom: 7px; }}
-                QPushButton:disabled {{ background: {BORDER}; color: {TEXT_MUT}; }}
-            """,
-            "success": f"""
-                QPushButton {{
-                    color: {SUCCESS}; background: {SUCCESS_BG};
-                    border: 1px solid {SUCCESS}; border-radius: 10px;
-                    padding: 7px 18px; font-size: 12px; font-weight: 700;
-                }}
-                QPushButton:hover {{ background: #163d26; border-color: #50e890; color: #50e890; }}
-                QPushButton:pressed {{ padding-top: 8px; padding-bottom: 6px; }}
-            """,
-            "danger": f"""
-                QPushButton {{
-                    color: {DANGER}; background: #2a0f0f;
-                    border: 1px solid {DANGER}; border-radius: 10px;
-                    padding: 7px 18px; font-size: 12px; font-weight: 700;
-                }}
-                QPushButton:hover {{ background: #3a1414; }}
-                QPushButton:pressed {{ padding-top: 8px; padding-bottom: 6px; }}
-            """,
-            "ghost": f"""
-                QPushButton {{
-                    color: {TEXT_SEC}; background: transparent;
-                    border: 1px solid {BORDER_LT}; border-radius: 10px;
-                    padding: 7px 16px; font-size: 12px; font-weight: 600;
-                }}
-                QPushButton:hover {{ color: {TEXT_PRI}; border-color: {ACCENT}; background: #1e1e30; }}
-                QPushButton:pressed {{ padding-top: 8px; padding-bottom: 6px; }}
-            """,
-            "ghost_sm": f"""
-                QPushButton {{
-                    color: {TEXT_SEC}; background: transparent;
-                    border: 1px solid {BORDER}; border-radius: 8px;
-                    padding: 5px 12px; font-size: 11px; font-weight: 600;
-                }}
-                QPushButton:hover {{ color: {TEXT_PRI}; border-color: {BORDER_LT}; background: {CARD_HOV}; }}
-                QPushButton:pressed {{ padding-top: 6px; padding-bottom: 4px; }}
-            """,
-        }
-        return styles.get(kind, styles["ghost"])
+    def _match_badge_colors(self, match_type: str) -> tuple[str, str]:
+        if "IA" in match_type:
+            return ACCENT2, WARNING_BG
+        if "exact" in match_type or "exacta" in match_type:
+            return SUCCESS, SUCCESS_BG
+        return INFO, INFO_BG
 
     def _on_selection_changed(self) -> None:
-        """
-        Updates the UI to reflect the number of currently selected photos to keep.
-        """
-        selected = sum(1 for c in self.cards if c.is_checked())
+        selected = sum(1 for card in self.cards if card.is_checked())
         total = len(self.cards)
         self.lbl_selection.setText(get_text("lbl_selection").format(sel=selected, tot=total))
 
     def _select_best_only(self) -> None:
-        """
-        Selects only the recommended photo, deselecting the rest.
-        """
-        for i, card in enumerate(self.cards):
-            card.set_checked(i == self.group.best_index)
+        for index, card in enumerate(self.cards):
+            card.set_checked(index == self.group.best_index)
 
     def _select_all(self) -> None:
-        """
-        Selects all photo cards in the group.
-        """
         for card in self.cards:
             card.set_checked(True)
 
     def _select_none(self) -> None:
-        """
-        Deselects all photo cards in the group.
-        """
         for card in self.cards:
             card.set_checked(False)
 
     def _apply_action(self) -> None:
-        """
-        Applies the selected action (move or delete) to the unselected photos in the group.
-        """
-        to_keep = [c.photo for c in self.cards if c.is_checked()]
-        to_move = [c.photo for c in self.cards if not c.is_checked()]
+        to_keep = [card.photo for card in self.cards if card.is_checked()]
+        to_process = [card.photo for card in self.cards if not card.is_checked()]
 
-        if len(to_keep) == 0:
+        if not to_keep:
             QMessageBox.warning(self, get_text("title_no_sel"), get_text("msg_no_keep"))
             return
 
-        if len(to_move) == 0:
+        if not to_process:
             QMessageBox.information(self, get_text("title_no_changes"), get_text("msg_no_move"))
             self._mark_resolved(get_text("status_no_changes"), TEXT_SEC)
             return
 
-        action = self.action_combo.currentText()
-
-        if action == "Delete permanently":
-            msg = get_text("msg_del").format(move=len(to_move), files="\n".join(f"  • {p.filename}" for p in to_move), keep=len(to_keep))
-            reply = QMessageBox.question(self, get_text("title_del"), msg,
-                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
-            if reply != QMessageBox.StandardButton.Yes:
-                return
-
-            errors = []
-            for photo in to_move:
-                try:
-                    try:
-                        import send2trash
-                        send2trash.send2trash(photo.path)
-                    except ImportError:
-                        os.remove(photo.path)
-                    log_history("delete", {"file": photo.path, "group": self.group_number})
-                except Exception as e:
-                    errors.append(f"{photo.filename}: {e}")
-
-            moved_ok = len(to_move) - len(errors)
-            if errors:
-                detail = "\n".join(errors)
-                QMessageBox.warning(self, get_text("title_del_err"), get_text("msg_del_err").format(ok=moved_ok, tot=len(to_move), detail=detail))
-            if moved_ok > 0:
-                self._mark_resolved(get_text("status_deleted").format(ok=moved_ok), SUCCESS)
-                self.action_taken.emit()
-                for card in self.cards:
-                    if not card.is_checked():
-                        card.hide()
-                self.lbl_selection.setText(get_text("lbl_kept"))
+        if self.action_combo.currentIndex() == 1:
+            self._delete_photos(to_keep, to_process)
         else:
-            dest_folder = QFileDialog.getExistingDirectory(self.window(), get_text("dlg_select_dest"))
-            if not dest_folder:
-                return
+            self._move_photos(to_keep, to_process)
 
-            msg = get_text("msg_move").format(move=len(to_move), dest=dest_folder, files="\n".join(f"  • {p.filename}" for p in to_move), keep=len(to_keep))
-            reply = QMessageBox.question(self, get_text("title_move"), msg,
-                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
-            if reply != QMessageBox.StandardButton.Yes:
-                return
+    def _delete_photos(self, to_keep: list[PhotoInfo], to_delete: list[PhotoInfo]) -> None:
+        files = "\n".join(f"  - {photo.filename}" for photo in to_delete)
+        msg = get_text("msg_del").format(move=len(to_delete), files=files, keep=len(to_keep))
+        reply = QMessageBox.question(
+            self,
+            get_text("title_del"),
+            msg,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+        )
+        if reply != QMessageBox.StandardButton.Yes:
+            return
 
-            errors = []
-            for photo in to_move:
+        errors = []
+        for photo in to_delete:
+            try:
                 try:
-                    src = Path(photo.path).resolve()
-                    if not src.exists():
-                        errors.append(f"{photo.filename}: origin file not found ({src})")
-                        continue
+                    import send2trash
+                    send2trash.send2trash(photo.path)
+                except ImportError:
+                    os.remove(photo.path)
+                log_history("delete", {"file": photo.path, "group": self.group_number})
+            except Exception as error:
+                errors.append(file_error_message(get_text("err_action_delete"), photo.filename, error))
 
-                    dest_dir = Path(dest_folder) / "duplicados"
-                    dest_dir.mkdir(parents=True, exist_ok=True)
+        self._finish_action(to_delete, errors, get_text("title_del_err"), get_text("msg_del_err"), get_text("status_deleted"), "delete")
 
-                    dest = dest_dir / src.name
-                    counter = 1
-                    while dest.exists():
-                        dest = dest_dir / f"{src.stem}_dup{counter}{src.suffix}"
-                        counter += 1
+    def _move_photos(self, to_keep: list[PhotoInfo], to_move: list[PhotoInfo]) -> None:
+        dest_folder = QFileDialog.getExistingDirectory(self.window(), get_text("dlg_select_dest"))
+        if not dest_folder:
+            return
 
-                    shutil.move(str(src), str(dest))
-                except Exception as e:
-                    errors.append(f"{photo.filename}: {e}")
+        files = "\n".join(f"  - {photo.filename}" for photo in to_move)
+        msg = get_text("msg_move").format(move=len(to_move), dest=dest_folder, files=files, keep=len(to_keep))
+        reply = QMessageBox.question(
+            self,
+            get_text("title_move"),
+            msg,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+        )
+        if reply != QMessageBox.StandardButton.Yes:
+            return
 
-            moved_ok = len(to_move) - len(errors)
-            if errors:
-                detail = "\n".join(errors)
-                QMessageBox.warning(self, get_text("title_move_err"), get_text("msg_move_err").format(ok=moved_ok, tot=len(to_move), detail=detail))
-            if moved_ok > 0:
-                successfully_moved = [p.path for i, p in enumerate(to_move) if i < len(to_move) - len(errors)]
-                log_history("move", {
-                    "files": successfully_moved,
+        errors = []
+        moved_paths = []
+        for photo in to_move:
+            try:
+                src = Path(photo.path).resolve()
+                if not src.exists():
+                    errors.append(get_text("err_file_not_found").format(file=photo.filename))
+                    continue
+
+                dest_dir = Path(dest_folder) / "duplicados"
+                dest_dir.mkdir(parents=True, exist_ok=True)
+
+                dest = dest_dir / src.name
+                counter = 1
+                while dest.exists():
+                    dest = dest_dir / f"{src.stem}_dup{counter}{src.suffix}"
+                    counter += 1
+
+                shutil.move(str(src), str(dest))
+                moved_paths.append(str(dest))
+            except Exception as error:
+                errors.append(file_error_message(get_text("err_action_move"), photo.filename, error))
+
+        if moved_paths:
+            log_history(
+                "move",
+                {
+                    "files": moved_paths,
                     "destination": str(dest_folder),
                     "group": self.group_number,
-                    "count": moved_ok
-                })
-                self._mark_resolved(get_text("status_moved").format(ok=moved_ok), SUCCESS)
-                self.action_taken.emit()
-                for card in self.cards:
-                    if not card.is_checked():
-                        card.hide()
-                self.lbl_selection.setText(get_text("lbl_kept"))
+                    "count": len(moved_paths),
+                },
+            )
+
+        self._finish_action(to_move, errors, get_text("title_move_err"), get_text("msg_move_err"), get_text("status_moved"), "move")
+
+    def _finish_action(
+        self,
+        processed: list[PhotoInfo],
+        errors: list[str],
+        error_title: str,
+        error_template: str,
+        status_template: str,
+        action: str,
+    ) -> None:
+        ok = len(processed) - len(errors)
+        if errors:
+            detail = "\n".join(errors)
+            QMessageBox.warning(self, error_title, error_template.format(ok=ok, tot=len(processed), detail=detail))
+        if ok <= 0:
+            self._mark_resolved(get_text("status_error"), DANGER)
+            return
+
+        self._mark_resolved(status_template.format(ok=ok), SUCCESS)
+        self.action_taken.emit()
+        for card in self.cards:
+            if not card.is_checked():
+                card.hide()
+        self.lbl_selection.setText(get_text("lbl_kept"))
 
     def _mark_resolved(self, text: str, color: str) -> None:
-        """
-        Marks the group as resolved, updating its badge status and disabling the apply button.
-
-        Args:
-            text (str): The text to show in the status badge.
-            color (str): The color code for the badge text and border.
-        """
         self._resolved = True
         self.status_badge.setText(text)
-        bg = SUCCESS_BG if color == SUCCESS else WARNING_BG if color == WARNING else "#1a0a0a"
-        self.status_badge.setStyleSheet(f"""
-            color: {color}; background: {bg};
-            border: 1px solid {color}; border-radius: 20px;
-            padding: 3px 12px; font-size: 10px; font-weight: 700;
-            letter-spacing: 0.5px;
-        """)
+        bg = SUCCESS_BG if color == SUCCESS else WARNING_BG if color == WARNING else DANGER_BG
+        self.status_badge.setStyleSheet(badge_style(color, bg))
         self.btn_apply.setEnabled(False)
         self.btn_apply.setText(get_text("btn_resolved"))
-        self.btn_apply.setStyleSheet(f"""
-            QPushButton {{
-                color: {TEXT_MUT}; background: {BORDER};
-                border: none; border-radius: 10px;
-                padding: 8px 20px; font-size: 12px; font-weight: 700;
-            }}
-        """)
+        self.btn_apply.setStyleSheet(button_style("ghost", compact=True))
 
     def _export_csv(self) -> None:
-        """
-        Exports the details of the photos in this group to a CSV file.
-        """
         file_path, _ = QFileDialog.getSaveFileName(self, get_text("dlg_save_csv"), "", "CSV Files (*.csv)")
         if not file_path:
             return
         try:
-            with open(file_path, 'w', newline='', encoding='utf-8') as csvfile:
+            with open(file_path, "w", newline="", encoding="utf-8") as csvfile:
                 writer = csv.writer(csvfile)
-                writer.writerow(['Group', 'File', 'Size (MB)', 'Resolution', 'Sharpness', 'EXIF Date', 'Location', 'Title', 'Description', 'Quality'])
-                for i, photo in enumerate(self.group.photos):
+                writer.writerow([
+                    "Group",
+                    "File",
+                    "Size (MB)",
+                    "Resolution",
+                    "Sharpness",
+                    "EXIF Date",
+                    "Location",
+                    "Title",
+                    "Description",
+                    "Quality",
+                ])
+                for photo in self.group.photos:
                     loc = ""
-                    if getattr(photo, 'geo_data', None):
+                    if getattr(photo, "geo_data", None):
                         loc = f"{photo.geo_data.get('latitude', 0)}, {photo.geo_data.get('longitude', 0)}"
                     writer.writerow([
                         self.group_number,
@@ -644,12 +488,16 @@ class GroupWidget(QFrame):
                         f"{photo.size_mb:.2f}",
                         f"{photo.width}x{photo.height}",
                         f"{photo.sharpness:.0f}",
-                        photo.exif_date or 'N/A',
+                        photo.exif_date or "N/A",
                         loc,
-                        getattr(photo, 'title', '') or '',
-                        getattr(photo, 'description', '') or '',
-                        f"{photo.score:.1f}"
+                        getattr(photo, "title", "") or "",
+                        getattr(photo, "description", "") or "",
+                        f"{photo.score:.1f}",
                     ])
             QMessageBox.information(self, get_text("title_exported"), get_text("msg_exported").format(file=file_path))
-        except Exception as e:
-            QMessageBox.warning(self, get_text("title_export_err"), get_text("msg_export_err").format(err=e))
+        except Exception as error:
+            QMessageBox.warning(
+                self,
+                get_text("title_export_err"),
+                get_text("msg_export_err").format(err=file_error_message(get_text("err_action_export"), file_path, error)),
+            )

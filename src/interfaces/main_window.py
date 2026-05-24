@@ -11,6 +11,7 @@ from src.modules.services.models import DuplicateGroup, Statistics
 from src.modules.config.state import CACHE_FILE
 from src.modules.config.i18n import get_text
 from src.modules.utils.paths import resolve_asset_path
+from src.modules.utils.errors import readable_error
 from src.interfaces.theme import *
 from src.interfaces.screens import WelcomeScreen, ProgressScreen, ResultsScreen
 
@@ -44,16 +45,7 @@ class MainWindow(QMainWindow):
         """
         Applies global CSS styling to the main window and common widgets.
         """
-        self.setStyleSheet(f"""
-            QMainWindow, QWidget {{ background: {DARK_BG}; color: {TEXT_PRI}; }}
-            QLabel {{ color: {TEXT_PRI}; }}
-            QMessageBox {{ background: {PANEL_BG}; }}
-            QMessageBox QLabel {{ color: {TEXT_PRI}; }}
-            QMessageBox QPushButton {{
-                color: {TEXT_PRI}; background: {CARD_BG};
-                border: 1px solid {BORDER}; border-radius: 6px; padding: 6px 16px;
-            }}
-        """)
+        self.setStyleSheet(app_stylesheet())
 
     def _setup_ui(self) -> None:
         """
@@ -153,7 +145,12 @@ class MainWindow(QMainWindow):
         Args:
             msg (str): Error message.
         """
-        QMessageBox.critical(self, get_text("title_error"), msg)
+        logging.error("Analysis failed: %s", msg)
+        QMessageBox.critical(
+            self,
+            get_text("title_error"),
+            get_text("msg_analysis_failed").format(error=readable_error(Exception(msg))),
+        )
         self.stack.setCurrentIndex(0)
 
     def _go_home(self) -> None:
@@ -189,6 +186,6 @@ class MainWindow(QMainWindow):
                 try:
                     os.remove(CACHE_FILE)
                 except Exception as e:
-                    logging.error(f"Error removing cache on exit: {e}")
+                    logging.warning("Could not remove cache on exit: %s", e, exc_info=True)
 
         event.accept()

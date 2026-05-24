@@ -28,9 +28,12 @@ def load_embeddings_cache() -> dict:
     try:
         if EMBEDDINGS_CACHE_FILE.exists():
             with open(EMBEDDINGS_CACHE_FILE, 'rb') as file_handle:
-                return pickle.load(file_handle)
+                cache = pickle.load(file_handle)
+                if isinstance(cache, dict):
+                    return cache
+                logging.warning("Embeddings cache has invalid shape; starting with an empty cache.")
     except Exception as error:
-        logging.error(f"Error loading embeddings cache: {error}")
+        logging.warning("Error loading embeddings cache from %s: %s", EMBEDDINGS_CACHE_FILE, error, exc_info=True)
     return {}
 
 
@@ -40,7 +43,7 @@ def save_embeddings_cache(cache: dict) -> None:
         with open(EMBEDDINGS_CACHE_FILE, 'wb') as file_handle:
             pickle.dump(cache, file_handle)
     except Exception as error:
-        logging.error(f"Error saving embeddings cache: {error}")
+        logging.warning("Error saving embeddings cache to %s: %s", EMBEDDINGS_CACHE_FILE, error, exc_info=True)
 
 
 def load_cache() -> dict:
@@ -55,9 +58,12 @@ def load_cache() -> dict:
     try:
         if CACHE_FILE.exists():
             with open(CACHE_FILE, 'r', encoding='utf-8') as file_handle:
-                return json.load(file_handle)
+                cache = json.load(file_handle)
+                if isinstance(cache, dict):
+                    return cache
+                logging.warning("Photo cache has invalid shape; starting with an empty cache.")
     except Exception as error:
-        logging.error(f"Error loading cache: {error}")
+        logging.warning("Error loading cache from %s: %s", CACHE_FILE, error, exc_info=True)
     return {}
 
 
@@ -72,7 +78,7 @@ def save_cache(cache: dict) -> None:
         with open(CACHE_FILE, 'w', encoding='utf-8') as file_handle:
             json.dump(cache, file_handle, indent=2)
     except Exception as error:
-        logging.error(f"Error saving cache: {error}")
+        logging.warning("Error saving cache to %s: %s", CACHE_FILE, error, exc_info=True)
 
 
 def load_config() -> dict:
@@ -86,9 +92,12 @@ def load_config() -> dict:
     try:
         if CONFIG_FILE.exists():
             with open(CONFIG_FILE, 'r', encoding='utf-8') as file_handle:
-                return json.load(file_handle)
+                config = json.load(file_handle)
+                if isinstance(config, dict):
+                    return config
+                logging.warning("Config file has invalid shape; using defaults.")
     except Exception as error:
-        logging.error(f"Error loading config: {error}")
+        logging.warning("Error loading config from %s: %s", CONFIG_FILE, error, exc_info=True)
     return {"theme": "dark", "duplicate_mode": "similar", "auto_backup": True}
 
 
@@ -103,7 +112,7 @@ def save_config(config: dict) -> None:
         with open(CONFIG_FILE, 'w', encoding='utf-8') as file_handle:
             json.dump(config, file_handle, indent=2)
     except Exception as error:
-        logging.error(f"Error saving config: {error}")
+        logging.warning("Error saving config to %s: %s", CONFIG_FILE, error, exc_info=True)
 
 
 def log_history(action: str, details: dict) -> None:
@@ -120,6 +129,9 @@ def log_history(action: str, details: dict) -> None:
         if HISTORY_FILE.exists():
             with open(HISTORY_FILE, 'r', encoding='utf-8') as file_handle:
                 history = json.load(file_handle)
+                if not isinstance(history, list):
+                    logging.warning("History file has invalid shape; starting a new history list.")
+                    history = []
 
         history.append({
             "timestamp": datetime.now().isoformat(),
@@ -130,7 +142,7 @@ def log_history(action: str, details: dict) -> None:
         with open(HISTORY_FILE, 'w', encoding='utf-8') as file_handle:
             json.dump(history, file_handle, indent=2)
     except Exception as error:
-        logging.error(f"Error logging history: {error}")
+        logging.warning("Error logging history to %s: %s", HISTORY_FILE, error, exc_info=True)
 
 
 def load_history() -> list:
@@ -144,7 +156,10 @@ def load_history() -> list:
     try:
         if HISTORY_FILE.exists():
             with open(HISTORY_FILE, 'r', encoding='utf-8') as file_handle:
-                return json.load(file_handle)
+                history = json.load(file_handle)
+                if isinstance(history, list):
+                    return history
+                logging.warning("History file has invalid shape; returning an empty history.")
     except Exception as error:
-        logging.error(f"Error loading history: {error}")
+        logging.warning("Error loading history from %s: %s", HISTORY_FILE, error, exc_info=True)
     return []
