@@ -1,43 +1,19 @@
-#Requires -Version 5.1
-<#
-.SYNOPSIS
-    PhotoDedup - One-command installer and launcher for Windows.
-
-.DESCRIPTION
-    Unified installer for local and remote execution. If the script is
-    executed outside the project root, it downloads the repository from GitHub
-    over HTTPS, validates the extracted structure, installs or updates the
-    local copy, and delegates to the local install.ps1.
-
-    In local mode it validates Python 3.14.x, creates or repairs .venv,
-    installs requirements.txt, and launches PhotoDedup.
-
-.EXAMPLE
-    .\install.ps1
-
-.EXAMPLE
-    irm https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex
-
-.NOTES
-    Platform : Windows 10/11
-    Runtime  : Python 3.14.x
-    License  : GNU General Public License v3.0
-    Author   : Wilkin Barban Rosabal
-#>
+@powershell -NoProfile -ExecutionPolicy Bypass -Command "$ScriptRoot = '%~dp0'; Invoke-Expression ((Get-Content '%~f0' -Encoding utf8 | Select-Object -Skip 1) -join [Environment]::NewLine)" & exit /b
+# PhotoDedup local launcher.
+# This file intentionally embeds PowerShell after the first BAT line.
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 $Version = "1.0.15"
-
-$Host.UI.RawUI.WindowTitle = "PhotoDedup - Instalando..."
+$Host.UI.RawUI.WindowTitle = "PhotoDedup - Iniciando..."
 Clear-Host
 
 Write-Host ""
 Write-Host "  *** P H O T O D E D U P ***" -ForegroundColor Magenta
 Write-Host "  ========================================" -ForegroundColor DarkCyan
-Write-Host "   Instalador y Lanzador - Version $Version" -ForegroundColor Gray
+Write-Host "   Lanzador Local - Version $Version" -ForegroundColor Gray
 Write-Host "  ========================================" -ForegroundColor DarkCyan
 Write-Host ""
 
@@ -187,102 +163,17 @@ function Get-Python314Command {
     return $null
 }
 
-$ScriptRootCandidates = @(
-    $PSScriptRoot,
-    $(if (-not [string]::IsNullOrWhiteSpace($PSCommandPath)) { Split-Path -Parent $PSCommandPath }),
-    (Get-Location).Path,
-    '.'
-)
-
-$ScriptRoot = $null
-foreach ($candidate in $ScriptRootCandidates) {
-    if (-not [string]::IsNullOrWhiteSpace($candidate)) {
-        $ScriptRoot = $candidate.Trim()
-        break
-    }
-}
-
 if ([string]::IsNullOrWhiteSpace($ScriptRoot)) {
-    Show-Error "Error de Directorio" "No se pudo determinar el directorio de trabajo." "Ejecute el instalador desde un directorio con permisos de lectura y escritura."
+    Show-Error "Error de Directorio" "No se pudo determinar el directorio del lanzador." "Ejecute Install.bat desde la carpeta del proyecto."
 }
 
+Set-Location $ScriptRoot
+$ProjectRoot = (Get-Location).Path
 $RequiredFiles = @('src\main\photo_dedup.py', 'requirements.txt')
-$IsProjectRoot = $true
 foreach ($file in $RequiredFiles) {
-    if (-not (Test-Path (Join-Path $ScriptRoot $file))) {
-        $IsProjectRoot = $false
-        break
+    if (-not (Test-Path (Join-Path $ProjectRoot $file))) {
+        Show-Error "Proyecto Incompleto" "No se encontro $file en $ProjectRoot." "Descargue el proyecto completo o ejecute el instalador remoto install.ps1."
     }
-}
-
-if (-not $IsProjectRoot) {
-    Write-Host "  [!] Archivos de proyecto no encontrados en el directorio actual." -ForegroundColor Yellow
-    Write-Host "  [INFO] Entrando a modo Bootstrapper remoto: descargando repositorio..." -ForegroundColor Cyan
-
-    $RepoOwner = 'wilkinbarban'
-    $RepoName = 'photo-dedup'
-    $Branch = 'main'
-    $ArchiveUrl = "https://github.com/$RepoOwner/$RepoName/archive/refs/heads/$Branch.zip"
-    $DesktopDir = [Environment]::GetFolderPath('Desktop')
-    if ([string]::IsNullOrWhiteSpace($DesktopDir)) {
-        $DesktopDir = Join-Path $HOME 'Desktop'
-    }
-    $InstallDir = if ($env:PHOTO_DEDUP_INSTALL_DIR) { $env:PHOTO_DEDUP_INSTALL_DIR } else { Join-Path $DesktopDir $RepoName }
-    $TempZip = Join-Path $env:TEMP "$RepoName-$Branch.zip"
-    $TempExtract = Join-Path $env:TEMP "$RepoName-bootstrap-$(Get-Random)"
-
-    $dlArgs = "-NoProfile -Command `"Invoke-WebRequest -Uri '$ArchiveUrl' -OutFile '$TempZip' -UseBasicParsing`""
-    $dlRes = Run-WithProgress "powershell" $dlArgs "Descargando repositorio de GitHub"
-    if (-not $dlRes.Success) {
-        Show-Error "Fallo de Descarga" "No se pudo descargar el repositorio desde GitHub." "Verifique su conexion a Internet y que github.com sea accesible."
-    }
-
-    $zipSize = (Get-Item $TempZip).Length
-    if ($zipSize -lt 1024) {
-        Remove-Item -Force $TempZip -ErrorAction SilentlyContinue
-        Show-Error "Integridad Invalida" "El archivo descargado es invalido o corrupto." "Vuelva a intentar la ejecucion."
-    }
-
-    $null = New-Item -ItemType Directory -Path $TempExtract -Force
-    $extArgs = "-NoProfile -Command `"Expand-Archive -Path '$TempZip' -DestinationPath '$TempExtract' -Force`""
-    $extRes = Run-WithProgress "powershell" $extArgs "Extrayendo repositorio"
-    Remove-Item -Force $TempZip -ErrorAction SilentlyContinue
-
-    if (-not $extRes.Success) {
-        Remove-Item -Recurse -Force $TempExtract -ErrorAction SilentlyContinue
-        Show-Error "Extraccion Fallida" "No se pudo descomprimir el archivo del repositorio." "Asegurese de contar con espacio en disco."
-    }
-
-    $ExtractedRoot = Join-Path $TempExtract "$RepoName-$Branch"
-    if (-not (Test-Path $ExtractedRoot)) {
-        Remove-Item -Recurse -Force $TempExtract -ErrorAction SilentlyContinue
-        Show-Error "Estructura Invalida" "La carpeta esperada tras la extraccion no existe." "Vuelva a intentar la ejecucion."
-    }
-
-    Show-Step "Instalando archivos del repositorio"
-    if (Test-Path $InstallDir) {
-        Write-Host "  [!] Carpeta destino existente. Actualizando archivos en-lugar..." -ForegroundColor Yellow
-        Get-ChildItem -Path $ExtractedRoot | Where-Object { $_.Name -ne '.venv' } | ForEach-Object {
-            $dest = Join-Path $InstallDir $_.Name
-            Copy-Item -Path $_.FullName -Destination $dest -Recurse -Force
-        }
-    }
-    else {
-        Move-Item -Path $ExtractedRoot -Destination $InstallDir
-    }
-
-    Remove-Item -Recurse -Force $TempExtract -ErrorAction SilentlyContinue
-
-    $LocalInstaller = Join-Path $InstallDir 'install.ps1'
-    if (-not (Test-Path $LocalInstaller)) {
-        Show-Error "Script Faltante" "El script install.ps1 no se encontro en el directorio instalado." "Reporte este error al autor del proyecto."
-    }
-
-    Write-Host "  [OK] Repositorio instalado con exito." -ForegroundColor Green
-    Write-Host "  [INFO] Delegando arranque al instalador local..." -ForegroundColor Cyan
-    Set-Location $InstallDir
-    & $LocalInstaller
-    exit $LASTEXITCODE
 }
 
 Show-Step "Verificando entorno de Python 3.14"
@@ -303,13 +194,13 @@ if (-not $pythonCmd) {
     $env:PATH = [System.Environment]::GetEnvironmentVariable('PATH', 'Machine') + ';' + [System.Environment]::GetEnvironmentVariable('PATH', 'User')
     $pythonCmd = Get-Python314Command
     if (-not $pythonCmd) {
-        Show-Error "Reinicio de Consola Requerido" "Python fue instalado, pero la terminal actual aun no reconoce el comando." "Cierre todas las consolas abiertas y vuelva a ejecutar install.ps1."
+        Show-Error "Reinicio de Consola Requerido" "Python fue instalado, pero la terminal actual aun no reconoce el comando." "Cierre todas las consolas abiertas y vuelva a ejecutar Install.bat."
     }
 }
 
 Write-Host "  [OK] Python base detectado ($pythonCmd)" -ForegroundColor Green
 
-$venvDir = Join-Path $ScriptRoot '.venv'
+$venvDir = Join-Path $ProjectRoot '.venv'
 $venvPython = Join-Path $venvDir 'Scripts\python.exe'
 $venvPip = Join-Path $venvDir 'Scripts\pip.exe'
 $recreateVenv = $false
@@ -358,11 +249,7 @@ if (-not $pipUpgrade.Success) {
     Show-Error "Error de pip" "No se pudo actualizar pip dentro del entorno virtual." "Revise la conexion o ejecute manualmente: .venv\Scripts\python.exe -m pip install --upgrade pip"
 }
 
-$ReqPath = Join-Path $ScriptRoot "requirements.txt"
-if (-not (Test-Path $ReqPath)) {
-    Show-Error "Dependencias No Encontradas" "requirements.txt no existe en el proyecto instalado." "Verifique que el repositorio se haya descargado completo."
-}
-
+$ReqPath = Join-Path $ProjectRoot "requirements.txt"
 $depsRes = Run-WithProgress $venvPip "install --no-input -r `"$ReqPath`"" "Instalando dependencias de Python"
 if (-not $depsRes.Success) {
     $logFile = Join-Path $venvDir "install.log"
@@ -382,5 +269,5 @@ try {
     }
 }
 catch {
-    Show-Error "Fallo Critico al Iniciar" $_.Exception.Message "Compruebe que .venv no este danado y vuelva a ejecutar install.ps1."
+    Show-Error "Fallo Critico al Iniciar" $_.Exception.Message "Compruebe que .venv no este danado y vuelva a ejecutar Install.bat."
 }

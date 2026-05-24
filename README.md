@@ -56,18 +56,18 @@ Artefactos principales:
 | `PhotoDedup-lite.exe` | Menor tamano, arranque rapido, flujo hash/visual sin IA. |
 | `PhotoDedup-full.exe` | Analisis mas profundo con IA opcional cuando el runtime esta disponible. |
 
-### Instalacion con PowerShell
-
-Instalador seguro recomendado:
-
-```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
-```
-
-Instalador estandar:
+### Instalacion con un solo comando
 
 ```powershell
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
+```
+
+`install.ps1` es el instalador unico. Si se ejecuta fuera del proyecto, descarga el repositorio oficial, valida la estructura, instala o actualiza la copia local y luego continua con la instalacion desde esa copia. Si se ejecuta dentro del proyecto, valida Python 3.14.x, prepara `.venv`, instala dependencias y abre PhotoDedup.
+
+Para una copia ya descargada o clonada, ejecuta:
+
+```cmd
+Install.bat
 ```
 
 ### Uso local para desarrollo
@@ -127,18 +127,18 @@ Main artifacts:
 | `PhotoDedup-lite.exe` | Smaller binary, faster startup, hash/visual workflow without AI. |
 | `PhotoDedup-full.exe` | Deeper analysis with optional AI support when the runtime is available. |
 
-### PowerShell Installation
-
-Recommended secure installer:
-
-```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
-```
-
-Standard installer:
+### One-Command Installation
 
 ```powershell
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
+```
+
+`install.ps1` is now the single installer. When executed outside the project, it downloads the official repository, validates the extracted structure, installs or updates the local copy, and continues from that local copy. When executed inside the project, it validates Python 3.14.x, prepares `.venv`, installs dependencies, and opens PhotoDedup.
+
+For an already downloaded or cloned copy, run:
+
+```cmd
+Install.bat
 ```
 
 ### Local Development
@@ -198,18 +198,18 @@ Artefatos principais:
 | `PhotoDedup-lite.exe` | Binario menor, inicio mais rapido, fluxo hash/visual sem IA. |
 | `PhotoDedup-full.exe` | Analise mais profunda com IA opcional quando o runtime esta disponivel. |
 
-### Instalacao com PowerShell
-
-Instalador seguro recomendado:
-
-```powershell
-powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install_secure.ps1 | iex"
-```
-
-Instalador padrao:
+### Instalacao com um comando
 
 ```powershell
 powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/wilkinbarban/photo-dedup/main/install.ps1 | iex"
+```
+
+`install.ps1` agora e o instalador unico. Quando executado fora do projeto, ele baixa o repositorio oficial, valida a estrutura extraida, instala ou atualiza a copia local e continua a partir dessa copia. Quando executado dentro do projeto, valida Python 3.14.x, prepara `.venv`, instala dependencias e abre o PhotoDedup.
+
+Para uma copia ja baixada ou clonada, execute:
+
+```cmd
+Install.bat
 ```
 
 ### Desenvolvimento local
@@ -249,6 +249,8 @@ Os executaveis atuais nao possuem assinatura de codigo. O Windows pode mostra-lo
 | `src/modules/utils/` | Logging, asset path resolution, and shared error helpers. |
 | `requirements.txt` | Runtime dependencies pinned for Python 3.14.x. |
 | `requirements-build.txt` | Build-only dependencies such as PyInstaller. |
+| `install.ps1` | Unified one-command installer and launcher for remote or local use. |
+| `Install.bat` | Local Windows launcher with the same setup/repair flow as `install.ps1`. |
 | `scripts/build_windows.ps1` | Builds one Windows EXE flavor. |
 | `scripts/build_variants.ps1` | Builds Full and Lite variants. |
 | `.github/workflows/` | Release, build, and smoke-test automation. |

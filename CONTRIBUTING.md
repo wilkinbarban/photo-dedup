@@ -33,7 +33,13 @@ Please do not contribute features that encourage misuse, violate platform terms,
 
 PhotoDedup now targets Python `3.14.x`. Use the Python installed on the PC and ensure it is first in `PATH` before creating `.venv`.
 
-Use the existing dependency installer:
+Use the local launcher when you want the same setup and repair flow used by the one-command installer:
+
+```cmd
+Install.bat
+```
+
+For dependency-only setup, use:
 
 ```cmd
 install_dependencies.bat
@@ -69,6 +75,8 @@ If your change touches packaging/release flow, validate:
 pip install -r requirements-build.txt
 ./scripts/build_windows.ps1 -Version local-test -Clean
 ```
+
+If your change touches installer behavior, keep `install.ps1`, `Install.bat`, README.md, CHANGELOG.md, and RELEASE.template.md aligned. `install.ps1` is the only remote one-command installer; do not reintroduce a separate secure installer path.
 
 Before creating a new release tag, regenerate release notes from template:
 
@@ -127,7 +135,7 @@ Recommended prefixes:
 
 Examples:
 
-- feat: add stable release channel for secure installer
-- fix: handle in-memory execution in secure installer signature check
+- build: unify one-command Windows installer
+- fix: repair local launcher dependency setup
 - ci: add Windows EXE smoke-test workflow
 - docs: add Download Windows EXE section for non-technical users
