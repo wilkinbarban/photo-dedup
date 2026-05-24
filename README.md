@@ -67,7 +67,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 Para una copia ya descargada o clonada, ejecuta:
 
 ```cmd
-Install.bat
+Iniciar.bat
 ```
 
 ### Uso local para desarrollo
@@ -88,6 +88,8 @@ Las dependencias de `requirements.txt` estan ajustadas para Python 3.14.x, inclu
 PhotoDedup intenta degradar de forma controlada:
 
 - Si la IA no esta disponible, la app continua en modo hash/visual.
+- Si detecta metadatos de Google Takeout, usa los JSON para enriquecer JPEG cuando es compatible, organiza fotos/videos por fecha y mueve los JSON procesados a `Json`.
+- Si un HEIC/HEIF no admite escritura EXIF directa, omite esa escritura sin detener la organizacion por fecha.
 - Si una miniatura no se puede leer, se muestra un marcador visual neutro.
 - Si el cache o la configuracion local estan corruptos, se usan valores seguros y se registra el detalle tecnico.
 - Si una accion de mover/eliminar falla en algunos archivos, se informa el detalle por archivo sin ocultar los resultados exitosos.
@@ -138,7 +140,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 For an already downloaded or cloned copy, run:
 
 ```cmd
-Install.bat
+Iniciar.bat
 ```
 
 ### Local Development
@@ -159,6 +161,8 @@ Compatible Python: `3.14.x`; recommended: use the Python installed on the PC and
 PhotoDedup is designed to degrade gracefully:
 
 - If AI is unavailable, the app continues in hash/visual mode.
+- If Google Takeout metadata is detected, JSON sidecars are used to enrich compatible JPEGs, organize photos/videos by date, and move processed JSON files to `Json`.
+- If HEIC/HEIF cannot be written through direct EXIF insertion, that write is skipped without blocking date-based organization.
 - If a thumbnail cannot be read, the UI shows a neutral placeholder.
 - If local cache or config files are corrupt, safe defaults are used and the technical detail is logged.
 - If moving/deleting fails for some files, the app reports per-file details while preserving successful results.
@@ -209,7 +213,7 @@ powershell -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.gi
 Para uma copia ja baixada ou clonada, execute:
 
 ```cmd
-Install.bat
+Iniciar.bat
 ```
 
 ### Desenvolvimento local
@@ -230,6 +234,8 @@ Python compativel: `3.14.x`; recomendado: usar o Python instalado no PC e dispon
 PhotoDedup tenta degradar de forma controlada:
 
 - Se a IA nao estiver disponivel, o app continua em modo hash/visual.
+- Se metadados do Google Takeout forem detectados, os JSONs sao usados para enriquecer JPEGs compativeis, organizar fotos/videos por data e mover os JSONs processados para `Json`.
+- Se HEIC/HEIF nao permitir escrita EXIF direta, essa escrita e ignorada sem bloquear a organizacao por data.
 - Se uma miniatura nao puder ser lida, a interface mostra um marcador neutro.
 - Se cache ou configuracao local estiverem corrompidos, valores seguros sao usados e o detalhe tecnico e registrado.
 - Se mover/excluir falhar em alguns arquivos, o app mostra detalhes por arquivo sem ocultar os resultados bem-sucedidos.
@@ -250,7 +256,7 @@ Os executaveis atuais nao possuem assinatura de codigo. O Windows pode mostra-lo
 | `requirements.txt` | Runtime dependencies pinned for Python 3.14.x. |
 | `requirements-build.txt` | Build-only dependencies such as PyInstaller. |
 | `install.ps1` | Unified one-command installer and launcher for remote or local use. |
-| `Install.bat` | Local Windows launcher with the same setup/repair flow as `install.ps1`. |
+| `Iniciar.bat` | Local Windows launcher for manually cloned or downloaded copies. |
 | `scripts/build_windows.ps1` | Builds one Windows EXE flavor. |
 | `scripts/build_variants.ps1` | Builds Full and Lite variants. |
 | `.github/workflows/` | Release, build, and smoke-test automation. |

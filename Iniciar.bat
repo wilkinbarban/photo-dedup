@@ -164,7 +164,7 @@ function Get-Python314Command {
 }
 
 if ([string]::IsNullOrWhiteSpace($ScriptRoot)) {
-    Show-Error "Error de Directorio" "No se pudo determinar el directorio del lanzador." "Ejecute Install.bat desde la carpeta del proyecto."
+    Show-Error "Error de Directorio" "No se pudo determinar el directorio del lanzador." "Ejecute Iniciar.bat desde la carpeta del proyecto."
 }
 
 Set-Location $ScriptRoot
@@ -194,7 +194,7 @@ if (-not $pythonCmd) {
     $env:PATH = [System.Environment]::GetEnvironmentVariable('PATH', 'Machine') + ';' + [System.Environment]::GetEnvironmentVariable('PATH', 'User')
     $pythonCmd = Get-Python314Command
     if (-not $pythonCmd) {
-        Show-Error "Reinicio de Consola Requerido" "Python fue instalado, pero la terminal actual aun no reconoce el comando." "Cierre todas las consolas abiertas y vuelva a ejecutar Install.bat."
+        Show-Error "Reinicio de Consola Requerido" "Python fue instalado, pero la terminal actual aun no reconoce el comando." "Cierre todas las consolas abiertas y vuelva a ejecutar Iniciar.bat."
     }
 }
 
@@ -269,5 +269,5 @@ try {
     }
 }
 catch {
-    Show-Error "Fallo Critico al Iniciar" $_.Exception.Message "Compruebe que .venv no este danado y vuelva a ejecutar Install.bat."
+    Show-Error "Fallo Critico al Iniciar" $_.Exception.Message "Compruebe que .venv no este danado y vuelva a ejecutar Iniciar.bat."
 }

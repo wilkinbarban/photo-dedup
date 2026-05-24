@@ -36,19 +36,7 @@ PhotoDedup now targets Python `3.14.x`. Use the Python installed on the PC and e
 Use the local launcher when you want the same setup and repair flow used by the one-command installer:
 
 ```cmd
-Install.bat
-```
-
-For dependency-only setup, use:
-
-```cmd
-install_dependencies.bat
-```
-
-Then run:
-
-```cmd
-python src\main\photo_dedup.py
+Iniciar.bat
 ```
 
 ### Manual setup
@@ -76,7 +64,7 @@ pip install -r requirements-build.txt
 ./scripts/build_windows.ps1 -Version local-test -Clean
 ```
 
-If your change touches installer behavior, keep `install.ps1`, `Install.bat`, README.md, CHANGELOG.md, and RELEASE.template.md aligned. `install.ps1` is the only remote one-command installer; do not reintroduce a separate secure installer path.
+If your change touches installer behavior, keep `install.ps1`, `Iniciar.bat`, README.md, CHANGELOG.md, and RELEASE.template.md aligned. `install.ps1` is the only remote one-command installer; do not reintroduce a separate secure installer path or a second dependency-only batch installer.
 
 Before creating a new release tag, regenerate release notes from template:
 
